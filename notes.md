@@ -31,19 +31,48 @@ Notes on Matt's course:
 
 ## What is Fortran?
 
-- old language! 1957 -- 62 years old
+- old language! 1956 -- 62 years old
+    - oldest "high-level" language
     - many versions over the years, latest is 2018! And next one is
       being worked on as we speak
 - some parts feel outdated
+    - backwards compatibility is important
+    - but original reasons for some features no longer hold
 - but still in use for good reason!
 - can be _very_ fast
 - native multidimensional arrays
     - very useful for scientists!
 - compiled language
+    - c.f. Python as interpreted language
 - statically typed:
     - types of variables must be specified at compile time and cannot
       be changed
+    - "strong" typing, c.f. C
 - imperative: commands executed in order
+    - c.f. SQL
+
+### Alternatives
+
+- C++
+    - Templates make it possible to express generic operations
+    - Can get "close to the metal", can get very good performance
+    - Multidimensional array support poor (no native support,
+      libraries exist)
+- Python
+    - Easier to use!
+    - Possible cost of performance (but e.g. numpy uses C or Fortran
+      under the hood!)
+- Matlab
+    - Expensive!
+
+## Fundamentals of Programming
+
+- Source code is read more times than it is written, by factor 5 or
+  more
+- We use high-level languages in order to be understandable to humans
+- Therefore, more important to write _readable_ code than _efficient_
+  code
+    - Even more important that it is correct
 
 
 ## Hello world
@@ -51,7 +80,6 @@ Notes on Matt's course:
 ```Fortran
 program hello_world
   implicit none
-
   ! Program prints "Hello, world" to the screen
   print*, "Hello, world"
 end program hello_world
@@ -59,53 +87,135 @@ end program hello_world
 
 1. All programs must start with `program` and a label and end with
    `end program <label>`
-2. `implicit none`
-3. A comment
-4. Write to screen
+2. `implicit none`: Historical reasons! Old Fortran had implicit
+   typing: more on this later
+3. A comment, begins with `!`
+4. Print some text to screen
 
 ## Compiling code
 
-`gfortran source.f90` -> `a.out`
-`gfortran source.f90 -o executable` -> `executable`
+This will be covered more in depth later on
+
+- `gfortran source.f90` -> `a.out`
+- `gfortran source.f90 -o executable` -> `executable`
 
 ## Types
 
+The fundamental types in Fortran:
+
 - `integer`
-- `real`
-- `logical`
-- `character`
-- `complex`
+- `real` -- floating point numbers
+- `logical` -- booleans, true/false
+- `character` -- text, also called strings
+- `complex` -- floating point complex numbers
 
 (later, we will look at derived types)
 
+### What, exactly, is a type?
+
+- Computers store _everything_ in binary, ones and zeros, called _bits_
+- Given a set of bits, what does it mean?
+    - Could be a number, could be some text
+    - Could be an instruction!
+- We need to tell computer how to interpret the set of bits
+    - We're free to lie to the computer and change our minds about how
+      to interpret a given set of bits
+- Would be very tedious if we had to tell the computer every time we
+  wanted to do an operation on some bits what type they represented
+    - plus potential for mistakes
+- Types tell the _compiler_ our intent: these bits are an integer,
+  those are text
+- Compiler then checks we're doing sensible things
+    - `4 + 6` makes sense
+    - `4 + "hello"` doesn't make any sense
+    - `4 + 5.3` might do
+
 ### Cover literals here
+- FIXME: later
+- Writing `real`s:
+```Fortran
+2.
+0.3
+4.6E4
+0.02e-3
+```
+- Note: `real` literals are single-precision by default
+    - more on this later
 
 ## Variables
 
-Always, always `implicit none`
+- A variable is label for some value in memory used in a program
+- In Fortran, we must tell the compiler up front what type a variable
+  is, and this is fixed
+    - Other languages, like Python, we can change our minds
+- Variables are declared like:
 
-syntax: `type :: variable_name`
-
-- note: `::` not always needed, but never hurts!
-- note: names must start with a letter, and are limited to ASCII
+```Fortran
+<type> :: <name>
+```
+- Note: `::` not always needed, but never hurts!
+- Note: names must start with a letter, and are limited to ASCII
   lower/uppercase, numbers and underscore
-- pick variable names wisely!
+- Pick variable names wisely!
     - in F2003, you can have up to 63 characters in a name
+    - Good names:
+        - `distance_to_next_atom`
+        - `temperature`
+        - `total_energy`
+    - Less good names:
+        - `distnxtatm`
+        - `temp`
+        - `E`
 
-can initialise in the declaration, but WARNING
+- Let's modify our hello world example:
 
-### examples of good/bad names
+```Fortran
+program hello_input
+  implicit none
+  character(len=20) :: name
+  integer :: number
+  print*, "What is your name?"
+  read*, name
+  print*, "What is your favourite integer?"
+  read*, number
+  print*, "Hello, ", name, &
+       & ", your favourite number is ", number, "!"
+end program hello_input
+```
+
+- `character(len=20)`: we need to say up-front how long how strings
+  are
+- `read*,`: read a variable from stdin/command line
+- `&`: line continuation for long lines
+
+### Careful!
+
+- Always, always `implicit none`
+- Early Fortran done on punch cards
+- Assume anything starting with `i-n` is an `integer`, otherwise it's
+  `real`
+- Very easy to make a tpyo and use an undefined value, get the wrong
+  answer
+- One `implicit none` at the top of the program (or module, see later)
+  is sufficient
+    - You may like to keep it in every function, see later
+
+### Careful 2!
+
+- Can initialise in the declaration, but WARNING!
+- This unfortunately adds extra semantics that you may not intend
+- Will cover when we get onto functions
 
 ## Operations
 
-### arithmetic
+### Arithmetic
 
-`**` for exponentiation
-`()` for clarity!
+- Usual mathematical operators: `+, -, *, /`
+- Plus `**` for exponentiation
+    - Careful you only use integers unless you mean it
+- BODMAS/PEDMAS and left-to-right, but use `()` to clarify
 
-BODMAS and left-to-right, but use `()` to clarify
-
-### logical/boolean
+### Logical/boolean
 
 Prefer `<` over `.lt.`
 
