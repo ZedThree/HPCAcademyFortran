@@ -264,8 +264,9 @@ end if
 
 ## Loops
 
-- often want to repeat some bit of code/instructions for multiple
+- Often want to repeat some bit of code/instructions for multiple
   values
+    - Could write everything out explicitly
 - `do` _loops_ are way of doing this
 - three slight variations:
 
@@ -297,6 +298,64 @@ end do
 
 - FIXME: loop examples
 
+## Bare `do`
+
+```{include=examples/07_infinite_do.f90 .numberLines .Fortran}
+```
+
+## `exit`
+
+- Leaves current loop entirely
+
+```{include=examples/08_do_exit.f90 .numberLines .Fortran}
+```
+
+## `do while`
+
+```{include=examples/09_do_while.f90 .numberLines .Fortran}
+```
+
+- Unlike C++, `do while` checks the condition at the _beginning_ of the loop:
+
+```{include=examples/10_do_while_none.f90 .numberLines .Fortran}
+```
+
+## `do <counter> = <start>, <stop>, [<stride>]`
+
+- Most common form of the `do` loop is with a counter
+- Must be an integer and declared before-hand
+- `start` and `stop` are required, `counter` goes from `start` to
+  `stop` _inclusive_:
+  
+```{include=examples/11_do_counter.f90 .numberLines .Fortran}
+```
+
+- There is an optional `stride`:
+
+```{include=examples/12_do_stride.f90 .numberLines .Fortran}
+```
+
+- Note that `stop` might not be included if `stride` would step over
+  it
+
+### notes
+
+- it's ok for `stop` < `start`: just won't be executed
+- `stride` can be negative:
+
+```{include=examples/13_do_negative_stride.f90 .numberLines .Fortran}
+```
+
+- you cannot change the value of the loop `counter` inside a loop
+- value of `counter` not defined outside loop
+    - likely to take on last value after loop, but absolutely do not
+      rely on it!
+    - compiler free to optimise it away
+
+
+### FIXME
+
+- move `cycle` and `select case` here
 
 # Session 2
 
@@ -504,18 +563,6 @@ end do
 integer :: i
 do i = 1, 5
   if (i == 3) cycle
-  print*, i
-end do
-```
-
-## `exit`
-
-- Leaves loop entirely
-
-```Fortran
-integer :: i
-do i = 1, 5
-  if (i == 3) exit
   print*, i
 end do
 ```
