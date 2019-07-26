@@ -184,6 +184,12 @@ There are 5 fundamental types in Fortran:
 ```{include=examples/03_basic_maths.f90 .numberLines .Fortran}
 ```
 
+### FIXME
+
+- mixed-type operations
+- integer division
+- briefly, floating point maths
+
 ## Logical/boolean operations
 
 - `<`, `<=`, `>`, `>=`, `==`, `/=`
@@ -606,6 +612,8 @@ deallocate(array)
   deallocate(bigarray, stat=istat)
   if (istat /= 0) error stop istat
   ```
+
+  - FIXME: `errmsg`
 
 ## Procedures
 
