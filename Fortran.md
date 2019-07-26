@@ -84,7 +84,7 @@ There are 5 fundamental types in Fortran:
 
 - `integer`
 - `real` -- floating point numbers
-- `logical` -- booleans, true/false
+- `logical` -- booleans, two values: `.true.`/`.false.`
 - `character` -- text, also called strings
 - `complex` -- floating point complex numbers
 
@@ -190,7 +190,7 @@ There are 5 fundamental types in Fortran:
 - integer division
 - briefly, floating point maths
 
-## Logical/boolean operations
+## Logical/relational operations
 
 - `<`, `<=`, `>`, `>=`, `==`, `/=`
     - Note the inequality operator! Might look odd if you come from
@@ -219,6 +219,9 @@ exist!)
 
 ## Control flow
 
+- often need to change exactly what happens at runtime
+- `if` statement allows us to take one of two _branches_ depending on
+  the value of its _condition_
 
 ```Fortran
 if (logical-expression) then
@@ -241,41 +244,59 @@ end if
 - Bare `else` must be last
 - conditions are checked from the top:
 
-```Fortran
-program positive_negative
-  implicit none
-  integer :: x = 5
-  if (x >= 0) then
-    print*, "x is positive"
-  else if (x > 1) then
-    print*, "can never be reached!"
-  else
-    print*, "x is negative"
-  end if
-end program positive_negative
+```{include=examples/05_if_statement.f90 .numberLines .Fortran}
 ```
 
-`.and.` etc
+## Logical/boolean operations
 
+- `.and.`, `.or.`, `.not.`
+
+
+```{include=examples/06_logical_boolean_operations.f90 .numberLines .Fortran}
+```
+
+- Note for those familiar with other languages: Fortran does not have
+  shortcut logical operations
+    - Line 4 above evaluates _both_ conditions. may be important
+      later...
 - note difference between `.eq.` and `.eqv.`
-
-```Fortran
-program x_range
-  implicit none
-  integer :: x = 5
-  if ((x >= 0) .and. (x < 10)) then
-    print*, "x is between 0 and 10"
-  else
-    print*, "x not between 0 and 10"
-  end if
-end program x_range
-```
+    - `.eqv.` must be used for `logical`s
 
 ## Loops
 
-`do`
+- often want to repeat some bit of code/instructions for multiple
+  values
+- `do` _loops_ are way of doing this
+- three slight variations:
 
-`do while`
+```Fortran
+do
+  ...
+end do
+```
+
+```Fortran
+do while (<logical-expression>)
+  ...
+end do
+```
+
+```Fortran
+do <index> = <lower-bound>, <upper-bound>
+  ...
+end do
+```
+
+- all essentially equivalent
+- Bare `do` needs something in body to `exit` loop
+- `do while` loops _while_ the condition is true, and does the loop
+  _at least once_
+- Last form does `<upper-bound> - <lower-bound> + 1` loops
+    - loop variable (`<index>`) must be pre-declared
+    - lower and upper bounds are your choice
+
+- FIXME: loop examples
+
 
 # Session 2
 
@@ -601,6 +622,7 @@ deallocate(array)
 - Possible to request more memory than available
 - Good practice to always check `allocate` succeeds using `stat`
   argument **caveat**
+- FIXME: `errmsg`
 
   ```Fortran
   use, intrinsic :: iso_fortran_env, only : real64, int64
