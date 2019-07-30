@@ -326,7 +326,7 @@ end do
 - Must be an integer and declared before-hand
 - `start` and `stop` are required, `counter` goes from `start` to
   `stop` _inclusive_:
-  
+
 ```{include=examples/11_do_counter.f90 .numberLines .Fortran}
 ```
 
@@ -361,11 +361,35 @@ end do
 
 ## `parameter`
 
+- sometimes want a variable that can't be modified at runtime,
+  e.g. `pi`
+- or have lots of arrays of fixed size
+
+```Fortran
+real, dimension(10) :: x_grid_spacing, y_grid_spacing
+real, dimension(10) :: x_grid, y_grid
+real, dimension(10, 10) :: density
+```
+
+- What if you now need a 20x20 grid?
+- use a `parameter`!
 - fixed at compile time
-    - has to be made of literals and other `parameter`s
-    - FIXME: and intrinsics?
+    - has to be made of literals, other `parameter`s, intrinsics
 - names are great!
 - attribute (now we definitely need `::`)
+- super useful for things like `pi`, `speed_of_light`,
+  `electron_mass`, etc.
+
+```Fortran
+integer, parameter :: grid_size = 10
+real, dimension(grid_size) :: x_grid_spacing, y_grid_spacing
+real, dimension(grid_size) :: x_grid, y_grid
+real, dimension(grid_size, grid_size) :: density
+```
+
+```Fortran
+real(kind=wp), parameter :: pi = 4._wp*atan(1._wp)
+```
 
 ## Kinds of types
 
@@ -388,11 +412,11 @@ end do
 ```Fortran
 ! Get the kind number that can give us 15 digits of precision and 300
 orders of magntitude of range
-integer, parameter :: dp = selected_real_kind(15, 300)
+integer, parameter :: wp = selected_real_kind(15, 300)
 ! Declare a variable with this kind
-real(kind=dp) :: x
+real(kind=wp) :: x
 ! Use a literal with this range
-x = 1.0_dp
+x = 1.0_wp
 ```
 
 ### `iso_fortran_env`
@@ -402,6 +426,16 @@ x = 1.0_dp
 ```Fortran
 use, intrinsic :: iso_fortran_env, only : real64
 real(real64) :: x
+x = 1.0_real64
+```
+
+- Can combine this with a `parameter`:
+
+```Fortran
+use, intrinsic :: iso_fortran_env, only : real64
+integer, parameter :: wp = real64
+real(kind=wp) :: x
+x = 1.0_wp
 ```
 
 ## `open` - File I/O
@@ -523,6 +557,26 @@ end select
 - `lower:upper`
 - `value`
 
+- Neat thing about `select case` in Fortran: works with strings!
+
+```Fortran
+character(len=:) :: animal
+
+select case (animal)
+case ("cat")
+    print*, "meow!"
+case ("dog")
+    print*, "woof!"
+case ("pig")
+    print*, "oink!"
+case default
+    print*, "<generic animal noise>"
+end select
+```
+
+- Can be useful for parsing user arguments
+    - careful not to overdo it though, this is expensive!
+
 ## `do`
 
 - Very often need a fixed number of iterations
@@ -569,6 +623,10 @@ end do
 
 ### Loop labels
 
+- Many constructs in Fortran can be given labels
+- Useful as a form of documentation: what does this loop _do_?
+- Also useful when you need to jump out of a nested loop:
+
 ```Fortran
 integer :: i, j
 outer: do i = 1, 5
@@ -584,16 +642,22 @@ end do outer
 
 ## Arrays
 
+- Arrays are one of the "killer features" of Fortran
+    - Big reason why it's lasted so long!
 - Vector in 3D space could be 1D array of 3 elements:
 
 ```Fortran
-real(kind=dp), dimension(3) :: vector
-vector = [1.0_dp, 2.0_dp, -4.0_dp]
+real(kind=wp), dimension(3) :: vector
+! Could also declare it like so:
+! real(kind=wp) :: vector(3)
+vector = [1.0_wp, 2.0_wp, -4.0_wp]
 ```
 - Fortran can natively handle multidimensional arrays:
 
 ```Fortran
-real(kind=dp), dimension(3, 3) :: matrix
+real(kind=wp), dimension(3, 3) :: matrix
+! or
+! real(kind=wp) :: matrix(3, 3)
 ```
 
 - `matrix` has 3x3 = 9 elements
@@ -618,21 +682,76 @@ integer, dimension(-1:1) :: array
 ```
 - 1D array, 3 values with indices `-1, 0, 1`
 - Note array bounds separated with `:`, dimensions (or _ranks_) with
-  `,`
+  `,`:
+
+```Fortran
+real(real64), dimension(-1:1, 3:5) :: stress_tensor
+```
+
+- Still 3x3, but first dimension has indices `-1, 0, 1`, and second
+  has indices `3, 4, 5`
 
 - Can index an entire dimension via a _slice_ with `:`:
 
 
 ```Fortran
-real(kind=dp), dimension(3) :: vector
-real(kind=dp), dimension(3, 3) :: matrix
-vector = [1.0_dp, 2.0_dp, -4.0_dp]
+real(kind=wp), dimension(3) :: vector
+real(kind=wp), dimension(3, 3) :: matrix
+vector = [1.0_wp, 2.0_wp, -4.0_wp]
 matrix(1, :) = vector
-matrix(2, :) = 2.0_dp * vector
-matrix(3, :) = 3.0_dp * vector
+matrix(2, :) = 2.0_wp * vector
+matrix(3, :) = 3.0_wp * vector
 ```
 
 - Note `vector(:)` is the same as `vector`
+
+## Memory layout
+
+- Brief aside into computer architecture
+ - Computer memory is indexed by a linear series of addresses
+ - Usually written in hexadecimal
+     - e.g. 0x07FFAB43
+ - When we want to store multidimensional arrays, need to store them
+   "flattened"
+ - Also need to pick which is the "fastest" dimension, i.e. which is
+   stored first in memory
+
+- Maths matrix:
+
+![](./Matrix.png)
+By Svjo - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=79728977
+
+---
+
+- Two choices: $a_{11}$, then $a_{12}$, ... $a_{1n}$, then $a_{21}$, $a_{22}$,
+  ...
+  or $a_{11}$, $a_{21}$, ... $a_{m1}$, then $a_{12}$, $a_{22}$ ...
+- _Row-major_ or _column-major_
+
+![](./500px-Row_and_column_major_order.png)
+By Cmglee - Own work, CC BY-SA 4.0,
+https://commons.wikimedia.org/w/index.php?curid=65107030
+
+---
+
+- What does this mean in practice?
+- Nested loops over multidimensional arrays should have the inner-most
+  loop go over the left-most rank:
+
+  ```Fortran
+  integer :: i, j, k
+  real(real64), dimension(3, 3, 3) :: matrix
+
+  do k = 1, 3
+    do j = 1, 3
+      do i = 1, 3
+        matrix(i, j, k) = i + j +k
+      end do
+    end do
+  end do
+  ```
+- This is different from C-like languages
+    - Matlab is also column-major
 
 ## Allocatable arrays
 
@@ -641,21 +760,25 @@ matrix(3, :) = 3.0_dp * vector
 
 ```Fortran
 ! These two are equivalent:
-real(kind=dp), dimension(:), allocatable :: array1
-real(kind=dp), allocatable :: array2(:)
+real(kind=wp), dimension(:), allocatable :: array1
+real(kind=wp), allocatable :: array2(:)
 ! 3D array:
-real(kind=dp), dimension(:, :, :), allocatable :: array3
+real(kind=wp), dimension(:, :, :), allocatable :: array3
 ```
 
 - The number of dimensions/rank must be known at compile time
+    - Size of each dimension must be just `:`
 - After declaration, we must use `allocate` before first use:
 
 ```Fortran
-real(kind=dp), dimension(:, :), allocatable :: array
+real(kind=wp), dimension(:, :), allocatable :: array
 allocate(array(10, 5))
+! array is now 10x5
 ```
 
 - `array` is now `allocated`, but _uninitialised_
+    - i.e. if we index it we will get nonsense
+    - same state as a non-allocatable array before we fill it
 
 - When finished with the array, we can `deallocate` it and free up the
   memory:
@@ -663,6 +786,9 @@ allocate(array(10, 5))
 ```Fortran
 deallocate(array)
 ```
+
+- Less important than C-like languages due to _automatic_ variables
+  and scope -- will cover this later
 
 ## Guarding `allocate`
 
@@ -734,6 +860,8 @@ function kronecker_delta(i, j)
 end function kronecker_delta
 ```
 
+- Result has the same name as the function, by default
+- Can change this with `result` keyword
 - Functions in `program`s go after a `contains` statement:
 
 ```Fortran
@@ -779,23 +907,146 @@ call my_subroutine(argument)
 
 - Due to historical reasons, procedures are not recursive by default:
   they cannot call themselves directly or indirectly
+- Need to use `result` keyword to change name of function result
 - Use `recursive` keyword:
 
 ```Fortran
-recursive function factorial(n)
+recursive function factorial(n) result(res)
   ...
 end function factorial
 ```
 
 ## Local variables
 
-## intent
+- Variables declared inside procedures are _local_ to that routine
+    - Also called _automatic_ variables
+- Their _scope_ is the immediate procedure
+- Cannot be accessed outside the routine, except via:
+    - function result
+    - `intent(out)` or `intent(inout)` dummy arguments
+
+```{include=examples/0x_local_variables.f90 .numberLines .Fortran}
+```
+
+`x` in the main program and `x` within `add_square` are different variables
+
+## `intent`
+
+- when writing programs, can be very useful to tell the compiler as
+  much information as you can
+- one useful piece of info is the _intent_ of arguments to procedures
+- this can help avoid certain classes of bugs
+- there are three `intent`s:
+- `intent(in)`: this is for arguments which should not be modified in
+  the routine, only provide information _to_ the procedure
+- `intent(out)`: for arguments which are the _result_ of the
+  routine. these are _undefined_ on entry to the routine: don't try to
+  read them!
+- `intent(inout)`: for arguments are to be modified by the procedure
+    - if you don't explicitly provide an `intent`, this is the default
+- these are essentially equivalent to read-only, write-only and
+  read-write
+- prefer `function`s over `subroutine`s with `intent(out)` arguments
+    - easier to read!
 
 ## dummy arguments
+
+- _dummy_ arguments are the _local_ names of the procedure arguments
+- _actual_ arguments are the names at the calling site
+- the routine doesn't care or know what the names of the actual
+  arguments are
+    - type and order have to match though!
+
+```{include=examples/0x_dummy_arguments.f90 .numberLines .Fortran}
+```
+
+- `x` becomes associated with `a`; `y` with `b`; `z` with `c`
+
+- Another nifty feature of Fortran is keyword arguments:
+
+```Fortran
+call print_three_variables(c=z, a=x, b=y)
+```
+- lets us change the order of the arguments
+- _very_ useful as documentation at the calling site!
+    - especially when lots of arguments (but don't)
+    - or multiple arguments with same type next to each other
+
+```Fortran
+call calculate_position(0.345, 0.5346)
+! or
+call calculate_position(radius=0.345, angle=0.5346)
+```
+
+## More on scope
+
+- possible for procedures to access variables in the containing scope
+- generally not a great idea
+
+```{include=examples/0x_global_variables.f90 .numberLines .Fortran}
+```
+
+- this is surprising, despite the `intent(in)`!
+- also hard to see where `x` comes from
+
 
 # session 4
 
 ## modules
+
+- very big programs become difficult to develop and maintain
+- becomes useful to split up into separate files
+- early versions of Fortran just stuck subprograms into separate files
+  and compiled them altogether
+    - still works!
+- but compiler doesn't know what procedures are in what files, or what
+  the interfaces look like (number and type of arguments)
+- solution is `module`s
+- compiler generates interfaces for you
+- _always_ use `module`s when using multiple files
+- `module`s can also contain variables as well as procedures
+    - try to avoid though, except for `parameter`s
+- can choose what entities in a `module` to make `public` or `private`
+    - `module` is a bit like a single instance of an object
+
+
+```Fortran
+module <name>
+  implicit none
+
+  ! variables, type, parameters
+
+contains
+
+  ! functions, subroutines
+
+end module <name>
+```
+
+Then, elsewhere:
+
+```Fortran
+program track_particles
+  use particle_properties
+  implicit none
+```
+
+or even better, just certain things:
+
+```Fortran
+subroutine push_particle
+  use particle_properties, only : electron_mass
+```
+
+- this is great!
+    - more obvious where `electron_mass` comes from
+    - doesn't bring in extra names
+    - can rename things
+
+```Fortran
+subroutine push_particle
+  use particle_properties, only : electron_mass => mass
+```
 
 ## derived types
 
@@ -806,6 +1057,14 @@ end function factorial
 ## formatted i/o
 
 ## good practice
+
+# Missed bits
+
+## array constructors
+
+## elemental functions
+
+## interoperability with C/python
 
 
 # C++ course
