@@ -750,6 +750,10 @@ https://commons.wikimedia.org/w/index.php?curid=65107030
     end do
   end do
   ```
+- Assuming no loop-dependencies, answer is identical to reversing
+  order of loops
+- But performance can be very different!
+    - order of magnitude!
 - This is different from C-like languages
     - Matlab is also column-major
 
@@ -794,21 +798,16 @@ deallocate(array)
 
 - Possible to request more memory than available
 - Good practice to always check `allocate` succeeds using `stat`
-  argument **caveat**
-- FIXME: `errmsg`
+  argument
+- Value of `stat` is non-portable and might not even be documented!
+- Combine with `errmsg`:
 
-  ```Fortran
-  use, intrinsic :: iso_fortran_env, only : real64, int64
-  integer(int64), parameter :: bignumber = huge(1) * 2
-  real(real64), dimension(:), allocatable ::bigarray
-  integer :: istat
-  allocate(bigarray(bignumber), stat=istat)
-  if (istat /= 0) error stop istat
-  deallocate(bigarray, stat=istat)
-  if (istat /= 0) error stop istat
+  ```{include=examples/0x_allocate_stat.f90 .numberLines .Fortran}
   ```
 
-  - FIXME: `errmsg`
+- Note `errmsg` may not always be accurate...
+    - Bare `allocate` will terminate, possibly with more useful error
+      message
 
 ## Procedures
 
@@ -820,6 +819,7 @@ deallocate(array)
     - Functions
     - Subroutines
 - Modules
+    - Cover later
 - Procedures are good:
     - easier to test
     - reuse
@@ -829,58 +829,59 @@ deallocate(array)
 - Encapsulation: hide internal details from other parts of the
   program. Program against the _interface_
 
-### Functions
+## Functions
 - Takes arguments and returns a single result (may be array)
 - Always returns a value
 - Intrinsic functions, e.g. `sin(x)`, `sqrt(x)`
 - syntax:
 
 ```Fortran
-function my_function(input)
+function my_func(input)
   implicit none
   <type>, intent(in) :: input
-  <type> :: my_function
+  <type> :: my_func
   ! body
-  my_function = ! result
-end function
+  my_func = ! result
+end function my_func
 ```
 
-- example:
+## Functions
+- Takes arguments and returns a single result (may be array)
+- Always returns a value
+- Intrinsic functions, e.g. `sin(x)`, `sqrt(x)`
+- syntax:
 
 ```Fortran
-function kronecker_delta(i, j)
+<type> function my_func(input)
   implicit none
-  integer, intent(in) :: i, j
-  integer :: kronecker_delta
-  if (i == j) then
-    kronecker_delta = 1
-  else
-    kronecker_delta = 0
-  end if
-end function kronecker_delta
+  <type>, intent(in) :: input
+  ! body
+  my_func = ! result
+end function my_func
 ```
+
+## Functions
 
 - Result has the same name as the function, by default
 - Can change this with `result` keyword
+
+```{include=examples/0x_basic_function.f90 .numberLines .Fortran startLine=8 endLine=16}
+```
+
+## Functions
+
 - Functions in `program`s go after a `contains` statement:
 
-```Fortran
-program lattice
-  implicit none
-
-  print*, kronecker_delta(1, 2)
-  print*, kronecker_delta(2, 2)
-
-contains
-  function kronecker_delta
-    ...
+```{include=examples/0x_basic_function.f90 .numberLines .Fortran startLine=1 endLine=9}
 ```
 
 - use function like `y = function(x)`
 - use `()` even if a function requires no arguments: `x = function()`
+- As long as `implicit none` is in your `program` (or `module`, see
+  later), not necessary in procedures
+    - Some people may advise as good practice though
 
-
-### Subroutines
+## Subroutines
 
 - Essentially functions that don't need to return anything
 - Can still return things via out-arguments
@@ -901,6 +902,12 @@ end subroutine my_subroutine
 
 ```Fortran
 call my_subroutine(argument)
+```
+
+## Subroutine example
+
+```{include=examples/0x_basic_subroutine.f90 .numberLines .Fortran
+startLine=10 endLine=14}
 ```
 
 ## Recursion
@@ -928,7 +935,13 @@ end function factorial
 ```{include=examples/0x_local_variables.f90 .numberLines .Fortran}
 ```
 
-`x` in the main program and `x` within `add_square` are different variables
+`x` in the main program and `x` within `add_square` are different
+variables
+
+- Local `allocatable` variables are automatically `deallocate`d on
+  exit from a procedure
+    - not the case for dummy arguments (see later), or variables
+      accessed from a different scope (also see later!)
 
 ## `intent`
 
@@ -953,6 +966,8 @@ end function factorial
 
 - _dummy_ arguments are the _local_ names of the procedure arguments
 - _actual_ arguments are the names at the calling site
+    - _actual_ arguments are said to be _associated_ with the _dummy_
+      arguments
 - the routine doesn't care or know what the names of the actual
   arguments are
     - type and order have to match though!
@@ -1009,6 +1024,7 @@ call calculate_position(radius=0.345, angle=0.5346)
 - can choose what entities in a `module` to make `public` or `private`
     - `module` is a bit like a single instance of an object
 
+- syntax looks very similar to `program`:
 
 ```Fortran
 module <name>
@@ -1023,7 +1039,19 @@ contains
 end module <name>
 ```
 
-Then, elsewhere:
+- But note that `module` body before `contains` cannot include
+  executable statements!
+
+  ```Fortran
+  module badbad
+    implicit none
+    print*, "this won't compile!"
+  end module badbad
+  ```
+
+## Using modules
+
+- Using a `module` is simple:
 
 ```Fortran
 program track_particles
@@ -1031,7 +1059,7 @@ program track_particles
   implicit none
 ```
 
-or even better, just certain things:
+- or even better, just certain things:
 
 ```Fortran
 subroutine push_particle
@@ -1047,6 +1075,35 @@ subroutine push_particle
 subroutine push_particle
   use particle_properties, only : electron_mass => mass
 ```
+
+## Modules
+
+- Compiling a `module` results in a `.mod` file as well as the built
+  object
+- This is essentially an interface file, and is similar (though very
+  different!) to a C header file
+- Slightly unfortunately, `.mod` files are not portable even between
+  versions of the same compiler!
+    - This is "Application Binary Interface" (ABI) and is a Hard
+      Problem
+
+## Modules in practice
+
+- Cannot have circular dependencies
+    - A uses B which uses A
+    - This won't work!
+    - Ways round it (may cover `submodule`s later)
+
+- Some trickiness: there is now an order in which you have to compile
+  files
+- If A uses B which uses C, need to compile C then B then A
+- Can do it manually, but quickly gets out of hand
+- Some compilers can sort this out (but need two passes)
+- There are tools available,
+  e.g. ![fortdepend](https://github.com/ZedThree/fort_depend.py)
+- Also build systems such as ![CMake](https://cmake.org) can take care
+  of this for you
+
 
 ## derived types
 
