@@ -1,0 +1,9 @@
+- hello world
+- break the program
+- read in name
+- character(len)
+- read in two words
+- sum numbers from 1 to 100
+- fizzbuzz
+- factorial
+- euler integration
