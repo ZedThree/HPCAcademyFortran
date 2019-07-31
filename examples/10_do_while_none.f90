@@ -1,7 +1,7 @@
 program do_while_none
   implicit none
-  integer :: x = 5
-  do while(x < 5)
+  integer :: x = 10
+  do while(x < 10)
     print*, x
     x = x + 1
   end do

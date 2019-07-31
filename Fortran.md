@@ -247,6 +247,29 @@ There are 5 fundamental types in Fortran:
   is sufficient
     - You may like to keep it in every function, see later
 
+## Whitespace, lines and capitalisation
+
+Some points on Fortran grammar
+
+### FIXME
+examples
+
+### Whitespace
+- Mostly doesn't matter
+
+### Lines
+- Statements must be on a single line unless you use a `&`, _line
+  continuation_
+- Optional to put `&` at start of next line
+- Maximum of 256 lines (i.e. 255 `&`)
+
+### Capitalisation
+- Fortran is completely case-insensitive
+- Originally didn't have lower-case characters at all!
+- Prefer lower-case keywords
+- Careful with names!
+- You may prefer `snake_case`
+
 ## Initialisation
 
 - Can initialise in the declaration, but WARNING!
@@ -259,15 +282,32 @@ There are 5 fundamental types in Fortran:
 - Plus `**` for exponentiation
     - Careful you only use integers unless you mean it
 - BODMAS/PEDMAS and left-to-right, but use `()` to clarify
+    - Don't forget, make it _readable_
 
-```{include=examples/03_basic_maths.f90 .numberLines .Fortran}
+```{include=examples/03_basic_maths.f90 .numberLines .Fortran
+startLine=3 endLine=9 startFrom=3}
 ```
 
-### FIXME
+## Mixed-type operations
 
-- mixed-type operations
-- integer division
-- briefly, floating point maths
+- Not uncommon to want to mix types in arithmetic, e.g.
+    - `integer :: n` points of `real :: grid_spacing`
+- This will _promote_ the different types to be the same type/kind
+- Result may end being _demoted_ to fit the result type
+- Possible to lose information this way, but compiler should warn you
+
+## Integer division
+
+- When dividing two `integer`s, the result is an `integer` truncated
+  towards zero
+- This may be surprising!
+- `5 / 2 == 2`
+- Therefore, if you need the result to be a `real`, either convert (at
+  least) one operand to `real`, or use a `real` literal
+    - Don't forget `real` literals are single precision by default!
+- `5 / real(2) == 2.5`
+- `5. / 2 == 2.5`
+- `5._real64 / real(2, kind=real64) == 2.5_real64`
 
 ## Logical/relational operations
 
@@ -331,7 +371,9 @@ end if
 - `.and.`, `.or.`, `.not.`
 
 
-```{include=examples/06_logical_boolean_operations.f90 .numberLines .Fortran}
+```{include=examples/06_logical_boolean_operations.f90 .numberLines
+.Fortran
+startLine=3 endLine=8 startFrom=3}
 ```
 
 - Note for those familiar with other languages: Fortran does not have
@@ -346,7 +388,7 @@ end if
 - Often want to repeat some bit of code/instructions for multiple
   values
     - Could write everything out explicitly
-- `do` _loops_ are way of doing this
+- `do` _loops_ are a way of doing this
 - three slight variations:
 
 ```Fortran
@@ -367,7 +409,9 @@ do <index> = <lower-bound>, <upper-bound>
 end do
 ```
 
-- all essentially equivalent
+## Loops
+
+- All three forms essentially equivalent
 - Bare `do` needs something in body to `exit` loop
 - `do while` loops _while_ the condition is true, and does the loop
   _at least once_
@@ -375,28 +419,35 @@ end do
     - loop variable (`<index>`) must be pre-declared
     - lower and upper bounds are your choice
 
-- FIXME: loop examples
-
 ## Bare `do`
 
-```{include=examples/07_infinite_do.f90 .numberLines .Fortran}
+- Notice nothing to say when loop is done!
+
+```{include=examples/07_infinite_do.f90 .numberLines .Fortran
+startLine=3 endLine=7 startFrom=3}
 ```
 
 ## `exit`
 
+- We can use `exit` to leave a loop
 - Leaves current loop entirely
 
-```{include=examples/08_do_exit.f90 .numberLines .Fortran}
+```{include=examples/08_do_exit.f90 .numberLines .Fortran
+startLine=3 endLine=8 startFrom=3}
 ```
 
 ## `do while`
 
-```{include=examples/09_do_while.f90 .numberLines .Fortran}
+- Equivalent to using `exit` at start of loop
+
+```{include=examples/09_do_while.f90 .numberLines .Fortran
+startLine=3 endLine=7 startFrom=3}
 ```
 
 - Unlike C++, `do while` checks the condition at the _beginning_ of the loop:
 
-```{include=examples/10_do_while_none.f90 .numberLines .Fortran}
+```{include=examples/10_do_while_none.f90 .numberLines .Fortran
+startLine=3 endLine=7 startFrom=3}
 ```
 
 ## `do <counter> = <start>, <stop>, [<stride>]`
@@ -406,30 +457,35 @@ end do
 - `start` and `stop` are required, `counter` goes from `start` to
   `stop` _inclusive_:
 
-```{include=examples/11_do_counter.f90 .numberLines .Fortran}
+```{include=examples/11_do_counter.f90 .numberLines .Fortran
+startLine=3 endLine=6 startFrom=3}
 ```
+
+## `do <counter> = <start>, <stop>, [<stride>]`
 
 - There is an optional `stride`:
 
-```{include=examples/12_do_stride.f90 .numberLines .Fortran}
+```{include=examples/12_do_stride.f90 .numberLines .Fortran
+startLine=3 endLine=6 startFrom=3}
 ```
 
 - Note that `stop` might not be included if `stride` would step over
   it
 
-### notes
+## A couple of points on `do`
 
-- it's ok for `stop` < `start`: just won't be executed
+- It's ok for `stop` < `start`: just won't be executed
 - `stride` can be negative:
 
-```{include=examples/13_do_negative_stride.f90 .numberLines .Fortran}
+```{include=examples/13_do_negative_stride.f90 .numberLines .Fortran
+startLine=3 endLine=6 startFrom=3}
 ```
 
-- you cannot change the value of the loop `counter` inside a loop
-- value of `counter` not defined outside loop
-    - likely to take on last value after loop, but absolutely do not
+- You cannot change the value of the loop `counter` inside a loop
+- Value of `counter` not defined outside loop
+    - Likely to take on last value after loop, but absolutely do not
       rely on it!
-    - compiler free to optimise it away
+    - Compiler free to optimise it away
 
 
 ### FIXME
@@ -439,6 +495,9 @@ end do
 # Session 2
 
 ## `parameter`
+
+### FIXME
+ move after arrays
 
 - sometimes want a variable that can't be modified at runtime,
   e.g. `pi`
@@ -459,15 +518,9 @@ real, dimension(10, 10) :: density
 - super useful for things like `pi`, `speed_of_light`,
   `electron_mass`, etc.
 
-```Fortran
-integer, parameter :: grid_size = 10
-real, dimension(grid_size) :: x_grid_spacing, y_grid_spacing
-real, dimension(grid_size) :: x_grid, y_grid
-real, dimension(grid_size, grid_size) :: density
-```
+## `parameter` examples
 
-```Fortran
-real(kind=wp), parameter :: pi = 4._wp*atan(1._wp)
+```{include=examples/0x_parameters.f90 .numberLines .Fortran}
 ```
 
 ## Kinds of types
@@ -486,17 +539,21 @@ real(kind=wp), parameter :: pi = 4._wp*atan(1._wp)
         - Standard but non-portable!
         - What number represents what `kind` is entirely up to the compiler
 
+## Kinds of types
+
 - Don't use those! Use these:
 
 ```Fortran
 ! Get the kind number that can give us 15 digits of precision and 300
-orders of magntitude of range
+! orders of magntitude of range
 integer, parameter :: wp = selected_real_kind(15, 300)
 ! Declare a variable with this kind
 real(kind=wp) :: x
 ! Use a literal with this range
 x = 1.0_wp
 ```
+
+## Kinds of types
 
 ### `iso_fortran_env`
 - Even better! F2008 feature, but use this and complain if stuck on a
@@ -515,99 +572,6 @@ use, intrinsic :: iso_fortran_env, only : real64
 integer, parameter :: wp = real64
 real(kind=wp) :: x
 x = 1.0_wp
-```
-
-## `open` - File I/O
-
-- Open a file for reading/writing:
-
-```Fortran
-open(newunit=unit_num, file="filename")
-```
-
-- `unit_num` is integer (that you've already declared)
-- compiler will make sure it's unique (and negative)
-- `newunit` is F2008. Older versions:
-
-```Fortran
-open(unit=unit_num, file="rectangle.shape")
-```
-
-- `unit_num` must already have a value (choose >=10)
-
-- Lots of other arguments:
-- status
-- action
-- iostat
-
-### Note on keyword arguments
-
-## `read`
-
-- Once you've got a file with a `unit`, you can read from it into
-  variables
-
-```Fortran
-read(unit=unit_num, fmt=*) height, width
-```
-
-- `unit_num` must be already `open`ed file
-- `unit=*`, `fmt=*` is same as `read(*,*)`
-
-## `write`
-
-- Once you've got a file with a `unit`, you can write into it from
-  variables
-
-```Fortran
-write(unit=unit_num, fmt=*) height, width
-```
-
-- `unit_num` must be already `open`ed file
-- `unit=*`, `fmt=*` is same as `write(*,*)`
-
-## `close`
-
-- Need to `close` files after we're done to ensure contents get
-  written to disk properly
-
-```Fortran
-close(unit=unit_num)
-```
-
-- `unit_num` must be already `open`ed file
-
-## `iostat`
-
-- All the file I/O commands can take an `iostat` argument
-- Should be integer you've already declared
-- Error if `iostat /= 0`
-- Best practice is to check value of `iostat`
-
-```Fortran
-integer :: istat
-open(newunit=unit_num, file="filename", iostat=istat)
-if (istat /= 0) error stop "Error opening file"
-```
-
-- Worst practice is to use `iostat` and not check it!
-
-## `iomsg`
-
-- Any I/O operation errors will cause abort unless `iostat` is used
-- `iostat == 0` means success -- any other value is compiler dependent
-- Use `iomsg` to get a nice human readable message!
-- Unfortunately, no spec on how long it should be
-
-```Fortran
-integer :: istat
-character(len=200) :: error_msg
-open(newunit=unit_num, file="filename", iostat=istat &
-     iomsg=error_msg)
-if (istat /= 0) then
-  print*, error_msg
-  error stop
-end if
 ```
 
 ## `case`
@@ -655,38 +619,6 @@ end select
 
 - Can be useful for parsing user arguments
     - careful not to overdo it though, this is expensive!
-
-## `do`
-
-- Very often need a fixed number of iterations
-
-```Fortran
-integer :: i
-do i = 1, 10
-  print*, i
-end do
-```
-
-- Can change the step/stride:
-
-```Fortran
-integer :: i
-do i = 10, 1, -2
-  print*, i
-end do
-```
-
-- general syntax:
-
-```Fortran
-do counter = start, stop[, step]
-  ! loop body
-end do
-```
-
-- `counter` must be integer, cannot be changed inside loop
-- value of `counter` is undefined outside loop (except with `exit`) --
-  don't rely on it!
 
 ## `cycle`
 
@@ -741,6 +673,8 @@ real(kind=wp), dimension(3, 3) :: matrix
 
 - `matrix` has 3x3 = 9 elements
 
+## Arrays
+
 - We can _index_ an array using an integer:
 
 ```Fortran
@@ -752,6 +686,8 @@ do i = 1, 3
   print*, vector(1)
 end do
 ```
+
+## Arrays
 
 - **Note:** By default, Fortran indices start at 1!
 - Can change this:
@@ -770,6 +706,8 @@ real(real64), dimension(-1:1, 3:5) :: stress_tensor
 - Still 3x3, but first dimension has indices `-1, 0, 1`, and second
   has indices `3, 4, 5`
 
+## Arrays
+
 - Can index an entire dimension via a _slice_ with `:`:
 
 
@@ -783,6 +721,11 @@ matrix(3, :) = 3.0_wp * vector
 ```
 
 - Note `vector(:)` is the same as `vector`
+
+## Array inquiry functions
+
+### FIXME
+
 
 ## Memory layout
 
@@ -1112,6 +1055,101 @@ startLine=4 endLine=11}
 - also hard to see where `x` comes from
 
 
+# File I/O
+
+## `open` - File I/O
+
+- Open a file for reading/writing:
+
+```Fortran
+open(newunit=unit_num, file="filename")
+```
+
+- `unit_num` is integer (that you've already declared)
+- compiler will make sure it's unique (and negative)
+- `newunit` is F2008. Older versions:
+
+```Fortran
+open(unit=unit_num, file="rectangle.shape")
+```
+
+- `unit_num` must already have a value (choose >=10)
+
+- Lots of other arguments:
+- status
+- action
+- iostat
+
+### Note on keyword arguments
+
+## `read`
+
+- Once you've got a file with a `unit`, you can read from it into
+  variables
+
+```Fortran
+read(unit=unit_num, fmt=*) height, width
+```
+
+- `unit_num` must be already `open`ed file
+- `unit=*`, `fmt=*` is same as `read(*,*)`
+
+## `write`
+
+- Once you've got a file with a `unit`, you can write into it from
+  variables
+
+```Fortran
+write(unit=unit_num, fmt=*) height, width
+```
+
+- `unit_num` must be already `open`ed file
+- `unit=*`, `fmt=*` is same as `write(*,*)`
+
+## `close`
+
+- Need to `close` files after we're done to ensure contents get
+  written to disk properly
+
+```Fortran
+close(unit=unit_num)
+```
+
+- `unit_num` must be already `open`ed file
+
+## `iostat`
+
+- All the file I/O commands can take an `iostat` argument
+- Should be integer you've already declared
+- Error if `iostat /= 0`
+- Best practice is to check value of `iostat`
+
+```Fortran
+integer :: istat
+open(newunit=unit_num, file="filename", iostat=istat)
+if (istat /= 0) error stop "Error opening file"
+```
+
+- Worst practice is to use `iostat` and not check it!
+
+## `iomsg`
+
+- Any I/O operation errors will cause abort unless `iostat` is used
+- `iostat == 0` means success -- any other value is compiler dependent
+- Use `iomsg` to get a nice human readable message!
+- Unfortunately, no spec on how long it should be
+
+```Fortran
+integer :: istat
+character(len=200) :: error_msg
+open(newunit=unit_num, file="filename", iostat=istat &
+     iomsg=error_msg)
+if (istat /= 0) then
+  print*, error_msg
+  error stop
+end if
+```
+
 # session 4
 
 ## modules
@@ -1231,8 +1269,15 @@ subroutine push_particle
 
 ## elemental functions
 
+## namelists
+
+## `block`
+
 ## interoperability with C/python
 
+## Coarrays
+
+## `where`
 
 # C++ course
 
