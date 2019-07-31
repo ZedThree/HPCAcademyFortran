@@ -5,7 +5,18 @@ classoption: aspectratio=169
 theme: York169dark
 highlight-style: my.theme
 ---
+
 # Session 1
+
+## Course content
+
+- Some experience of programming in some language very useful
+- But I don't assume much!
+- Covers Fortran language
+- Other people covering floating point maths, compilation,
+  performance, parallelisation
+- One/two practical sessions on the basics, but most hands-on in the
+  target application sessions
 
 ## What is Fortran?
 
@@ -20,16 +31,59 @@ highlight-style: my.theme
 - can be _very_ fast
 - native multidimensional arrays
     - very useful for scientists!
-- compiled language
-    - c.f. Python as interpreted language
-- statically typed:
+
+## What is Fortran?
+
+- Compiled language
+    - compare with Python as interpreted language
+- Statically typed:
     - types of variables must be specified at compile time and cannot
       be changed
-    - "strong" typing, c.f. C
-- imperative: commands executed in order
-    - c.f. SQL
+    - "strong" typing, compare with C, easy to change types
+- Imperative: commands executed in order
+    - compare with SQL, Make, where commands are "what" vs "how"
 
-### Alternatives
+## Brief history of Fortran
+
+- First release in 1956, FORTRAN
+    - Not the first high-level language, but the first successful one
+    - Let people write programs much faster, rather than in assembly
+- Massively successful, ported to more than 40 different systems
+- Early computers had no disks, text editors or even keyboards!
+- Programs were made on punchcards
+
+![Fortran punchcard](./FortranCardPROJ039.agr.jpg){.width=50%}
+By Arnold Reinhold, CC BY-SA 2.5,
+https://commons.wikimedia.org/w/index.php?curid=775153
+
+## Brief history of Fortran
+
+- FORTRAN II added functions (!)
+- FORTRAN IV eventually got standardised and became FORTRAN 66
+    - Starting to look like a "modern" programming language
+- Next standard, FORTRAN 77, added lots of modern features
+    - But still tied to format of punchcards!
+- Fortran 90 finally brought language up to modern era
+    - "Free" form source code
+    - Made lots of "spaghetti" code features obsolescent
+- Further revisions:
+    - Fortran 95
+    - Fortran 2003
+    - Fortran 2008
+    - Fortran 2018
+
+## Why Fortran?
+
+- Built for efficient mathematical calculations
+- Multidimensional arrays are first-class objects
+- Easily fits into various parallel programming paradigms
+    - Some even built right into language
+- Majority of codes on UK supercomputers use Fortran
+    - fluid dynamics, materials, plasmas, climate, etc.
+- Portable code, several compilers available
+- Interoperability features (can work with C easily)
+
+## Alternatives
 
 - C++
     - Templates make it possible to express generic operations
@@ -38,10 +92,33 @@ highlight-style: my.theme
       libraries exist)
 - Python
     - Easier to use!
-    - Possible cost of performance (but e.g. numpy uses C or Fortran
+    - Possible cost of performance (but e.g. `numpy` uses C or Fortran
       under the hood!)
 - Matlab
     - Expensive!
+
+## Fundamentals of Programming
+
+- Computers understand machine code -- 1s and 0s
+- We would much prefer to write in a human language
+- Source code is human-readable set of instructions for computer
+- Need a program to convert source to machine code
+- Either:
+    - interpreted, like Python, convert on the fly
+    - compiled, like Fortran, convert then run
+- Compilation step offers opportunity to spend time _optimising_ the
+  code
+
+## Fundamentals
+
+- Source code is written in plain text files (i.e. not Word!)
+- Run compiler on source file to produce _executable_
+- Programming languages have a strict _syntax_ or grammar
+- Compiler will tell you if you get this wrong
+    - Read the error message, then read it again!
+- Compiler can also _warn_ you about suspicious code
+- Compilers have many options or _flags_ to control warnings, errors,
+  optimisations, etc.
 
 ## Fundamentals of Programming
 
@@ -50,7 +127,9 @@ highlight-style: my.theme
 - We use high-level languages in order to be understandable to humans
 - Therefore, more important to write _readable_ code than _efficient_
   code
-    - Even more important that it is correct
+- Even more important that it is correct
+- Make it work -> make it readable -> make it fast
+    - In that order!
 
 
 ## Hello world
@@ -72,7 +151,7 @@ This will be covered more in depth later on
 Basic compilation is as so:
 
 - `gfortran source.f90` -> `a.out`
-- `gfortran source.f90 -o executable` -> `executable`
+- `gfortran source.f90 -o executable -Wall -Wextra ` -> `executable`
 
 And running like
 
@@ -829,6 +908,15 @@ deallocate(array)
 - Encapsulation: hide internal details from other parts of the
   program. Program against the _interface_
 
+## Procedures
+
+- Two types of procedures:
+    - `function`s
+    - `subroutine`s
+- Generically called _procedures_ or _subprograms_
+- May also refer to them both as _functions_ -- will make it clear
+  when I mean `function`s in particular
+
 ## Functions
 - Takes arguments and returns a single result (may be array)
 - Always returns a value
@@ -930,18 +1018,32 @@ end function factorial
 - Their _scope_ is the immediate procedure
 - Cannot be accessed outside the routine, except via:
     - function result
-    - `intent(out)` or `intent(inout)` dummy arguments
+    - `intent(out)` or `intent(inout)` dummy arguments (see later)
+- Local `allocatable` variables are automatically `deallocate`d on
+  exit from a procedure
+    - not the case for dummy arguments (see later), or variables
+      accessed from a different scope (also see later!)
 
-```{include=examples/0x_local_variables.f90 .numberLines .Fortran}
+## Local variables
+
+```{include=examples/0x_local_variables.f90 .numberLines .Fortran
+startLine=3 endLine=12 startFrom=3}
 ```
 
 `x` in the main program and `x` within `add_square` are different
 variables
 
-- Local `allocatable` variables are automatically `deallocate`d on
-  exit from a procedure
-    - not the case for dummy arguments (see later), or variables
-      accessed from a different scope (also see later!)
+## Initialising local variables
+
+- A word of warning when initialising local variables
+- Giving a variable a value on the same line it is declared gives it
+  an implicit `save` attribute
+- This `save`s the value of the variable between function calls
+- Initialisation is then _not done_ on subsequent calls:
+
+```{include=examples/0x_save_attribute.f90 .numberLines .Fortran
+startLine=13 endLine=17 startFrom=13}
+```
 
 ## `intent`
 
@@ -972,15 +1074,19 @@ variables
   arguments are
     - type and order have to match though!
 
+## dummy arguments
+
 ```{include=examples/0x_dummy_arguments.f90 .numberLines .Fortran}
 ```
 
 - `x` becomes associated with `a`; `y` with `b`; `z` with `c`
 
+## Keyword arguments
+
 - Another nifty feature of Fortran is keyword arguments:
 
-```Fortran
-call print_three_variables(c=z, a=x, b=y)
+```{include=examples/0x_keyword_arguments.f90 .numberLines .Fortran
+startFrom=6 startLine=6 endLine=8}
 ```
 - lets us change the order of the arguments
 - _very_ useful as documentation at the calling site!
@@ -998,7 +1104,8 @@ call calculate_position(radius=0.345, angle=0.5346)
 - possible for procedures to access variables in the containing scope
 - generally not a great idea
 
-```{include=examples/0x_global_variables.f90 .numberLines .Fortran}
+```{include=examples/0x_global_variables.f90 .numberLines .Fortran
+startLine=4 endLine=11}
 ```
 
 - this is surprising, despite the `intent(in)`!
@@ -1014,6 +1121,7 @@ call calculate_position(radius=0.345, angle=0.5346)
 - early versions of Fortran just stuck subprograms into separate files
   and compiled them altogether
     - still works!
+    - but don't do it!
 - but compiler doesn't know what procedures are in what files, or what
   the interfaces look like (number and type of arguments)
 - solution is `module`s
@@ -1023,6 +1131,8 @@ call calculate_position(radius=0.345, angle=0.5346)
     - try to avoid though, except for `parameter`s
 - can choose what entities in a `module` to make `public` or `private`
     - `module` is a bit like a single instance of an object
+
+## modules
 
 - syntax looks very similar to `program`:
 
@@ -1100,8 +1210,8 @@ subroutine push_particle
 - Can do it manually, but quickly gets out of hand
 - Some compilers can sort this out (but need two passes)
 - There are tools available,
-  e.g. ![fortdepend](https://github.com/ZedThree/fort_depend.py)
-- Also build systems such as ![CMake](https://cmake.org) can take care
+  e.g. [fortdepend](https://github.com/ZedThree/fort_depend.py)
+- Also build systems such as [CMake](https://cmake.org) can take care
   of this for you
 
 
