@@ -151,11 +151,25 @@ This will be covered more in depth later on
 Basic compilation is as so:
 
 - `gfortran source.f90` -> `a.out`
-- `gfortran source.f90 -o executable -Wall -Wextra ` -> `executable`
+- `gfortran source.f90 -o executable` -> `executable`
 
 And running like
 
 - `./executable`
+
+## Compiler flags
+
+Some basic, very helpful flags you should use:
+
+- `-Wall`: "commonly used" warnings
+- `-Wextra`: additional warnings
+- `-fcheck=all`: various run-time checks
+    - This isn't free!
+- `-g`: debug symbols
+    - Can give better error messages, required for debuggers like
+      `gdb`
+- `-O1`/`-O2`/`-O3`: optimisations
+    - Can speed up code at cost of longer compile times
 
 ## Types
 
@@ -189,7 +203,7 @@ There are 5 fundamental types in Fortran:
     - `4 + 5.3` might do
 
 ## Cover literals here
-- FIXME: later
+### FIXME: later
 - Writing `real`s:
 ```Fortran
 2.
@@ -487,13 +501,6 @@ startLine=3 endLine=6 startFrom=3}
       rely on it!
     - Compiler free to optimise it away
 
-
-### FIXME
-
-- move `cycle` and `select case` here
-
-# Session 2
-
 ## `parameter`
 
 ### FIXME
@@ -648,8 +655,7 @@ outer: do i = 1, 5
 end do outer
 ```
 
-
-# Session 3
+# Session 2
 
 ## Arrays
 
@@ -726,6 +732,7 @@ matrix(3, :) = 3.0_wp * vector
 
 ### FIXME
 
+- Later, probably
 
 ## Memory layout
 
@@ -1015,7 +1022,7 @@ startLine=13 endLine=17 startFrom=13}
       arguments
 - the routine doesn't care or know what the names of the actual
   arguments are
-    - type and order have to match though!
+    - type, kind, rank and order have to match though!
 
 ## dummy arguments
 
@@ -1023,6 +1030,22 @@ startLine=13 endLine=17 startFrom=13}
 ```
 
 - `x` becomes associated with `a`; `y` with `b`; `z` with `c`
+
+## dummy arguments and arrays
+
+- Three choices for passing arrays:
+- `dimension(n, m, p)`: explicit size
+    - Actual argument has to be exactly this size
+- `dimension(n, m, *)`: _assumed size_ -- old, don't use!
+    - Compiler doesn't know the size of the array, so you better index
+      it correctly!
+- `dimension(:, :, :)`: _assumed shape_
+    - Compiler now _does_ know the size of the actual array passed
+    - Can check if you go out-of-bounds (may need compiler flag!)
+    - Indices now always start at 1
+- `dimension(n:, m:, p:)`: assumed shape with lower bounds
+    - Compiler still knows the correct size
+    - but remaps indices to match your provided lower bounds
 
 ## Keyword arguments
 
@@ -1079,8 +1102,6 @@ open(unit=unit_num, file="rectangle.shape")
 - status
 - action
 - iostat
-
-### Note on keyword arguments
 
 ## `read`
 
