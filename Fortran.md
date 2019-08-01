@@ -501,160 +501,6 @@ startLine=3 endLine=6 startFrom=3}
       rely on it!
     - Compiler free to optimise it away
 
-## `parameter`
-
-### FIXME
- move after arrays
-
-- sometimes want a variable that can't be modified at runtime,
-  e.g. `pi`
-- or have lots of arrays of fixed size
-
-```Fortran
-real, dimension(10) :: x_grid_spacing, y_grid_spacing
-real, dimension(10) :: x_grid, y_grid
-real, dimension(10, 10) :: density
-```
-
-- What if you now need a 20x20 grid?
-- use a `parameter`!
-- fixed at compile time
-    - has to be made of literals, other `parameter`s, intrinsics
-- names are great!
-- attribute (now we definitely need `::`)
-- super useful for things like `pi`, `speed_of_light`,
-  `electron_mass`, etc.
-
-## `parameter` examples
-
-```{include=examples/0x_parameters.f90 .numberLines .Fortran}
-```
-
-## Kinds of types
-
-- Most important for `real`s
-- Floating point representation
-- Doing lots of maths with floating point numbers can lose precision
-  => need more precision in our `real`s
-- Three old styles:
-    - `double precision`: use twice the number of bytes as for `real`
-        - Standard! but vague
-    - `real*8`: use 8 bytes
-        - Non-standard! never use this
-        - You'll see it a bunch in old codes though
-    - `real(8)` or `real(kind=8)`: use real of `kind` 8
-        - Standard but non-portable!
-        - What number represents what `kind` is entirely up to the compiler
-
-## Kinds of types
-
-- Don't use those! Use these:
-
-```Fortran
-! Get the kind number that can give us 15 digits of precision and 300
-! orders of magntitude of range
-integer, parameter :: wp = selected_real_kind(15, 300)
-! Declare a variable with this kind
-real(kind=wp) :: x
-! Use a literal with this range
-x = 1.0_wp
-```
-
-## Kinds of types
-
-### `iso_fortran_env`
-- Even better! F2008 feature, but use this and complain if stuck on a
-  previous standard (upgrade compilers!)
-
-```Fortran
-use, intrinsic :: iso_fortran_env, only : real64
-real(real64) :: x
-x = 1.0_real64
-```
-
-- Can combine this with a `parameter`:
-
-```Fortran
-use, intrinsic :: iso_fortran_env, only : real64
-integer, parameter :: wp = real64
-real(kind=wp) :: x
-x = 1.0_wp
-```
-
-## `case`
-
-- When comparing series of mutually exclusive values, order is not
-  important
-- `case` construct can be useful
-
-```Fortran
-select case (x)
-case (1)
-  print*, "x is 1"
-case (2:4)
-  print*, "x is between 2 and 4"
-case default
-  print*, "x is neither 1 nor between 2 and 4"
-end select
-```
-
-- The expression in the `select case` must be an `integer`, `logical`
-  or `character` scalar variable
-- Ranges must be of same type
-
-- `:upper_bound`
-- `lower_bound:`
-- `lower:upper`
-- `value`
-
-- Neat thing about `select case` in Fortran: works with strings!
-
-```Fortran
-character(len=:) :: animal
-
-select case (animal)
-case ("cat")
-    print*, "meow!"
-case ("dog")
-    print*, "woof!"
-case ("pig")
-    print*, "oink!"
-case default
-    print*, "<generic animal noise>"
-end select
-```
-
-- Can be useful for parsing user arguments
-    - careful not to overdo it though, this is expensive!
-
-## `cycle`
-
-- skip to next loop iteration
-
-```Fortran
-integer :: i
-do i = 1, 5
-  if (i == 3) cycle
-  print*, i
-end do
-```
-
-### Loop labels
-
-- Many constructs in Fortran can be given labels
-- Useful as a form of documentation: what does this loop _do_?
-- Also useful when you need to jump out of a nested loop:
-
-```Fortran
-integer :: i, j
-outer: do i = 1, 5
-  inner: do j = 1, 5
-    if ((i + j) == 9) exit outer
-    print*, i, j
-  end do inner
-end do outer
-```
-
 # Session 2
 
 ## Arrays
@@ -837,6 +683,83 @@ deallocate(array)
 - Note `errmsg` may not always be accurate...
     - Bare `allocate` will terminate, possibly with more useful error
       message
+
+## `parameter`
+
+- sometimes want a variable that can't be modified at runtime,
+  e.g. `pi`
+- or have lots of arrays of fixed size
+
+```Fortran
+real, dimension(10) :: x_grid_spacing, y_grid_spacing
+real, dimension(10) :: x_grid, y_grid
+real, dimension(10, 10) :: density
+```
+
+- What if you now need a 20x20 grid?
+- use a `parameter`!
+- fixed at compile time
+    - has to be made of literals, other `parameter`s, intrinsics
+- names are great!
+- attribute (now we definitely need `::`)
+- super useful for things like `pi`, `speed_of_light`,
+  `electron_mass`, etc.
+
+## `parameter` examples
+
+```{include=examples/0x_parameters.f90 .numberLines .Fortran}
+```
+
+## Kinds of types
+
+- Most important for `real`s
+- Floating point representation
+- Doing lots of maths with floating point numbers can lose precision
+  => need more precision in our `real`s
+- Three old styles:
+    - `double precision`: use twice the number of bytes as for `real`
+        - Standard! but vague
+    - `real*8`: use 8 bytes
+        - Non-standard! never use this
+        - You'll see it a bunch in old codes though
+    - `real(8)` or `real(kind=8)`: use real of `kind` 8
+        - Standard but non-portable!
+        - What number represents what `kind` is entirely up to the compiler
+
+## Kinds of types
+
+- Don't use those! Use these:
+
+```Fortran
+! Get the kind number that can give us 15 digits of precision and 300
+! orders of magntitude of range
+integer, parameter :: wp = selected_real_kind(15, 300)
+! Declare a variable with this kind
+real(kind=wp) :: x
+! Use a literal with this range
+x = 1.0_wp
+```
+
+## Kinds of types
+
+### `iso_fortran_env`
+- Even better! F2008 feature, but use this and complain if stuck on a
+  previous standard (upgrade compilers!)
+
+```Fortran
+use, intrinsic :: iso_fortran_env, only : real64
+real(real64) :: x
+x = 1.0_real64
+```
+
+- Can combine this with a `parameter`:
+
+```Fortran
+use, intrinsic :: iso_fortran_env, only : real64
+integer, parameter :: wp = real64
+real(kind=wp) :: x
+x = 1.0_wp
+```
 
 ## Procedures
 
@@ -1036,6 +959,7 @@ startLine=13 endLine=17 startFrom=13}
 - Three choices for passing arrays:
 - `dimension(n, m, p)`: explicit size
     - Actual argument has to be exactly this size
+    - Compiler can only check if it knows the size at compile time
 - `dimension(n, m, *)`: _assumed size_ -- old, don't use!
     - Compiler doesn't know the size of the array, so you better index
       it correctly!
@@ -1078,7 +1002,81 @@ startLine=4 endLine=11}
 - also hard to see where `x` comes from
 
 
-# File I/O
+## `case`
+
+- When comparing series of mutually exclusive values, order is not
+  important
+- `case` construct can be useful
+
+```Fortran
+select case (x)
+case (1)
+  print*, "x is 1"
+case (2:4)
+  print*, "x is between 2 and 4"
+case default
+  print*, "x is neither 1 nor between 2 and 4"
+end select
+```
+
+- The expression in the `select case` must be an `integer`, `logical`
+  or `character` scalar variable
+- Ranges must be of same type
+
+- `:upper_bound`
+- `lower_bound:`
+- `lower:upper`
+- `value`
+
+- Neat thing about `select case` in Fortran: works with strings!
+
+```Fortran
+character(len=:) :: animal
+
+select case (animal)
+case ("cat")
+    print*, "meow!"
+case ("dog")
+    print*, "woof!"
+case ("pig")
+    print*, "oink!"
+case default
+    print*, "<generic animal noise>"
+end select
+```
+
+- Can be useful for parsing user arguments
+    - careful not to overdo it though, this is expensive!
+
+## `cycle`
+
+- skip to next loop iteration
+
+```Fortran
+integer :: i
+do i = 1, 5
+  if (i == 3) cycle
+  print*, i
+end do
+```
+
+### Loop labels
+
+- Many constructs in Fortran can be given labels
+- Useful as a form of documentation: what does this loop _do_?
+- Also useful when you need to jump out of a nested loop:
+
+```Fortran
+integer :: i, j
+outer: do i = 1, 5
+  inner: do j = 1, 5
+    if ((i + j) == 9) exit outer
+    print*, i, j
+  end do inner
+end do outer
+```
+
+# Session 4
 
 ## `open` - File I/O
 
@@ -1170,8 +1168,6 @@ if (istat /= 0) then
   error stop
 end if
 ```
-
-# session 4
 
 ## modules
 
