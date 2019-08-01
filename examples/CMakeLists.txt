@@ -8,7 +8,7 @@ macro(add_example example_name)
   add_executable(${example_name}
     ${example_name}.f90)
   target_compile_options(${example_name}
-    PRIVATE -Wall -Wextra -std=f2008)
+    PRIVATE -Wall -Wextra -std=f2008 -fcheck=all)
 endmacro()
 
 add_example(01_hello_world)
