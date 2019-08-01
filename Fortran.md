@@ -52,9 +52,8 @@ highlight-style: my.theme
 - Early computers had no disks, text editors or even keyboards!
 - Programs were made on punchcards
 
-![Fortran punchcard](./FortranCardPROJ039.agr.jpg){.width=50%}
-By Arnold Reinhold, CC BY-SA 2.5,
-https://commons.wikimedia.org/w/index.php?curid=775153
+![By Arnold Reinhold, CC BY-SA 2.5,
+https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr.jpg){width=50%}
 
 ## Brief history of Fortran
 
@@ -591,23 +590,24 @@ matrix(3, :) = 3.0_wp * vector
  - Also need to pick which is the "fastest" dimension, i.e. which is
    stored first in memory
 
+## Memory layout
+
 - Maths matrix:
 
-![](./Matrix.png)
-By Svjo - Own work, CC BY-SA 4.0, https://commons.wikimedia.org/w/index.php?curid=79728977
+![By Svjo - Own work, CC BY-SA 4.0,
+https://commons.wikimedia.org/w/index.php?curid=79728977](./Matrix.png){width=50%}
 
----
+## Memory layout
 
 - Two choices: $a_{11}$, then $a_{12}$, ... $a_{1n}$, then $a_{21}$, $a_{22}$,
-  ...
-  or $a_{11}$, $a_{21}$, ... $a_{m1}$, then $a_{12}$, $a_{22}$ ...
+- or $a_{11}$, $a_{21}$, ... $a_{m1}$, then $a_{12}$, $a_{22}$ ...
 - _Row-major_ or _column-major_
 
-![](./500px-Row_and_column_major_order.png)
-By Cmglee - Own work, CC BY-SA 4.0,
-https://commons.wikimedia.org/w/index.php?curid=65107030
+![By Cmglee - Own work, CC BY-SA 4.0,
+https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column_major_order.png){height=50%}
 
----
+
+## Memory layout
 
 - What does this mean in practice?
 - Nested loops over multidimensional arrays should have the inner-most
@@ -625,12 +625,19 @@ https://commons.wikimedia.org/w/index.php?curid=65107030
     end do
   end do
   ```
+
+## Memory layout
+
 - Assuming no loop-dependencies, answer is identical to reversing
   order of loops
 - But performance can be very different!
     - order of magnitude!
 - This is different from C-like languages
     - Matlab is also column-major
+
+### Example
+
+Speed difference
 
 ## Allocatable arrays
 
@@ -654,6 +661,8 @@ real(kind=wp), dimension(:, :), allocatable :: array
 allocate(array(10, 5))
 ! array is now 10x5
 ```
+
+## Allocatable arrays
 
 - `array` is now `allocated`, but _uninitialised_
     - i.e. if we index it we will get nonsense
@@ -1289,6 +1298,23 @@ subroutine push_particle
 ## namelists
 
 ## `block`
+
+- Fortran requires all variables to be declared at the top of the
+  scope, before first executable statement
+    - Limitation of early compilers!
+- But modern best practice is to declare variables only where you need
+  them
+- Reducing scope -> always good!
+    - Easier to read
+    - Reduces chances for bugs
+- `block` construct allows introduction of new entities
+- Names within a `block` can _shadow_ or hide those outside
+
+## `block` example
+
+```{include=examples/0x_block_demo.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=11}
+```
 
 ## interoperability with C/python
 

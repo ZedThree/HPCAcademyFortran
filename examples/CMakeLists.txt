@@ -36,6 +36,7 @@ add_example(0x_global_variables)
 add_example(0x_save_attribute)
 add_example(0x_dummy_arguments)
 add_example(0x_array_dummy_arguments)
+add_example(0x_block_demo)
 
 add_example(array_bounds)
 add_example(loop_labels)
