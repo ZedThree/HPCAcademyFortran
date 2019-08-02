@@ -3,7 +3,8 @@ title: Introduction to Fortran
 author: Peter Hill
 classoption: aspectratio=169
 theme: York169dark
-highlight-style: my.theme
+header-includes: \usepackage{pandoc-solarized}
+monofont: Inconsolata LGC
 ---
 
 # Session 1
