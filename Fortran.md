@@ -141,7 +141,7 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
   with `end program <label>`
 - Line 2: `implicit none`: Historical reasons! Old Fortran had implicit
   typing: more on this later
-- Line 3: A comment, begins with `!`
+- Line 3: A comment, begins with `!` (ignore everything after this)
 - Line 4: Print some text to screen
 
 ## Compiling code
@@ -202,17 +202,22 @@ There are 5 fundamental types in Fortran:
     - `4 + "hello"` doesn't make any sense
     - `4 + 5.3` might do
 
-## Cover literals here
-### FIXME: later
-- Writing `real`s:
-```Fortran
-2.
-0.3
-4.6E4
-0.02e-3
-```
-- Note: `real` literals are single-precision by default
-    - more on this later
+## Literals
+
+- Very common to need _literally_ "this value"
+- `integer`:
+    - `1`, `-2`, `1e3`, `42`
+- `real`:
+    - `2.`, `0.3`, `4.6E4`, `0.02e-3`
+    - Note: `real` literals are single-precision by default (more on
+      this later)
+- `complex`:
+    - `(0.0, 1.0)`, `(3.2, 4.3e9)`
+- `character`:
+    - `"either double quotes"`, `'or single quotes are fine'`
+- `logical`:
+    - `.true.`, `.false.`
+    - But often printed as `T` and `F`!
 
 ## Variables
 
@@ -261,15 +266,29 @@ There are 5 fundamental types in Fortran:
   is sufficient
     - You may like to keep it in every function, see later
 
-## Whitespace, lines and capitalisation
+## Some points on Fortran grammar: whitespace
 
-Some points on Fortran grammar
+- Whitespace mostly doesn't matter:
 
-### FIXME
-examples
+```{include=examples/bad_whitespace.f90 .numberLines .Fortran
+startFrom=1 startLine=1 endLine=5}
+```
 
-### Whitespace
-- Mostly doesn't matter
+- But very important for readability!
+
+```{include=examples/good_whitespace.f90 .numberLines .Fortran
+startFrom=1 startLine=1 endLine=5}
+```
+
+## Some points on Fortran grammar: whitespace
+
+- Matter of personal taste, but go for readability over prettiness
+- Prefer one space around operators (`+`, `*`, `=`, etc.)
+- Prefer one space after "punctuation" (`:`, `,`)
+- Vertical whitespace also affects readability
+- Also note: tabs are not standard Fortran! Use spaces for indentation
+
+## Some points on Fortran grammar
 
 ### Lines
 - Statements must be on a single line unless you use a `&`, _line
@@ -278,17 +297,11 @@ examples
 - Maximum of 256 lines (i.e. 255 `&`)
 
 ### Capitalisation
-- Fortran is completely case-insensitive
+- Fortran is (almost) completely case-insensitive
 - Originally didn't have lower-case characters at all!
 - Prefer lower-case keywords
 - Careful with names!
 - You may prefer `snake_case`
-
-## Initialisation
-
-- Can initialise in the declaration, but WARNING!
-- This unfortunately adds extra semantics that you may not intend
-    - Will cover when we get onto functions
 
 ## Arithmetic operations
 
@@ -299,7 +312,7 @@ examples
     - Don't forget, make it _readable_
 
 ```{include=examples/03_basic_maths.f90 .numberLines .Fortran
-startLine=3 endLine=9 startFrom=3}
+startLine=3 endLine=10 startFrom=3}
 ```
 
 ## Mixed-type operations
@@ -308,7 +321,7 @@ startLine=3 endLine=9 startFrom=3}
     - `integer :: n` points of `real :: grid_spacing`
 - This will _promote_ the different types to be the same type/kind
 - Result may end being _demoted_ to fit the result type
-- Possible to lose information this way, but compiler should warn you
+- Possible to lose information this way, but compiler _may_ warn you!
 
 ## Integer division
 
@@ -318,56 +331,67 @@ startLine=3 endLine=9 startFrom=3}
 - `5 / 2 == 2`
 - Therefore, if you need the result to be a `real`, either convert (at
   least) one operand to `real`, or use a `real` literal
-    - Don't forget `real` literals are single precision by default!
-- `5 / real(2) == 2.5`
-- `5. / 2 == 2.5`
-- `5._real64 / real(2, kind=real64) == 2.5_real64`
+
+```{include=examples/0x_integer_division.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=7}
+```
+
 
 ## Logical/relational operations
 
-- `<`, `<=`, `>`, `>=`, `==`, `/=`
+- `<` `>`: Less/greater than
+- `<=` `>=`: Less/greater than or equal to
+- `==`: Equal to
+- `/=`: Not equal to
     - Note the inequality operator! Might look odd if you come from
       C-like languages or Python
     - This operator is essentially why Fortran doesn't have short-hand
       operators like `a *= b`
 - Also wordier versions:
     - `.lt.`, `.le.`, `.gt.`, `.ge.`, `.eq.`, `.ne.`
+    - But don't use these!
 
-Prefer `<` over `.lt.`, etc.!
-
-`/=`, `.ne.` is not equals (part of reason why `a *= b` doesn't
-exist!)
-
-```{include=examples/04_logical_operators.f90 .numberLines .Fortran}
+```{include=examples/04_logical_operators.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=6}
 ```
 
 ## Intrinsic functions
 
-- built-in to language
+- Built-in to language
 - Lots of maths!
     - `sin`, `cos`, etc.
     - F2008 has things like `hypot`, `bessel_j0`, `erf`, `norm2`
-- use them if they exist -- can be heavily optimised by compiler
+- Use them if they exist -- can be heavily optimised by compiler
     - Difficult to detect if they are available of course
+
+```{include=examples/intrinsic_functions.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=6}
+```
 
 ## Control flow
 
-- often need to change exactly what happens at runtime
+- Often need to change exactly what happens at runtime
 - `if` statement allows us to take one of two _branches_ depending on
   the value of its _condition_
 
 ```Fortran
-if (logical-expression) then
+if (<logical-expression>) then
   ! do something
 end if
 ```
 
-or more generally:
+- If `<logical-expression>` evaluates to `.true.` then the statements
+  inside the _construct_ are executed
+- Otherwise, we carry on executing after the `end if`
+
+## Control flow
+
+- More generally:
 
 ```Fortran
-if (logical-expression-1) then
+if (<logical-expression-1>) then
   ! do something 1
-else if (logical-expression-2) then
+else if (<logical-expression-2>) then
   ! do something 2
 else
   ! do something 3
@@ -375,9 +399,14 @@ end if
 ```
 
 - Bare `else` must be last
-- conditions are checked from the top:
+- Also note that brackets `()` are mandatory here
 
-```{include=examples/05_if_statement.f90 .numberLines .Fortran}
+## Control flow
+
+- Conditions are checked from the top:
+
+```{include=examples/05_if_statement.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=12}
 ```
 
 ## Logical/boolean operations
@@ -392,10 +421,10 @@ startLine=3 endLine=8 startFrom=3}
 
 - Note for those familiar with other languages: Fortran does not have
   shortcut logical operations
-    - Line 4 above evaluates _both_ conditions. may be important
-      later...
-- note difference between `.eq.` and `.eqv.`
-    - `.eqv.` must be used for `logical`s
+    - Line 4 above _may_ evaluate _both_ conditions!
+- Also note that `logical`s must be compared with `.eqv.` and not `==`
+  or `.eq.`
+    - But you will probably never use this!
 
 ## Loops
 
@@ -407,19 +436,19 @@ startLine=3 endLine=8 startFrom=3}
 
 ```Fortran
 do
-  ...
+  ! do something
 end do
 ```
 
 ```Fortran
 do while (<logical-expression>)
-  ...
+  ! do something
 end do
 ```
 
 ```Fortran
 do <index> = <lower-bound>, <upper-bound>
-  ...
+  ! do something
 end do
 ```
 
@@ -509,34 +538,36 @@ startLine=3 endLine=6 startFrom=3}
     - Big reason why it's lasted so long!
 - Vector in 3D space could be 1D array of 3 elements:
 
-```Fortran
-real(kind=wp), dimension(3) :: vector
-! Could also declare it like so:
-! real(kind=wp) :: vector(3)
-vector = [1.0_wp, 2.0_wp, -4.0_wp]
+```{include=examples/array_basics.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=5}
 ```
+
 - Fortran can natively handle multidimensional arrays:
 
-```Fortran
-real(kind=wp), dimension(3, 3) :: matrix
-! or
-! real(kind=wp) :: matrix(3, 3)
+```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=5}
 ```
 
-- `matrix` has 3x3 = 9 elements
+- `matrix1` has 3x3 = 9 elements
 
-## Arrays
+## Array indexing
 
 - We can _index_ an array using an integer:
 
-```Fortran
-print*, vector(1)
-print*, vector(2)
-print*, vector(3)
+```{include=examples/array_basics.f90 .numberLines .Fortran
+startFrom=9 startLine=9 endLine=13}
+```
 
-do i = 1, 3
-  print*, vector(1)
-end do
+- We can even take a _slice_ using the `:` notation:
+
+```{include=examples/array_basics.f90 .numberLines .Fortran
+startFrom=14 startLine=14 endLine=14}
+```
+
+- We can optionally leave off the lower and/or upper bounds:
+
+```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+startFrom=16 startLine=16 endLine=19}
 ```
 
 ## Arrays
@@ -544,15 +575,16 @@ end do
 - **Note:** By default, Fortran indices start at 1!
 - Can change this:
 
-```Fortran
-integer, dimension(-1:1) :: array
+```{include=examples/array_indices.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=8}
 ```
+
 - 1D array, 3 values with indices `-1, 0, 1`
 - Note array bounds separated with `:`, dimensions (or _ranks_) with
   `,`:
 
 ```Fortran
-real(real64), dimension(-1:1, 3:5) :: stress_tensor
+real, dimension(-1:1, 3:5) :: stress_tensor
 ```
 
 - Still 3x3, but first dimension has indices `-1, 0, 1`, and second
@@ -560,25 +592,11 @@ real(real64), dimension(-1:1, 3:5) :: stress_tensor
 
 ## Arrays
 
-- Can index an entire dimension via a _slice_ with `:`:
-
-
-```Fortran
-real(kind=wp), dimension(3) :: vector
-real(kind=wp), dimension(3, 3) :: matrix
-vector = [1.0_wp, 2.0_wp, -4.0_wp]
-matrix(1, :) = vector
-matrix(2, :) = 2.0_wp * vector
-matrix(3, :) = 3.0_wp * vector
-```
-
-- Note `vector(:)` is the same as `vector`
-
-## Array inquiry functions
-
 ### FIXME
 
-- Later, probably
+- whole array operations
+- array constructor?
+- useful intrinsics
 
 ## Memory layout
 
@@ -636,9 +654,9 @@ https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column
 - This is different from C-like languages
     - Matlab is also column-major
 
-### Example
-
-Speed difference
+```{include=examples/0x_memory_order.f90 .numberLines .Fortran
+startFrom=15 startLine=15 endLine=27}
+```
 
 ## Allocatable arrays
 
@@ -770,6 +788,20 @@ integer, parameter :: wp = real64
 real(kind=wp) :: x
 x = 1.0_wp
 ```
+
+## Kinds of types
+
+- `real` literals are single precision by default, so need `kind`
+  identifier
+
+  ```{include=examples/loss_of_precision.f90 .numberLines .Fortran
+  startFrom=4 startLine=4 endLine=6}
+  ```
+
+- Mixed-kind operations will convert like mixed-type operations
+- Lots of intrinsics take a `kind` argument:
+    - `5._real64 / real(2, kind=real64) == 2.5_real64`
+
 
 ## Procedures
 
