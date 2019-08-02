@@ -6,5 +6,6 @@ program basic_maths
   print*, 3.6e-1 + 3.6e0
   x = 42.
   y = 6.
-  print*, (x / y) ** 2
+  print*, x + 2. / 4. * y ** 2
+  print*, x + ((2. / 4.) * (y ** 2))
 end program basic_maths
