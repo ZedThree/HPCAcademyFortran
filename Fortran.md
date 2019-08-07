@@ -219,6 +219,10 @@ There are 5 fundamental types in Fortran:
     - `.true.`, `.false.`
     - But often printed as `T` and `F`!
 
+### FIXME
+
+- binary, octal, hexadecimal integers
+
 ## Variables
 
 - A variable is label for some value in memory used in a program
@@ -244,6 +248,19 @@ There are 5 fundamental types in Fortran:
         - `temp`
         - `E`
 
+## Variable names
+
+### FIXME
+
+valid and invalid names
+
+### FIXME
+
+- a bit more on declaring characters
+- more on using characters in general?
+- substrings
+- `//`, `trim`, `len`, `adjustl`
+
 ## Hello world again
 
 ```{include=examples/02_hello_input.f90 .numberLines .Fortran}
@@ -256,7 +273,7 @@ There are 5 fundamental types in Fortran:
 
 ## What's this `implicit none`?
 
-- Always, always `implicit none`
+- Always, **always** use `implicit none`
 - Early Fortran done on punch cards
 - Assume anything starting with `i-n` is an `integer`, otherwise it's
   `real`
@@ -597,6 +614,8 @@ real, dimension(-1:1, 3:5) :: stress_tensor
 - whole array operations
 - array constructor?
 - useful intrinsics
+- conformability
+- array constructors
 
 ## Memory layout
 
@@ -738,6 +757,10 @@ real, dimension(10, 10) :: density
 ```{include=examples/0x_parameters.f90 .numberLines .Fortran}
 ```
 
+### FIXME
+
+- character parameter
+
 ## Kinds of types
 
 - Most important for `real`s
@@ -752,7 +775,13 @@ real, dimension(10, 10) :: density
         - You'll see it a bunch in old codes though
     - `real(8)` or `real(kind=8)`: use real of `kind` 8
         - Standard but non-portable!
-        - What number represents what `kind` is entirely up to the compiler
+        - What number represents what `kind` is entirely up to the
+          compiler
+
+### FIXME
+
+- ranges of different kinds
+- mention integers
 
 ## Kinds of types
 
@@ -822,6 +851,11 @@ x = 1.0_wp
     - collaboration
 - Encapsulation: hide internal details from other parts of the
   program. Program against the _interface_
+  
+### FIXME
+
+- names are great
+- internal procedures
 
 ## Procedures
 
@@ -1120,6 +1154,79 @@ end do outer
 
 # Session 4
 
+## formatted i/o
+
+- What does the `*` mean in `print`, `read`?
+- Why is it `print` and `read`?
+- Why does Fortran put great big spaces between variables in `print`?
+
+## formatted i/o
+
+- `print*,` is essentially short for `write(*, *)`
+- `read*,` is essentially short for `read(*, *)`
+- Note lack of trailing commas!
+- One step closer
+- `write(*, *)` is short for `write(unit=*, fmt=*)`
+- A bit closer!
+
+## What do those stars mean
+
+- first argument, `unit`, tells program _where_ to `read`/`write`
+    - `*` means `stdout` -- _standard out_ for `write`
+        - usually "screen", but could be redirected somewhere else
+    - `*` means `stdin` -- _standard in_ for `read`
+        - usually keyboard, but could be something else redirected
+- second argument, `fmt`, short for _format_, tells program _how_ to
+  `read`/`write`
+    - `*` means "read/write everything, separated by spaces"
+        - Also called _list-directed I/O_
+  
+## Formatted I/O
+
+- Formats first
+- Instead of star, can give a _format string_
+- Basic form is `'(<something>)'`, where something is a
+  comma-separated list of format codes
+    - Need to be as many codes as variables being read/written
+- `write(*, '(a, i0, a)') "I have ", number_of_cats, " cats`
+    - `a` means `character`
+    - `i0` means `integer`, the `0` is "make it as wide as it needs to
+      be"
+- Can also stick text in there:
+- `write(*, '("I have ", i0, " cats")') number_of_cats`
+
+## Formatted I/O
+
+### Basic format codes
+
+- `a`: `character`
+- `i`: `integer`
+- `f`: `real`
+- `e`: scientific notation
+
+### Widths
+
+- `cw.d`:
+    - `c`: code (e.g. `i`, `f`, `e`)
+    - `w`: width of whole field
+    - `d`: number of digits after decimal place for `real`, minimum
+      number of digits (pad with leading zeros) for `integer`
+
+## Formatted I/O
+
+- can repeat chunks
+- `write(*, '(3("[", 3(f3.1, ", "), "], "))') array`
+- three lots of square brackets surrounding
+    - three lots of `real` separated by commas
+
+## unformatted i/o
+
+- good for checkpoints, etc.
+- _much_ faster than writing text
+- _can_ be read by other programs, but technically not portable
+    - i.e. don't rely on it!
+- for serious HPC programs, better to use a library such as NetCDF
+
 ## `open` - File I/O
 
 - Open a file for reading/writing:
@@ -1317,8 +1424,6 @@ subroutine push_particle
 ## private/public
 
 ## optional arguments
-
-## formatted i/o
 
 ## good practice
 
