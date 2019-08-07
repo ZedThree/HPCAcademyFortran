@@ -851,7 +851,7 @@ x = 1.0_wp
     - collaboration
 - Encapsulation: hide internal details from other parts of the
   program. Program against the _interface_
-  
+
 ### FIXME
 
 - names are great
@@ -1176,18 +1176,20 @@ end do outer
         - usually "screen", but could be redirected somewhere else
     - `*` means `stdin` -- _standard in_ for `read`
         - usually keyboard, but could be something else redirected
+    - Similar to file descriptor/handle in other languages
 - second argument, `fmt`, short for _format_, tells program _how_ to
   `read`/`write`
     - `*` means "read/write everything, separated by spaces"
         - Also called _list-directed I/O_
-  
+
 ## Formatted I/O
 
 - Formats first
 - Instead of star, can give a _format string_
+    - (technically _data edit descriptor_, but yeesh)
 - Basic form is `'(<something>)'`, where something is a
   comma-separated list of format codes
-    - Need to be as many codes as variables being read/written
+    - Called _record-directed I/O_ **FIXME**
 - `write(*, '(a, i0, a)') "I have ", number_of_cats, " cats`
     - `a` means `character`
     - `i0` means `integer`, the `0` is "make it as wide as it needs to
@@ -1214,12 +1216,30 @@ end do outer
 
 ## Formatted I/O
 
+```{include=examples/format_string.f90 .numberLines .Fortran
+}
+```
+
+## Formatted I/O
+
 - can repeat chunks
 - `write(*, '(3("[", 3(f3.1, ", "), "], "))') array`
 - three lots of square brackets surrounding
     - three lots of `real` separated by commas
 
+### FIXME
+
+- the i/o control statement will consume stuff from _transfer list_ to
+  fill up the format string
+- `write` writes a newline every time it "fills up" the format string
+- `read` similar, but ignores everything until after next newline
+- Compiler will check types, but unfortunately only at runtime
+- this is because format string can be built dynamically!
+- `****` when format is too small for data
+
 ## unformatted i/o
+
+### FIXME
 
 - good for checkpoints, etc.
 - _much_ faster than writing text
