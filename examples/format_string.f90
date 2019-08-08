@@ -9,41 +9,36 @@ program format_string
   real(real64), dimension(8) :: array = sin(grid)
 
 
-  write(*, '(i8)') grid_size
-  write(*, '(i8.4)') grid_size
+  print*, "integer formats:"
+  write(*, '("      |12345678|")')
+  write(*, '("i0:   |", i0, "|")') grid_size
+  write(*, '("i4:   |", i4, "|")') grid_size
+  write(*, '("i4.4: |", i4. 4,"|")') grid_size
+  write(*, '("i0:   |", i0, "|")') 23249425
+  write(*, '("i4:   |", i4, "|")') 23249425
 
-  write(*, '(f8.4)') pi
-  write(*, '(f2.1)') pi
-  print*, "------------------------------"
-  write(*, '(f18.10)') pi*100
-  write(*, '(e18.10)') pi*100
-  write(*, '(es18.10)') pi*100
-  write(*, '(en18.10)') pi*100
-  write(*, '(g18.10)') pi*100
-  print*, "------------------------------"
-  write(*, '(f18.10)') pi*100
-  write(*, '(e18.10e1)') pi*100
-  write(*, '(es18.10e1)') pi*100
-  write(*, '(en18.10e1)') pi*100
-  write(*, '(g18.10e1)') pi*100
-  print*, "------------------------------"
-  write(*, '(f18.4)') pi
-  write(*, '(e18.4)') pi
-  write(*, '(g18.4)') pi
-  print*, "---1---------------------------"
-  write(*, '(f18.4)') pi*1e9
-  write(*, '(e18.4)') pi*1e9
-  write(*, '(g18.4)') pi*1e9
-
-  print*, "------------------------------"
-  print*, grid, array
+  print*
   print*, "------------------------------"
 
+  print*, "real formats:"
+  write(*, '("        |000000000111111111|")')
+  write(*, '("        |123456789012345678|")')
+  write(*, '("f3.1:   |", f3.1, "|")') 2. * pi
+  write(*, '("f8.4:   |", f8.4, "|")') 2. * pi
+  write(*, '("f2.1:   |", f2.1, "|")') 2. * pi
+  write(*, '("f18.10: |", f18.10, "|")') pi*100
+  write(*, '("e18.10: |", e18.10, "|")') pi*100
+  write(*, '("g18.10: |", g18.10, "|")') pi*100
+  write(*, '("f18.4:  |", f18.4, "|")') pi*1e9
+  write(*, '("e18.4:  |", e18.4, "|")') pi*1e9
+  write(*, '("g18.4:  |", g18.4, "|")') pi*1e9
+
+  print*, "------------------------------"
+  print*, "write two arrays without a format:"
+  write(*, *) grid, array
+
+  print*, "------------------------------"
+  print*, "write two arrays with a format:"
   write(*, '(8(f8.4))') grid, array
 
-  print*, "------------------------------"
-  read(*, '(2(f4.1))') array
-
-  write(*, '(8(f8.4))') grid, array
-  
 end program format_string

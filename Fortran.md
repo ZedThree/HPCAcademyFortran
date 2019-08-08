@@ -1187,10 +1187,10 @@ end do outer
 - Formats first
 - Instead of star, can give a _format string_
     - (technically _data edit descriptor_, but yeesh)
-- Basic form is `'(<something>)'`, where something is a
+- Basic form is `'(<something>)'`, where `<something>` is a
   comma-separated list of format codes
     - Called _record-directed I/O_ **FIXME**
-- `write(*, '(a, i0, a)') "I have ", number_of_cats, " cats`
+- `write(*, '(a, i0, a)') "I have ", number_of_cats, " cats"`
     - `a` means `character`
     - `i0` means `integer`, the `0` is "make it as wide as it needs to
       be"
@@ -1217,15 +1217,23 @@ end do outer
 ## Formatted I/O
 
 ```{include=examples/format_string.f90 .numberLines .Fortran
-}
+startFrom=12 startLine=12 endLine=18}
 ```
+```{include=examples/format_string.f90 .numberLines .Fortran
+startFrom=24 startLine=24 endLine=28}
+```
+
 
 ## Formatted I/O
 
-- can repeat chunks
-- `write(*, '(3("[", 3(f3.1, ", "), "], "))') array`
-- three lots of square brackets surrounding
-    - three lots of `real` separated by commas
+- can repeat chunks:
+
+```{include=examples/repeating_format_string.f90 .numberLines .Fortran
+startFrom=8 startLine=8 endLine=8}
+```
+- This means:
+    - three lots of square brackets surrounding:
+    - three lots of `integer` separated by commas
 
 ### FIXME
 
@@ -1236,6 +1244,7 @@ end do outer
 - Compiler will check types, but unfortunately only at runtime
 - this is because format string can be built dynamically!
 - `****` when format is too small for data
+- nice tip: can put format string into a `character`
 
 ## unformatted i/o
 
@@ -1249,26 +1258,42 @@ end do outer
 
 ## `open` - File I/O
 
-- Open a file for reading/writing:
+- Open a file called `<filename>` for reading/writing:
 
 ```Fortran
-open(newunit=unit_num, file="filename")
+open(newunit=<unit>, file=<filename>)
 ```
 
+- Now we can't just use `*` for the unit, as we need a "handle" to
+  give to `read`/`write`
 - `unit_num` is integer (that you've already declared)
-- compiler will make sure it's unique (and negative)
+- `newunit` will make sure it's unique (and negative)
 - `newunit` is F2008. Older versions:
 
 ```Fortran
-open(unit=unit_num, file="rectangle.shape")
+open(unit=10, file="rectangle.shape")
 ```
 
-- `unit_num` must already have a value (choose >=10)
+- You probably want to make the unit a `parameter` with a value `> 10`
+  (to avoid clashing with pre-declared units)
 
-- Lots of other arguments:
-- status
-- action
-- iostat
+## `open` arguments
+
+Lots of possible arguments, but two useful ones:
+
+### `status`
+- Can be one of the following:
+- `"old"`: must already exist
+- `"new"`: must not exist
+- `"replace"`: overwrite any existing file
+- `"scratch"`: remove file after `close` or end of program
+- `"unknown"`: you don't care!
+
+### `action`
+- Can be one of the following:
+- `"read"`: `open` the file for `read` only
+- `"write"`: `open` the file for `write` only
+- `"readwrite"`: allow both `read` and `write`
 
 ## `read`
 
@@ -1276,23 +1301,26 @@ open(unit=unit_num, file="rectangle.shape")
   variables
 
 ```Fortran
-read(unit=unit_num, fmt=*) height, width
+read(unit=<unit>, fmt=<fmt>) <transfer list>
 ```
 
-- `unit_num` must be already `open`ed file
+- `<unit>` must be already `open`ed unit
 - `unit=*`, `fmt=*` is same as `read(*,*)`
+- The `intrinsic` module `iso_fortran_env` has `input_unit` for
+  `stdin`
 
 ## `write`
 
-- Once you've got a file with a `unit`, you can write into it from
-  variables
+- Similarly, once you've got a file with a `unit`, you can write into
+  it from variables or expressions
 
 ```Fortran
-write(unit=unit_num, fmt=*) height, width
+write(unit=<unit>, fmt=<fmt>) <transfer list>
 ```
 
-- `unit_num` must be already `open`ed file
+- `<unit>` must be already `open`ed unit
 - `unit=*`, `fmt=*` is same as `write(*,*)`
+- The `intrinsic` module `iso_fortran_env` has `output_unit` for `stdout`
 
 ## `close`
 
@@ -1300,10 +1328,10 @@ write(unit=unit_num, fmt=*) height, width
   written to disk properly
 
 ```Fortran
-close(unit=unit_num)
+close(unit=<unit>)
 ```
 
-- `unit_num` must be already `open`ed file
+- `<unit>` must be already `open`ed unit
 
 ## `iostat`
 
@@ -1337,6 +1365,13 @@ if (istat /= 0) then
   error stop
 end if
 ```
+
+## Working with files example
+
+```{include=examples/open_and_read_file.f90 .numberLines .Fortran
+startFrom=10 startLine=10 endLine=23}
+```
+
 
 ## modules
 
