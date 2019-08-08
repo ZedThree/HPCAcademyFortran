@@ -237,6 +237,9 @@ There are 5 fundamental types in Fortran:
 - Note: `::` not always needed, but never hurts!
 - Note: names must start with a letter, and are limited to ASCII
   lower/uppercase, numbers and underscore
+
+## Variable names
+
 - Pick variable names wisely!
     - in F2003, you can have up to 63 characters in a name
     - Good names:
@@ -247,8 +250,6 @@ There are 5 fundamental types in Fortran:
         - `distnxtatm`
         - `temp`
         - `E`
-
-## Variable names
 
 ### FIXME
 
@@ -757,9 +758,25 @@ real, dimension(10, 10) :: density
 ```{include=examples/0x_parameters.f90 .numberLines .Fortran}
 ```
 
-### FIXME
+## `character` `parameter`s
 
-- character parameter
+- It can be a quite annoying to keep the `len` of a `character` in
+  sync with how long it is
+- For `character` `parameter`s though, we can use `len=*`
+
+    ```Fortran
+    character(len=*), parameter :: filename = "output.log"
+    ```
+
+- Only works for `parameter`s though!
+- Non-constant `character`s can be `allocatable` with `len=:` though!
+
+## `character` examples
+
+```{include=examples/parameter_and_allocatable_characters.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=12}
+```
+
 
 ## Kinds of types
 
@@ -1136,7 +1153,7 @@ do i = 1, 5
 end do
 ```
 
-### Loop labels
+## Loop labels
 
 - Many constructs in Fortran can be given labels
 - Useful as a form of documentation: what does this loop _do_?
