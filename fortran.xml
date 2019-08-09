@@ -438,6 +438,7 @@
 
       <context attribute="Normal Text" lineEndContext="#stay" name="find_examples">
         <RegExpr attribute="Example" context="#stay" String="&lt;[-a-zA-Z0-9]+&gt;"/>
+        <AnyChar attribute="Example" context="#stay" String="{}"/>
       </context>
 
 <!-- IMPORTANT: If you modify something, do it also in "fortran-fixed.xml"! -->
