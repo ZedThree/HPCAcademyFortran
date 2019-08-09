@@ -652,7 +652,7 @@
       <itemData name="String" defStyleNum="dsString"/>
       <itemData name="Comment" defStyleNum="dsComment"/>
       <itemData name="IO Function" defStyleNum="dsFunction" bold="0" italic="0"/>
-      <itemData name="Elemental Procedure" defStyleNum="dsBuiltIn" bold="1" italic="0"/>
+      <itemData name="Elemental Procedure" defStyleNum="dsFunction" bold="1" italic="0"/>
       <itemData name="Inquiry Function" defStyleNum="dsFunction" bold="1" italic="1"/>
       <itemData name="Transformational Function" defStyleNum="dsFunction" bold="1" italic="0"/>
       <itemData name="Non elemental subroutine" defStyleNum="dsFunction" bold="1" italic="0"/>
