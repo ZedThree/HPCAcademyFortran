@@ -606,17 +606,88 @@ real, dimension(-1:1, 3:5) :: stress_tensor
 ```
 
 - Still 3x3, but first dimension has indices `-1, 0, 1`, and second
-  has indices `3, 4, 5`
+  has `3, 4, 5`
 
-## Arrays
+## Literal arrays
+
+- Just like scalar types have literals, so do arrays
+- Wrap the scalar values in square brackets `[<values>...]`
+    - Older style is `(/<values>.../)`
+- Can use this to initialise or assign to arrays:
+```{include=examples/array_constructors.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=4}
+```
+- Or even pass to functions:
+```{include=examples/array_constructors.f90 .numberLines .Fortran
+startFrom=15 startLine=15 endLine=15}
+```
+- Unfortunately, only works for 1D arrays! Multidimensional arrays
+  need to use `reshape`
+
+### FIXME
+
+reshape example
+
+
+## Constructing arrays
+
+- How to fill an array with 10 values between $0$ and $2\pi$?
+- Could do:
+
+```Fortran
+array(1) = 0.
+array(2) = 2. * pi * (1. / 10.)
+array(3) = 2. * pi * (2. / 10.)
+...
+! or
+do i = 1, 10
+    array(i) = 2. * pi * (real(i - 1) / 10.)
+end do
+```
+
+- This can be written a bit more compactly using an _implied do_:
+
+```{include=examples/array_constructors.f90 .numberLines .Fortran
+startFrom=10 startLine=10 endLine=10}
+```
+
+- Not always the best tool, but sometimes very useful!
+
+## Operations with arrays
+
+- We can element-wise operations on arrays very simply:
+
+```{include=examples/array_basics.f90 .numberLines .Fortran
+startFrom=18 startLine=18 endLine=23}
+```
+
+- Notice how we can use both scalars and arrays in these operations?
+
+## Conformability
+
+- When working with multiple arrays, need to make sure shapes
+  _conform_ (i.e. match exactly)
+    - Useful intrinsic, `shape`, to tell you the shape!
+- Scalars conform with everything
+- Slices with the same shape conform (even if upper/lower bounds don't
+  match)
+
+```{include=examples/array_conformability.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=12}
+```
+
+## Conformability
+
+```{include=examples/array_conformability.f90 .numberLines .Fortran
+startFrom=19 startLine=19 endLine=29}
+```
+
+##
 
 ### FIXME
 
 - whole array operations
-- array constructor?
 - useful intrinsics
-- conformability
-- array constructors
 
 ## Memory layout
 
@@ -638,13 +709,22 @@ https://commons.wikimedia.org/w/index.php?curid=79728977](./Matrix.png){width=50
 
 ## Memory layout
 
-- Two choices: $a_{11}$, then $a_{12}$, ... $a_{1n}$, then $a_{21}$, $a_{22}$,
-- or $a_{11}$, $a_{21}$, ... $a_{m1}$, then $a_{12}$, $a_{22}$ ...
+:::::: {.columns}
+::: {.column}
+
+- Two choices:
+- $a_{11}$, $a_{12}$, $...$, $a_{1n}$, then $a_{21}$, $a_{22}$, $...$
+- or $a_{11}$, $a_{21}$, $...$, $a_{m1}$, then $a_{12}$, $a_{22}$ $...$
 - _Row-major_ or _column-major_
 
-![By Cmglee - Own work, CC BY-SA 4.0,
-https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column_major_order.png){height=50%}
+:::
+::: {.column}
 
+![By Cmglee - Own work, CC BY-SA 4.0,
+https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column_major_order.png){height=75%}
+
+:::
+::::::
 
 ## Memory layout
 
@@ -672,7 +752,6 @@ https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column
 - But performance can be very different!
     - order of magnitude!
 - This is different from C-like languages
-    - Matlab is also column-major
 
 ```{include=examples/0x_memory_order.f90 .numberLines .Fortran
 startFrom=15 startLine=15 endLine=27}

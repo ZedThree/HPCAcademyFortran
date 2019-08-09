@@ -15,6 +15,11 @@ program array_basics
 
   vector2 = [4, 5, 6]
 
+  print*, "42 + vector1:", 42 + vector1
+  print*, "2 * vector1:", 2 * vector1
   print*, "vector1 + vector2:", vector1 + vector2
+  print*, "vector1 - vector2:", vector1 - vector2
+  print*, "vector1 * vector2:", vector1 * vector2
+  print*, "vector1 / vector2:", vector1 / vector2
   print*, "dot_product(vector1, vector2):", dot_product(vector1, vector2)
 end program array_basics

@@ -40,6 +40,8 @@ add_example(0x_block_demo)
 
 add_example(array_bounds)
 add_example(array_basics)
+add_example(array_constructors)
+add_example(array_conformability)
 add_example(array_multidimensions)
 add_example(array_indices)
 add_example(loop_labels)
