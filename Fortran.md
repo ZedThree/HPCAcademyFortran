@@ -75,13 +75,26 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
 ## Why Fortran?
 
 - Built for efficient mathematical calculations
+- Makes it easy to write simple code that optimises well
+    - For "reasonable" use cases!
 - Multidimensional arrays are first-class objects
+- Support for basic input files built in
 - Easily fits into various parallel programming paradigms
     - Some even built right into language
 - Majority of codes on UK supercomputers use Fortran
     - fluid dynamics, materials, plasmas, climate, etc.
 - Portable code, several compilers available
 - Interoperability features (can work with C easily)
+
+## Why not Fortran?
+
+- Not great at problems outside of "usual" domain
+    - Text processing, graphical interfaces, system programming
+    - Still possible, just harder than in specialist languages!
+- Historical baggage has left a very verbose language
+    - Lots of typing!
+- Lack of proper generics make some useful data structures tricky to
+  implement
 
 ## Alternatives
 
@@ -100,16 +113,37 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
 ## Fundamentals of Programming
 
 - Computers understand machine code -- 1s and 0s
+- e.g. a `square` function might look like:
+```
+111100110000111100010000000001111111001100001111010110011100000011000011
+```
+- Exact number depends on exactly what physical processor you want to
+  run on!
 - We would much prefer to write in a human language
-- Source code is human-readable set of instructions for computer
+- "Lowest" level language is _assembly_, which just gives names to the
+  _op codes_:
+```nasm
+        movss  xmm0,DWORD PTR [rdi]  ;; f3 0f 10 07
+        mulss  xmm0,xmm0             ;; f3 0f 59 c0
+        ret                          ;; c3
+```
+- Source code is human-readable set of instructions for computer:
+```Fortran
+        square = x * x
+```
+
+## Fundamentals of Programming
+
+- Higher level language can abstract over assembly complications
 - Need a program to convert source to machine code
 - Either:
     - interpreted, like Python, convert on the fly
     - compiled, like Fortran, convert then run
 - Compilation step offers opportunity to spend time _optimising_ the
   code
+    - unoptimised version of `square` above is 9 times longer!
 
-## Fundamentals
+## Fundamentals of Programming
 
 - Source code is written in plain text files (i.e. not Word!)
 - Run compiler on source file to produce _executable_
@@ -130,6 +164,21 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
 - Even more important that it is correct
 - Make it work -> make it readable -> make it fast
     - In that order!
+
+
+## Some conventions
+
+- `<something>` means "something" is mandatory, but up to you
+- `{something}` means "something" is optional, but has to be exactly `something`
+    - `{<something>}` means "something" is optional and up to you!
+- These two are red in code blocks, as they won't compile!
+- If a code block has numbers on the left, it's from an example file,
+  which will be available from
+  <https://github.com/ZedThree/HPCAcademyFortran/tree/master/examples>
+- I usually don't show the whole file, but the whole file will compile
+  and work
+- I don't always follow best practices to make things fit on slides!
+    - Do as I say, not as I do!
 
 
 ## Hello world
@@ -171,6 +220,12 @@ Some basic, very helpful flags you should use:
 - `-O1`/`-O2`/`-O3`: optimisations
     - Can speed up code at cost of longer compile times
 
+Full compile line might look like:
+
+- `gfortran -Wall -Wextra -fcheck=all -g -O2 hello.f90 -o hello`
+
+Build systems like `CMake` or `Makefile` help simplify this
+
 ## Types
 
 There are 5 fundamental types in Fortran:
@@ -189,6 +244,14 @@ There are 5 fundamental types in Fortran:
 - Given a set of bits, what does it mean?
     - Could be a number, could be some text
     - Could be an instruction!
+- Binary: `00000000000000001001011001110000`
+- As an `integer`: `38512`
+- As a `real`: `5.39668e-41`
+- As a `character`: `p`
+- As an instruction: `XCHG`
+
+## What, exactly, is a type?
+
 - We need to tell computer how to interpret the set of bits
     - We're free to lie to the computer and change our minds about how
       to interpret a given set of bits
@@ -219,48 +282,51 @@ There are 5 fundamental types in Fortran:
     - `.true.`, `.false.`
     - But often printed as `T` and `F`!
 
-### FIXME
-
-- binary, octal, hexadecimal integers
-
 ## Variables
 
 - A variable is label for some value in memory used in a program
 - In Fortran, we must tell the compiler up front what type a variable
   is, and this is fixed
-    - Other languages, like Python, we can change our minds
+    - In other languages, like Python, we can change our minds
 - Variables are declared like:
 
 ```Fortran
-<type> :: <name>
+    <type> :: <name> {, <name>}
 ```
 - Note: `::` not always needed, but never hurts!
-- Note: names must start with a letter, and are limited to ASCII
+
+```Fortran
+    integer :: grid_points
+    real :: energy, mass
+```
+
+## Variable names
+
+- Variable names must start with a letter, and are limited to ASCII
   lower/uppercase, numbers and underscore
+- Valid:
+    - `a`, `NUMBER5`, `nitrogen_mass`, `O2_concentration`
+- Invalid:
+    - `1a`: must start with a letter
+    - `_b`: must start with a letter
+    - `Pounds£`: contains non-valid character `£`
+    - `a-b`: parsed as "subtract `b` from `a`"
 
 ## Variable names
 
 - Pick variable names wisely!
     - in F2003, you can have up to 63 characters in a name
-    - Good names:
-        - `distance_to_next_atom`
-        - `temperature`
-        - `total_energy`
-    - Less good names:
-        - `distnxtatm`
-        - `temp`
-        - `E`
-
-### FIXME
-
-valid and invalid names
-
-### FIXME
-
-- a bit more on declaring characters
-- more on using characters in general?
-- substrings
-- `//`, `trim`, `len`, `adjustl`
+- Good names:
+    - `distance_to_next_atom`
+    - `temperature`
+    - `total_energy`
+- Less good names:
+    - `distnxtatm`
+    - `temp`
+    - `E`
+- "Writing code is a form of communication" - Kate Gregory
+- Be kind to future readers, dnt ndlssly shrtn nms
+- Your code will live longer than you think!
 
 ## Hello world again
 
@@ -268,7 +334,7 @@ valid and invalid names
 ```
 
 - Line 3: `character(len=20)`: we need to say up-front how long how strings
-  are via the `len` type parameter
+  are via the `len` type parameter (we'll cover this a bit more later on)
 - Line 6: `read*,`: read a variable from stdin/command line
 - Line 9: `&`: line continuation for long lines
 
@@ -311,15 +377,36 @@ startFrom=1 startLine=1 endLine=5}
 ### Lines
 - Statements must be on a single line unless you use a `&`, _line
   continuation_
+  ```Fortran
+  if (some_very_long_and_complicated_condition > some_other_very_long_and_complicated_condition) then
+  ```
+  can be rewritten as
+  ```Fortran
+  if (some_very_long_and_complicated_condition &
+      > some_other_very_long_and_complicated_condition) then
+  ```
 - Optional to put `&` at start of next line
 - Maximum of 256 lines (i.e. 255 `&`)
+- Prefer to put operators at the beginning of lines
+
+
+## Some points on Fortran grammar
 
 ### Capitalisation
 - Fortran is (almost) completely case-insensitive
-- Originally didn't have lower-case characters at all!
+    - Inside strings matters, but keywords and variable names don't
+```Fortran
+iF (eNeRgY > cRiTiCaL_eNeRgY) tHen
+```
+is _identical_ to
+```Fortran
+if (energy > critical_energy) then
+```
+but one is easier to read
+    - Originally didn't have lower-case characters at all!
 - Prefer lower-case keywords
 - Careful with names!
-- You may prefer `snake_case`
+- You may prefer `snake_case` for variable names
 
 ## Arithmetic operations
 
@@ -389,7 +476,7 @@ startFrom=3 startLine=3 endLine=6}
 ## Control flow
 
 - Often need to change exactly what happens at runtime
-- `if` statement allows us to take one of two _branches_ depending on
+- `if` statement allows us to take one of a number of _branches_ depending on
   the value of its _condition_
 
 ```Fortran
@@ -511,7 +598,7 @@ startLine=3 endLine=7 startFrom=3}
 startLine=3 endLine=7 startFrom=3}
 ```
 
-## `do <counter> = <start>, <stop>, [<stride>]`
+## `do <counter> = <start>, <stop> {, <stride>}`
 
 - Most common form of the `do` loop is with a counter
 - Must be an integer and declared before-hand
@@ -522,7 +609,7 @@ startLine=3 endLine=7 startFrom=3}
 startLine=3 endLine=6 startFrom=3}
 ```
 
-## `do <counter> = <start>, <stop>, [<stride>]`
+## `do <counter> = <start>, <stop> {, <stride>}`
 
 - There is an optional `stride`:
 
@@ -919,9 +1006,9 @@ x = 1.0_wp
 - `real` literals are single precision by default, so need `kind`
   identifier
 
-  ```{include=examples/loss_of_precision.f90 .numberLines .Fortran
-  startFrom=4 startLine=4 endLine=6}
-  ```
+```{include=examples/loss_of_precision.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=6}
+```
 
 - Mixed-kind operations will convert like mixed-type operations
 - Lots of intrinsics take a `kind` argument:
@@ -1023,25 +1110,32 @@ end function my_func
 - syntax:
 
 ```Fortran
-subroutine my_subroutine(input, output)
+subroutine <name>(<input>, <output>)
   implicit none
-  <type>, intent(in) :: input
-  <type>, intent(out) :: output
+  <type>, intent(in) :: <input>
+  <type>, intent(out) :: <output>
   ! body
-end subroutine my_subroutine
+end subroutine <name>
 ```
 
 - Subroutines are used via the `call` statement:
 
 ```Fortran
-call my_subroutine(argument)
+call <name>(<arguments>)
 ```
 
 ## Subroutine example
 
 ```{include=examples/0x_basic_subroutine.f90 .numberLines .Fortran
-startLine=10 endLine=14}
+startFrom=10 startLine=10 endLine=14}
 ```
+
+used like:
+
+```{include=examples/0x_basic_subroutine.f90 .numberLines .Fortran
+startFrom=5 startLine=5 endLine=7}
+```
+
 
 ## Recursion
 
