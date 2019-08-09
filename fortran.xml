@@ -437,8 +437,7 @@
 <!--************************END OF THE MAIN CONTEXT*************************-->
 
       <context attribute="Normal Text" lineEndContext="#stay" name="find_examples">
-        <RegExpr attribute="Example" context="#stay" String="\b_[a-zA-Z0-9]+_\b"/>
-        <RegExpr attribute="Example" context="#stay" String="\b&lt;[a-zA-Z0-9]+&gt;\b" lookAhead="true"/>
+        <RegExpr attribute="Example" context="#stay" String="&lt;[-a-zA-Z0-9]+&gt;"/>
       </context>
 
 <!-- IMPORTANT: If you modify something, do it also in "fortran-fixed.xml"! -->
@@ -657,7 +656,7 @@
       <itemData name="Inquiry Function" defStyleNum="dsFunction" bold="1" italic="1"/>
       <itemData name="Transformational Function" defStyleNum="dsFunction" bold="1" italic="0"/>
       <itemData name="Non elemental subroutine" defStyleNum="dsFunction" bold="1" italic="0"/>
-      <itemData name="Example" defStyleNum="dsFunction" bold="1" italic="1"/>
+      <itemData name="Example" defStyleNum="dsAlert" bold="1" italic="1"/>
       <itemData name="Block Name" defStyleNum="dsFunction" bold="1" italic="1"/>
     </itemDatas>
   </highlighting>
