@@ -66,11 +66,13 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
 - Fortran 90 finally brought language up to modern era
     - "Free" form source code
     - Made lots of "spaghetti" code features obsolescent
+    - Added whole array operations, modules, derived data types
 - Further revisions:
-    - Fortran 95
-    - Fortran 2003
-    - Fortran 2008
-    - Fortran 2018
+    - Fortran 95 - minor revision to F90
+    - Fortran 2003 - major revision, support for object-oriented programming
+    - Fortran 2008 - native support for parallelisation via coarrays
+    - Fortran 2018 - minor revision to F2008, more support for
+      parallelisation and interoperability with C
 
 ## Why Fortran?
 
@@ -95,6 +97,7 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
     - Lots of typing!
 - Lack of proper generics make some useful data structures tricky to
   implement
+- Slow support from compiler vendors
 
 ## Alternatives
 
@@ -702,7 +705,7 @@ real, dimension(-1:1, 3:5) :: stress_tensor
     - Older style is `(/<values>.../)`
 - Can use this to initialise or assign to arrays:
 ```{include=examples/array_constructors.f90 .numberLines .Fortran
-startFrom=4 startLine=4 endLine=4}
+startFrom=5 startLine=5 endLine=5}
 ```
 - Or even pass to functions:
 ```{include=examples/array_constructors.f90 .numberLines .Fortran
@@ -891,12 +894,22 @@ deallocate(array)
 - Value of `stat` is non-portable and might not even be documented!
 - Combine with `errmsg`:
 
-  ```{include=examples/0x_allocate_stat.f90 .numberLines .Fortran}
-  ```
+```{include=examples/0x_allocate_stat.f90 .numberLines .Fortran
+startFrom=9 startLine=9 endLine=17}
+```
+<!-- [examples/0x_allocate_stat.f90](examples/0x_allocate_stat.f90) -->
 
 - Note `errmsg` may not always be accurate...
     - Bare `allocate` will terminate, possibly with more useful error
       message
+
+## Aside: heap and stack
+
+### FIXME
+
+## Returning `allocatable` variables from functions
+
+### FIXME
 
 ## `parameter`
 
@@ -1253,7 +1266,7 @@ startLine=4 endLine=11}
 - also hard to see where `x` comes from
 
 
-## `case`
+## `select case`
 
 - When comparing series of mutually exclusive values, order is not
   important
@@ -1270,14 +1283,21 @@ case default
 end select
 ```
 
+## `select case`
+
 - The expression in the `select case` must be an `integer`, `logical`
   or `character` scalar variable
 - Ranges must be of same type
+    - `:upper_bound`
+    - `lower_bound:`
+    - `lower:upper`
+    - `value`
 
-- `:upper_bound`
-- `lower_bound:`
-- `lower:upper`
-- `value`
+### FIXME
+
+example
+
+## `select case`
 
 - Neat thing about `select case` in Fortran: works with strings!
 
@@ -1299,6 +1319,10 @@ end select
 - Can be useful for parsing user arguments
     - careful not to overdo it though, this is expensive!
 
+### FIXME
+
+example
+
 ## `cycle`
 
 - skip to next loop iteration
@@ -1310,6 +1334,10 @@ do i = 1, 5
   print*, i
 end do
 ```
+
+### FIXME
+
+example
 
 ## Loop labels
 
@@ -1327,15 +1355,19 @@ outer: do i = 1, 5
 end do outer
 ```
 
+### FIXME
+
+example
+
 # Session 4
 
-## formatted i/o
+## Formatted i/o
 
 - What does the `*` mean in `print`, `read`?
 - Why is it `print` and `read`?
 - Why does Fortran put great big spaces between variables in `print`?
 
-## formatted i/o
+## Formatted i/o
 
 - `print*,` is essentially short for `write(*, *)`
 - `read*,` is essentially short for `read(*, *)`
@@ -1364,7 +1396,6 @@ end do outer
     - (technically _data edit descriptor_, but yeesh)
 - Basic form is `'(<something>)'`, where `<something>` is a
   comma-separated list of format codes
-    - Called _record-directed I/O_ **FIXME**
 - `write(*, '(a, i0, a)') "I have ", number_of_cats, " cats"`
     - `a` means `character`
     - `i0` means `integer`, the `0` is "make it as wide as it needs to
@@ -1379,7 +1410,7 @@ end do outer
 - `a`: `character`
 - `i`: `integer`
 - `f`: `real`
-- `e`: scientific notation
+- `e`: `real`, but using scientific notation
 
 ### Widths
 
@@ -1547,8 +1578,12 @@ end if
 startFrom=10 startLine=10 endLine=23}
 ```
 
+### FIXME
 
-## modules
+`write` example
+
+
+## Modules
 
 - very big programs become difficult to develop and maintain
 - becomes useful to split up into separate files
@@ -1566,9 +1601,14 @@ startFrom=10 startLine=10 endLine=23}
 - can choose what entities in a `module` to make `public` or `private`
     - `module` is a bit like a single instance of an object
 
-## modules
+### FIXME
 
-- syntax looks very similar to `program`:
+tidy
+
+
+## Modules
+
+- Syntax looks very similar to `program`:
 
 ```Fortran
 module <name>
@@ -1582,6 +1622,8 @@ contains
 
 end module <name>
 ```
+
+## Modules
 
 - But note that `module` body before `contains` cannot include
   executable statements!
@@ -1648,22 +1690,34 @@ subroutine push_particle
 - Also build systems such as [CMake](https://cmake.org) can take care
   of this for you
 
+### FIXME
+
+Full module example
+
 
 ## derived types
+
+### FIXME
+
+
 
 ## private/public
 
 ## optional arguments
 
+### FIXME
+
 ## good practice
 
 # Missed bits
 
-## array constructors
-
 ## elemental functions
 
+### FIXME
+
 ## namelists
+
+### FIXME
 
 ## `block`
 
