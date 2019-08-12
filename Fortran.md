@@ -1056,28 +1056,13 @@ startFrom=4 startLine=4 endLine=6}
 - syntax:
 
 ```Fortran
-function my_func(input)
+function <name>(<input>)
   implicit none
-  <type>, intent(in) :: input
-  <type> :: my_func
+  <type>, intent(in) :: <input>
+  <type> :: <name>
   ! body
-  my_func = ! result
-end function my_func
-```
-
-## Functions
-- Takes arguments and returns a single result (may be array)
-- Always returns a value
-- Intrinsic functions, e.g. `sin(x)`, `sqrt(x)`
-- syntax:
-
-```Fortran
-<type> function my_func(input)
-  implicit none
-  <type>, intent(in) :: input
-  ! body
-  my_func = ! result
-end function my_func
+  <name> = ! result
+end function <name>
 ```
 
 ## Functions
