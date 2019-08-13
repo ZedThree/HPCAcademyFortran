@@ -1,0 +1,4 @@
+# Ignore everything
+*
+# Except fortran files
+!*.f90
