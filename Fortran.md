@@ -2034,3 +2034,51 @@ startFrom=3 startLine=3 endLine=11}
 ## Coarrays
 
 ## `where`
+## Working with `character`s
+
+- `character`s of a fixed length are terminated by _blanks_,
+  i.e. spaces
+- so `character(len=10) :: cat = "ziggy     "`
+- `character`s can be indexed similarly to arrays, with one
+  restriction: the colon (`:`) is **required**:
+
+```Fortran
+character(len=10) :: cat = "Ziggy     "
+cat(:3) == "Zig"
+cat(4:4) == "g"
+cat(5:) == "y     "
+```
+
+## Working with `character`s
+
+- We can stick two `character`s together with the _concatenation
+  operator_, `//`:
+
+```Fortran
+character(len=*), parameter :: cat1 = "Ziggy", cat2 = "Lana"
+character(len=*), parameter :: both_cats = cat1 // " and " // cat2
+```
+
+- This is the easiest way to build up a string dynamically
+- But we can also `write` to a `character`!
+- Just use the variable in place of the `unit` argument
+
+## Writing to a `character`
+
+```{include=examples/write_to_character.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=14}
+```
+
+## Useful intrinsics for `character`s
+
+- `len(string)`: How long is `string`, including the trailing spaces
+- `len_trim(string)`: How long is `string`, _excluding_ the trailing
+  spaces
+- `trim`: Remove all trailing spaces
+- `adjustl(string)`, `adjustr(string)`: "Adjust" the string
+  left/right, moving leading/trailing spaces to the end/beginning
+- `index(string, substring)`: Return the starting position of
+  `substring` within `string`, or zero if it's not found.
+- `new_line(a)`: Get the new line `character` of the same kind as `a`
+    - This is the equivalent of `\n` in C, Python, etc.
+
