@@ -976,6 +976,11 @@ deallocate(array)
 
 - Less important than C-like languages due to _automatic_ variables
   and scope -- will cover this later
+- It is an error to `deallocate` an unallocated array, so:
+
+```Fortran
+if (allocated(array)) deallocate(array)
+```
 
 ## Guarding `allocate`
 
