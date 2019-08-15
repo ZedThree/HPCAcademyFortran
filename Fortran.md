@@ -1053,7 +1053,6 @@ real, dimension(10, 10) :: density
 startFrom=3 startLine=3 endLine=12}
 ```
 
-
 ## Kinds of types
 
 - Most important for `real`s
@@ -1710,6 +1709,13 @@ startFrom=10 startLine=10 endLine=23}
 `write` example
 
 
+## Namelists
+
+- Another nifty feature of Fortran
+- Great for simple things, not so great for more complicated things
+
+## FIXME
+
 ## Modules
 
 - very big programs become difficult to develop and maintain
@@ -2034,6 +2040,37 @@ startFrom=3 startLine=3 endLine=11}
 ## Coarrays
 
 ## `where`
+
+## `stop` and `error stop`
+
+- Sometimes want to finish a program "early"
+    - Maybe some quantity has converged
+    - Maybe something's gone wrong and we can't continue
+- Two statements: `stop` and `error stop`
+    - Essentially equivalent, except `error stop` always indicates an
+      error somehow
+- Can take an `integer` or `character` constant (i.e. value has to be
+  known exactly at compile time)
+    - Relaxed in Fortran 2018!
+
+```Fortran
+character(len=*), parameter :: converged = "The simulation has converged!"
+...
+stop converged
+```
+
+- Unfortunately, the standard is vague on what happens with an integer
+- _Usually_ is the exit code, if between 0--127
+    - Can't 100% rely on this, but mostly fine
+
+## Other useful intrinsics
+
+### FIXME
+
+- `call execute_command_line`
+- `call cpu_time`
+- `call get_command_line`
+
 ## Working with `character`s
 
 - `character`s of a fixed length are terminated by _blanks_,
