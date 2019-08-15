@@ -847,6 +847,82 @@ https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column
 startFrom=15 startLine=15 endLine=27}
 ```
 
+## Useful intrinsics
+
+- The basic mathematical intrinsic functions also work on arrays:
+- `sin`, `cos`, `tan`, `sqrt`, `exp`, `log`, etc.
+
+### FIXME
+
+```Fortran
+x = [0 to 2pi]
+print*, x, sin(x)
+```
+
+## Useful intrinsics
+
+There are many useful functions for working with arrays built in to
+Fortran
+
+Many of these intrinsics take an optional `dim` argument to take the
+function just along that dimension
+
+### Working with vectors/matrices
+- `dot_product(vector_a, vector_b)`: Returns the dot product of two
+  1D arrays of the same size
+- `matmul(matrix_a, matrix_b)`: Returns the matrix multiplication of
+  two matrices
+- `product(array)`: Return the product of all the elements
+- `sum(array)`: Return the sum of all the elements
+- `norm2(array)`: Return the $L_2$ norm, essentially `sqrt(array**2)`
+
+## Useful intrinsics
+
+### Logical inquiries
+
+- `all(mask)`: Returns true if all the elements in the logical array
+  `mask` are true, otherwise returns false
+    - `mask` can be an expression like: `all(array > 0)`
+- `any(mask)`: True if any of the elements in `mask` are true
+- `count(mask)`: Returns how many elements in `mask` are true (an
+  integer)
+
+## Useful intrinsics
+
+### Finding elements and values
+- `maxval(array)`: Returns the maximum value in `array`
+- `minval(array)`: Returns the minimum value in `array`
+- `maxloc(array [, mask])`: Returns the _location_ of the maximum
+  value
+- `minloc(array [, mask])`: Returns the _location_ of the minimum
+  value
+    - Get the element closest to `value`: `minloc(abs(array - value))`
+- `findloc(array, value)`: Return the location of `value` in `array`
+    - Note that this is not so useful for `real` arrays!
+
+## Useful intrinsics
+
+### Array size and shape inquiries
+
+- `lbound(array)`: Return a 1D array of the lower bounds of `array`
+- `ubound(array)`: Return a 1D array of the upper bounds of `array`
+- `shape(array)`: Return a 1D array of the size of each dimension
+- `size(array)`: Return a scalar of the total size of `array`
+  (i.e. `product(shape(array))`)
+
+## Useful intrinsics
+
+### Making new arrays
+
+- `merge(tsource, fsource, mask)`: Return `tsource` where `mask` is
+  true and `fsource` where `mask` is false
+- `spread(source, dim, ncopies)`:
+- `transpose(array)`: Returns the transpose of a 2D array
+- `reshape(source, shape [, pad] [, order])`: Returns a copy of
+  `source` with `shape`. `pad` can be used to fill in values if the
+  result is larger than `source`. `order` can be used to do a general
+  $n$-D transpose
+
 ## Allocatable arrays
 
 - If size of array not known until some time into the program
