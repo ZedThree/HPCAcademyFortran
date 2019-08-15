@@ -1741,7 +1741,7 @@ tidy
 module <name>
   implicit none
 
-  ! variables, type, parameters
+  ! variables, types, parameters
 
 contains
 
@@ -1749,6 +1749,8 @@ contains
 
 end module <name>
 ```
+
+- Just like `program`s, `implicit none` applies to the whole `module`
 
 ## Modules
 
@@ -1764,7 +1766,7 @@ end module <name>
 
 ## Using modules
 
-- Using a `module` is simple:
+Using a `module` is simple:
 
 ```Fortran
 program track_particles
@@ -1772,22 +1774,71 @@ program track_particles
   implicit none
 ```
 
-- or even better, just certain things:
+or even better, just certain things (could be either variables or
+procedures):
 
 ```Fortran
 subroutine push_particle
-  use particle_properties, only : electron_mass
+  use particle_properties, only : electron_mass, electron_charge
 ```
 
-- this is great!
+This is great!
     - more obvious where `electron_mass` comes from
     - doesn't bring in extra names
-    - can rename things
+    - can even rename things
 
 ```Fortran
 subroutine push_particle
   use particle_properties, only : electron_mass => mass
 ```
+- Note: `use` statements must come before `implicit none`
+
+## Using modules
+
+- Plain `use <module>` brings in _everything_ from `<module>` to the
+  local scope
+    - This is called _use association_
+- Sometimes we want to have some variable or procedure that is used
+  "internally" to a module, and don't want to be able to access it
+  from outside that module
+- We can use `public` and `private` statements and attributes to
+  control which names are available to be `use`d
+- `private` entities (i.e. variables or functions) won't be visible
+  outside the module
+- `private`/`public` statement by itself marks the default visibility
+- Then can add either as an attribute to individual entities
+- Entities `use`d from other modules can also have visibility
+  attributes applies to them
+
+## Module visibility
+
+```Fortran
+module particle_properties
+  !
+  use physics_constants, only : speed_of_light
+  implicit none
+  private  ! Marks all entities as private by default
+
+  ! As attribute on variable declaration
+  real, parameter, public :: electron_mass = 9.1e-31
+
+  ! As separate attribute for procedure
+  public :: kinetic_energy
+
+contains
+  ! Given public attribute above, so can be used outside of module
+  function kinetic_energy(mass, velocity)
+  ...
+
+  ! Takes default private attribute, so cannot be used outside of module
+  function is_relativistic(velocity)
+  ...
+```
+
+### FIXME
+
+- make proper example
+- think of reason to have something private!
 
 ## Modules
 
@@ -1799,6 +1850,27 @@ subroutine push_particle
   versions of the same compiler!
     - This is "Application Binary Interface" (ABI) and is a Hard
       Problem
+
+## Compiling modules
+
+- Getting an executable that you can run is (essentially) two step
+  process:
+    - _Compile_ source code to _object files_
+    - _Link_ object files to _executable_
+- Compiler normally takes care of both compiling and linking for us
+- If we tell the compiler about all the files we want to compile and
+  link together in one go, we don't need to do anything special
+- Modules are not executable, so if we don't want to compile
+  everything at once, need to tell compiler to stop at the object file
+  stage
+- For `gfortran`, this is the `-c` flag:
+
+```bash
+# Creates my_module.o
+$ gfortran -c my_module.f90
+# Compiles my_program and links it with my_module
+$ gfortran my_module.o my_program.f90 -o my_program
+```
 
 ## Modules in practice
 
