@@ -1309,22 +1309,6 @@ startLine=13 endLine=17 startFrom=13}
 
 - `x` becomes associated with `a`; `y` with `b`; `z` with `c`
 
-## dummy arguments and arrays
-
-- Three choices for passing arrays:
-- `dimension(n, m, p)`: explicit size
-    - Actual argument has to be exactly this size
-    - Compiler can only check if it knows the size at compile time
-- `dimension(n, m, *)`: _assumed size_ -- old, don't use!
-    - Compiler doesn't know the size of the array, so you better index
-      it correctly!
-- `dimension(:, :, :)`: _assumed shape_
-    - Compiler now _does_ know the size of the actual array passed
-    - Can check if you go out-of-bounds (may need compiler flag!)
-    - Indices now always start at 1
-- `dimension(n:, m:, p:)`: assumed shape with lower bounds
-    - Compiler still knows the correct size
-    - but remaps indices to match your provided lower bounds
 
 ## Keyword arguments
 
@@ -1343,6 +1327,41 @@ call calculate_position(0.345, 0.5346)
 ! or
 call calculate_position(radius=0.345, angle=0.5346)
 ```
+
+## dummy arguments and arrays
+
+Three choices for passing arrays:
+
+- `dimension(n, m, p)`: explicit size
+    - Need to pass `n`, `m`, `p` as well (or get them from elsewhere)
+    - Actual argument has to be exactly this size
+    - Compiler can only check size is correct if it knows the size at
+      compile time
+- `dimension(n, m, *)`: _assumed size_ -- old, don't use!
+    - Compiler doesn't know the size of the array, so you better index
+      it correctly!
+- `dimension(:, :, :)`: _assumed shape_
+    - Compiler now _does_ know the size of the actual array passed
+    - Can check if you go out-of-bounds (may need compiler flag!)
+    - Indices now always start at 1
+- `dimension(n:, m:, p:)`: assumed shape with lower bounds
+    - Compiler still knows the correct size
+    - but remaps indices to match your provided lower bounds
+    - `n`, `m`, `p` need to be passed in (or got from elsewhere)
+
+## Pure procedures
+
+### FIXME
+
+## Elemental procedures
+
+- We saw some intrinsics can handle scalars or arrays
+- It is also possible to write our own functions that can operate on
+  both scalars and arrays
+- These functions apply the function to each element, so they are
+  called _elemental_
+
+### FIXME
 
 ## More on scope
 
