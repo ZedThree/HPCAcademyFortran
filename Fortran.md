@@ -2082,3 +2082,165 @@ startFrom=4 startLine=4 endLine=14}
 - `new_line(a)`: Get the new line `character` of the same kind as `a`
     - This is the equivalent of `\n` in C, Python, etc.
 
+## Interfaces
+
+- Early Fortran standards didn't have `contains` or `module`s
+- Functions could be external to the program, e.g. in a library
+- Return type for functions was `implicit`, i.e. based on first letter
+  of name
+- Type and number of arguments was completely unknown to the compiler
+    - Programmer had better get them right!
+- Very bug prone!
+
+## Missing interface example
+
+External library:
+```{include=examples/idouble.f90 .numberLines .Fortran}
+```
+Program:
+```{include=examples/external_function.f90 .numberLines .Fortran}
+```
+
+## Interfaces
+
+- Fortran 90 introduced `contains`, `module`s and `interface`s
+- Interface is essentially the procedure minus the executable
+  statements
+- Procedures in `module`s and `program`s have _interfaces_ generated
+  by the compiler
+    - Also known as _signatures_ or _prototypes_
+- The interface allows the compiler to give warnings/errors if
+  arguments are wrong
+- Programmers could also write an explicit `interface` block for
+  external procedures themselves
+    - Useful for legacy libraries or interoperability with other languages
+
+## Interfaces
+
+```{include=examples/external_function_with_interface.f90 .numberLines
+.Fortran
+startFrom=3 startLine=3 endLine=14}
+```
+
+Now compiler knows that `idouble(2.0)` and `iadd(2, 4)` are mistakes!
+
+## Passing procedures
+
+- With an interface, we can now pass procedures to other procedures
+- Useful for writing e.g. integration routines
+
+Let's take two functions we want to apply:
+
+```{include=examples/passing_procedure.f90 .numberLines .Fortran
+startFrom=18 startLine=18 endLine=26}
+```
+
+## Passing procedures
+
+Using an explicit interface in the function:
+
+```{include=examples/passing_procedure.f90 .numberLines .Fortran
+startFrom=28 startLine=28 endLine=37}
+```
+
+And calling the function:
+
+```{include=examples/passing_procedure.f90 .numberLines .Fortran
+startFrom=10 startLine=10 endLine=11}
+```
+
+
+## Passing procedures
+
+- This gets very verbose if we use the same function interface a lot
+- Another option is to use an _abstract interface_ to name a signature
+
+```{include=examples/passing_procedure.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=8}
+```
+
+- We can then declare our dummy argument to be a `procedure` of this type:
+
+```{include=examples/passing_procedure.f90 .numberLines .Fortran
+startFrom=39 startLine=39 endLine=44}
+```
+
+
+## Generic interfaces
+
+- Very common to want to have the same function for multiple types, or
+  different sets of arguments
+    - Called _overloads_ in other languages, but not quite the same in
+      Fortran
+- Before Fortran 90, needed to have a different name for each function
+    - e.g. `idouble` for `double` function on `integer`s, `cdouble`
+      for `complex`
+- Only intrinsics could have generic names
+- `interface` allows us to "group" functions or subroutines together
+  under a common name
+    - Cannot group _both_ `function`s and `subroutine`s together
+      though!
+- Somewhat annoyingly, can only do this for external procedures or
+  those in `module`s, _not_ those in `program`s
+
+## Generic interfaces
+
+- For external procedures, need to write out explicit interfaces
+- Don't need to repeat interface for modules, can just say
+
+```Fortran
+interface <generic-name>
+  module procedure <specific-name-1>
+  module procedure <specific-name-2>
+end interface <generic-name>
+```
+
+- Can use this to define new _constructors_ for derived types, or even
+  operators:
+
+```Fortran
+interface operator(+)
+  module procedure add_my_type
+end interface
+```
+
+## Generic interfaces
+
+In a module:
+```{include=examples/generic_interface.f90 .numberLines .Fortran
+startFrom=1 startLine=1 endLine=7}
+```
+Using it in a program:
+```{include=examples/generic_interface.f90 .numberLines .Fortran
+startFrom=25 startLine=25 endLine=30}
+```
+
+## Generic interfaces
+
+- There are some rules about what can be put in a generic interface
+- Mostly, the dummy arguments must be _distinguishable_:
+- Different number of arguments
+- Different types
+- Different kinds
+- Different ranks
+- `allocatable`/`pointer`
+- Procedure vs variable
+
+### FIXME
+
+- Check if names matter
+
+## Bad old stuff
+
+### FIXME
+
+- `common` blocks
+- `goto`
+- `do; do; 10 continue`
+
+## Documentation
+
+### FIXME
+
+- doxygen
+- Ford
