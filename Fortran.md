@@ -1043,7 +1043,8 @@ real, dimension(10, 10) :: density
     character(len=*), parameter :: filename = "output.log"
     ```
 
-- Only works for `parameter`s though!
+- Only works for `parameter`s and dummy `intent(in)` arguments (see
+  later) though!
 - Non-constant `character`s can be `allocatable` with `len=:` though!
 
 ## `character` examples
