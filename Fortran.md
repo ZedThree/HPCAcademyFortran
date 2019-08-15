@@ -1145,6 +1145,8 @@ startFrom=4 startLine=4 endLine=6}
 - Encapsulation: hide internal details from other parts of the
   program. Program against the _interface_
 
+## Procedures
+
 ### FIXME
 
 - names are great
@@ -1267,6 +1269,22 @@ startLine=3 endLine=12 startFrom=3}
 `x` in the main program and `x` within `add_square` are different
 variables
 
+
+## More on scope
+
+- Possible for procedures to access variables in the containing scope
+    - Technically called _host association_
+- Generally not a great idea!
+
+```{include=examples/0x_global_variables.f90 .numberLines .Fortran
+startLine=4 endLine=11}
+```
+
+- This is surprising, despite the `intent(in)`!
+- Also hard to see where `x` comes from
+- There are uses for this, but prefer to explicitly pass in variables
+  via arguments
+
 ## Initialising local variables
 
 - A word of warning when initialising local variables
@@ -1367,20 +1385,15 @@ Three choices for passing arrays:
 - These functions apply the function to each element, so they are
   called _elemental_
 
-### FIXME
-
-## More on scope
-
-- possible for procedures to access variables in the containing scope
-- generally not a great idea
-
-```{include=examples/0x_global_variables.f90 .numberLines .Fortran
-startLine=4 endLine=11}
+```{include=examples/elemental_functions.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=11}
 ```
 
-- this is surprising, despite the `intent(in)`!
-- also hard to see where `x` comes from
 
+### FIXME
+
+
+# Session 4
 
 ## `select case`
 
@@ -1474,8 +1487,6 @@ end do outer
 ### FIXME
 
 example
-
-# Session 4
 
 ## Formatted i/o
 
