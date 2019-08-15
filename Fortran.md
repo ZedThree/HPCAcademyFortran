@@ -1894,29 +1894,121 @@ $ gfortran my_module.o my_program.f90 -o my_program
 Full module example
 
 
-## derived types
+## Derived types
+
+- Not uncommon to need to call a set of functions with the same
+  few arguments
+- Or we may have some variables that we need to keep in sync
+- One solution to these problems is a _derived type_
+    - Other languages call these _structs_ or _classes_
+- A derived type contains _components_ (or _members_) which can be
+  intrinsic types or other derived types
+- Fortran does have the ability to do some _object-oriented
+  programming_
+    - Will only cover a little bit here
 
 ### FIXME
 
+## Derived types -- basic syntax
 
+```Fortran
+type :: <name>
+    <type> :: <component name>
+    ...
+end type <name>
+```
 
-## private/public
+Use like
 
-## optional arguments
+```Fortran
+type(<name>) :: <variable name>
+```
+
+## Derived types -- example
+
+```Fortran
+type :: particle
+  real(real64) :: mass
+  real(real64) :: charge
+  character(len=:), allocatable :: name
+end type
+```
 
 ### FIXME
+
+particle with mass, charge, energy
+
+## type-bound procedures
+
+- Can associate a procedure with a type
+    - But procedure can remain as a _free function_
+- Called _methods_ in other languages
+- Slightly annoying in that definition still needs to be in the
+  `contains` section of the `program` or `module`
+
+### FIXME
+
+- example
+
+## Private/Public
+
+- Just like `module`s can have declare the visibility of their
+  entities, `type`s can specify visibility of their members
+- This is very useful if there's some member that needs to be kept in
+  sync with the state of the type
+    - e.g. a particle might store its energy, instead of recalculating
+      it every time
+    - Or a container might store how many items it holds
+- These are called _invariants_
+- Can make the invariant `private` and then provide `public` methods
+  to get or set the value
+
+### FIXME
+
+- example
+
+## Optional arguments
+
+- Common to have a function that only sometimes needs a particular
+  argument
+- Can make these arguments `optional`
+- We've met a few intrinsics with optional arguments
+- Need to check that an `optional` argument is `present` before we can
+  use it
+    - Except to pass it to other functions
+- Require a bit of special handling if we want to give `optional`
+  arguments default values
+
+## Optional arguments
+
+```{include=examples/optional_arguments.f90 .numberLines .Fortran
+startFrom=8 startLine=8 endLine=23}
+```
+
+## Optional arguments
+
+```{include=examples/optional_arguments.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=5}
+```
+
+Also notice that we need to check if `politely` is `present` before
+trying to use it at all:
+
+
+```{include=examples/optional_arguments.f90 .numberLines .Fortran
+startFrom=16 startLine=16 endLine=17}
+```
+
+The following is dangerous, because standard doesn't mandate short-circuiting:
+```Fortran
+if (present(politely) .and. politely) then
+...
+```
+
 
 ## good practice
 
 # Missed bits
-
-## elemental functions
-
-### FIXME
-
-## namelists
-
-### FIXME
 
 ## `block`
 
