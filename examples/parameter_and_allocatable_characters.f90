@@ -10,4 +10,5 @@ program parameter_and_allocatable_characters
 
   flexible_character = "second time"
   print*, len(flexible_character), flexible_character
+
 end program parameter_and_allocatable_characters

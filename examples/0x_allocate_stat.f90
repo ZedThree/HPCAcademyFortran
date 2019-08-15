@@ -3,17 +3,17 @@ program bigarray_prog
   implicit none
   integer(int64), parameter :: bignumber = huge(1) * 2
   real(real64), dimension(:), allocatable ::bigarray
-  integer :: stat
+  integer :: status
   character(len=200) :: errmsg
 
-  allocate(bigarray(bignumber), stat=stat, errmsg=errmsg)
+  allocate(bigarray(bignumber), stat=status, errmsg=errmsg)
 
-  if (stat /= 0) then
+  if (status /= 0) then
     print*, trim(errmsg)
-    print*, stat
+    print*, status
     error stop
     ! F2018:
-    ! error stop stat
+    ! error stop status
   end if
   
 end program bigarray_prog
