@@ -411,6 +411,21 @@ but one is easier to read
 - Careful with names!
 - You may prefer `snake_case` for variable names
 
+## Some points on Fortran grammar
+
+### File names
+
+- The standard doesn't mention source files _at all_
+- Linux also doesn't care about file extensions
+- Early, fixed-form sources files used `.f` file extension
+- With Fortran 90, people started using `.f90` for free-form source
+  files
+- Some people thought that `.f95`, `.f03`, etc. should be used for
+  later standards
+- Not the case!
+- Just use `.f90` and you'll be fine
+
+
 ## Arithmetic operations
 
 - Usual mathematical operators: `+, -, *, /`
