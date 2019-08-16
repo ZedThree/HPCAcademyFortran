@@ -43,9 +43,10 @@ Fortran Course Schedule
         - select case
         - cycle
         - loop labels
-    - File I/O
     - Formatted I/O
+    - File I/O
     - Namelists
+    - Working with characters
 6. Wednesday 3:45 - 4:45 (1 hours)
     - Practical covering:
         - reading/writing files
@@ -58,7 +59,6 @@ Fortran Course Schedule
         - type bound procedures
         - inheritance
         - polymorphism
-    - Working with characters
     - Interfaces
         - passing procedures
         - generic/overloads
