@@ -1713,8 +1713,47 @@ startFrom=10 startLine=10 endLine=23}
 
 - Another nifty feature of Fortran
 - Great for simple things, not so great for more complicated things
+- Similar to list/record-based I/O above: give a list of variables to
+  read from/write to file
+- But now with reading, have a bit more flexibility
 
-## FIXME
+```Fortran
+namelist /<name>/ <variable1> {, <variable2> ...}
+
+read(<unit>, nml=<name>)
+```
+
+and the input file looks like:
+
+```
+&<name>
+  <variable1> = <value1>
+  <variable2> = <value2>
+/
+```
+
+## Namelists
+
+- Can also write namelists
+    - useful for recording what inputs were actually used
+- variables can be in any order
+- can even miss variables! useful for default values
+- extra ones not in the `namelist` statement is an error though
+- Also, `logical`s can be `T`/`F`, `.true.`/`.false.`, `1`/`0`
+- Variables need to be declared first
+- Comments are allowed (and are ignored), case insensitive (as usual),
+  and whitespace is mostly ignored (except within names, as usual)
+- Unfortunately, `namelist`s are not quite first-class entities
+    - Meaning you cannot put them in a variable of any kind, pass them
+      to a function, etc.
+    - This becomes a pain if you want to do more complicated things,
+      e.g. have multiple ion species, each with identical namelists
+
+### FIXME
+
+- double check logicals
+- example
+- practical
 
 ## Modules
 
