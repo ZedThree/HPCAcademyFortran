@@ -126,27 +126,28 @@
       <item>pad</item>
     </list>
     <list name="types">
-      <item>parameter</item>
-      <item>save</item>
-      <item>pointer</item>
-      <item>public</item>
-      <item>private</item>
-      <item>target</item>
-      <item>allocatable</item>
-      <item>optional</item>
-      <item>sequence</item>
       <item>abstract</item>
+      <item>allocatable</item>
       <item>asynchronous</item>
       <item>bind</item>
       <item>contiguous</item>
       <item>deferred</item>
+      <item>dimension</item>
       <item>enum</item>
       <item>enumerator</item>
       <item>final</item>
       <item>generic</item>
-      <item>nopass</item>
       <item>non_overridable</item>
+      <item>nopass</item>
+      <item>optional</item>
+      <item>parameter</item>
+      <item>pointer</item>
+      <item>private</item>
       <item>protected</item>
+      <item>public</item>
+      <item>save</item>
+      <item>sequence</item>
+      <item>target</item>
       <item>value</item>
       <item>volatile</item>
     </list>
@@ -436,7 +437,7 @@
       </context>
 <!--************************END OF THE MAIN CONTEXT*************************-->
 
-      <context attribute="Normal Text" lineEndContext="#stay" name="find_examples">
+      <context attribute="Normal Text" lineEndContext="#pop" name="find_examples">
         <RegExpr attribute="Example" context="#stay" String="&lt;[-a-zA-Z0-9]+&gt;"/>
         <AnyChar attribute="Example" context="#stay" String="{}"/>
       </context>
@@ -554,6 +555,7 @@
       </context>
 
       <context name="BlockName" attribute="Block Name" lineEndContext="#pop">
+        <DetectChar attribute="Block Name" context="find_examples" char="&lt;" lookAhead="true"/>
         <RegExpr attribute="Block Name" context="#pop" String="\b[a-zA-Z0-9_]+\b"/>
       </context>
 
@@ -581,19 +583,18 @@
 
 <!-- The following two contexts match declarations -->
       <context attribute="Normal Text" lineEndContext="#stay" name="find_decls">
-        <RegExpr attribute="Data Type" context="find_paren" String="\b(class|extends|procedure|pass|codimension)\s*[(]" insensitive="true"/>
-        <WordDetect attribute="Data Type" context="#stay" String="codimension" insensitive="true"/>
+        <RegExpr attribute="Data Type" context="find_paren" String="\b(class|extends|procedure|pass)\s*[(]" insensitive="true"/>
         <WordDetect attribute="Data Type" context="#stay" String="procedure" insensitive="true"/>
         <WordDetect attribute="Data Type" context="#stay" String="pass" insensitive="true"/>
         <keyword attribute="Data Type" context="#stay" String="types"/>
-        <RegExpr attribute="Data Type" context="find_paren" String="\b(type|integer|real|complex|character|logical|intent|dimension)\s*[(]" insensitive="true"/>
-        <RegExpr attribute="Data Type" context="#stay" String="\b(integer|real|complex)[\*]\d{1,2}" insensitive="true"/>
+        <RegExpr attribute="Data Type" context="find_paren" String="\b(type|integer|real|complex|character|logical|intent)\s*[(]" insensitive="true"/>
+        <!-- <RegExpr attribute="Data Type" context="#stay" String="\b(integer|real|complex)[\*]\d{1,2}" insensitive="true"/> -->
         <RegExpr attribute="Data Type" context="#stay" String="\bend\s*type\b" insensitive="true"/>
         <keyword attribute="Data Type" context="#stay" String="types"/>
         <WordDetect attribute="Data Type" context="#stay" String="data" firstNonSpace="true" insensitive="true"/>
         <RegExpr attribute="Data Type" context="#stay" String="\bcharacter[*][0-9]+\b" insensitive="true"/>
-        <RegExpr attribute="Data Type" context="find_paren" String="\b(type|integer|real|complex|character|logical|intent|dimension)\s*[(]" insensitive="true"/>
-        <RegExpr attribute="Data Type" context="#stay" String="[^_]\b(type|integer|real|complex|character|logical|double\s*precision|intent|dimension)\b" insensitive="true"/>
+        <RegExpr attribute="Data Type" context="find_paren" String="\b(type|integer|real|complex|character|logical|intent)\s*[(]" insensitive="true"/>
+        <RegExpr attribute="Data Type" context="#stay" String="\b(type|integer|real|complex|character|logical|double\s*precision|intent)\b" insensitive="true"/>
         <Detect2Chars attribute="Data Type" context="#stay" char=":" char1=":"/>
       </context>
 <!-- This context matches parenthesis in data type declarations, such as in 'real(...)'-->
