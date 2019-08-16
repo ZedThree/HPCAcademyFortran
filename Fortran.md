@@ -2337,18 +2337,41 @@ startFrom=25 startLine=25 endLine=30}
 
 ## Documentation
 
+- Documentation is a vital but dull part of programming
+- Everybody hates trying to use undocumented code
+    - Even worse trying to modify someone else's!
+- Comments can be used to document the code inline
+- Good practice to put a comment above procedures to explain what it
+  does and **how**
+- Comments on tricky bits of code to explain **why**
+- Various tools, e.g. Ford:
+  <https://github.com/Fortran-FOSS-Programmers/ford>
+- Usually special comment syntax for bits you want Ford to recognise,
+  e.g. `!!`
+
+## Ford documentation example
+
+```Fortran
+!! Feeds your cats and dogs, if enough food is available. If not enough
+!! food is available, some of your pets will get angry.
+subroutine feed_pets(cats, dogs, food, angry)
+    !! The number of cats to keep track of.
+    integer, intent(in)  :: cats
+    !! The number of dogs to keep track of.
+    integer, intent(in)  :: dogs
+    !! The ammount of pet food (in kilograms) which you have on hand.
+    real, intent(inout)  :: food
+    !! The number of pets angry because they weren't fed.
+    integer, intent(out) :: angry
+    ...
+end subroutine feed_pets
+```
+
+## Further reading
+
+- "Modern Fortran explained", Metcalf, Reid, Cohen
+- Fortran wiki
+
+## intrinsic modules
+
 ### FIXME
-
-- doxygen
-- Ford
-
-## good practice
-
-# Missed bits
-
-## interoperability with C/python
-
-## Coarrays
-
-## `where`
-
