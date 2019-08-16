@@ -9,6 +9,15 @@ monofont: Inconsolata LGC
 
 # Session 1
 
+## Overview
+
+- A brief history of Fortran
+- Some programming fundamentals
+- Hello World
+- Types and variables
+- Basic grammar and operations
+- Control flow
+
 ## Course content
 
 - Some experience of programming in some language very useful
@@ -653,7 +662,14 @@ startLine=3 endLine=6 startFrom=3}
       rely on it!
     - Compiler free to optimise it away
 
-# Session 2
+# Session 3
+
+## Overview
+
+- Arrays
+- Parameters
+- Kinds
+- Procedures (functions and subroutines)
 
 ## Arrays
 
@@ -1392,7 +1408,12 @@ startFrom=4 startLine=4 endLine=11}
 ### FIXME
 
 
-# Session 4
+# Session 5
+
+## Overview
+
+- More control flow
+- Input and output
 
 ## `select case`
 
@@ -1754,6 +1775,15 @@ and the input file looks like:
 - double check logicals
 - example
 - practical
+
+# Session 7
+
+## Overview
+
+- Modules
+- Derived types
+- Characters
+- Interfaces
 
 ## Modules
 
