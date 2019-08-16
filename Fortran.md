@@ -745,9 +745,19 @@ startFrom=15 startLine=15 endLine=15}
 - Unfortunately, only works for 1D arrays! Multidimensional arrays
   need to use `reshape`
 
-### FIXME
+## Literal multidimensional arrays
 
-reshape example
+```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+startFrom=5 startLine=5 endLine=5}
+```
+
+```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+startFrom=21 startLine=21 endLine=24}
+```
+
+- Second argument to `reshape` is shape of result
+- For assigning to arrays, we can just use `shape` intrinsic to get
+  the right answer
 
 
 ## Constructing arrays
@@ -776,13 +786,21 @@ startFrom=10 startLine=10 endLine=10}
 
 ## Operations with arrays
 
-- We can element-wise operations on arrays very simply:
+- We can do element-wise operations on arrays very simply:
 
 ```{include=examples/array_basics.f90 .numberLines .Fortran
 startFrom=18 startLine=18 endLine=23}
 ```
 
 - Notice how we can use both scalars and arrays in these operations?
+- These whole-array operations make Fortran very powerful:
+
+```Fortran
+pressure = density * temperature
+```
+
+- Assuming all three variables are the same shape, this just does the
+  right thing
 
 ## Conformability
 
@@ -803,19 +821,12 @@ startFrom=4 startLine=4 endLine=12}
 startFrom=19 startLine=19 endLine=29}
 ```
 
-##
-
-### FIXME
-
-- whole array operations
-- useful intrinsics
-
 ## Memory layout
 
 - Brief aside into computer architecture
  - Computer memory is indexed by a linear series of addresses
  - Usually written in hexadecimal
-     - e.g. 0x07FFAB43
+     - e.g. `0x07FFAB43`
  - When we want to store multidimensional arrays, need to store them
    "flattened"
  - Also need to pick which is the "fastest" dimension, i.e. which is
@@ -842,7 +853,7 @@ https://commons.wikimedia.org/w/index.php?curid=79728977](./Matrix.png){width=50
 ::: {.column}
 
 ![By Cmglee - Own work, CC BY-SA 4.0,
-https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column_major_order.png){height=75%}
+https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column_major_order.png){height=70%}
 
 :::
 ::::::
@@ -883,12 +894,10 @@ startFrom=15 startLine=15 endLine=27}
 - The basic mathematical intrinsic functions also work on arrays:
 - `sin`, `cos`, `tan`, `sqrt`, `exp`, `log`, etc.
 
-### FIXME
-
-```Fortran
-x = [0 to 2pi]
-print*, x, sin(x)
+```{include=examples/array_intrinsics.f90 .numberLines .Fortran
+startFrom=6 startLine=6 endLine=12}
 ```
+
 
 ## Useful intrinsics
 
@@ -1007,21 +1016,28 @@ if (allocated(array)) deallocate(array)
 - Combine with `errmsg`:
 
 ```{include=examples/0x_allocate_stat.f90 .numberLines .Fortran
-startFrom=9 startLine=9 endLine=17}
+startFrom=9 startLine=9 endLine=16}
 ```
-<!-- [examples/0x_allocate_stat.f90](examples/0x_allocate_stat.f90) -->
 
 - Note `errmsg` may not always be accurate...
-    - Bare `allocate` will terminate, possibly with more useful error
-      message
+- Bare `allocate` will terminate, possibly with more useful error
+  message
+- If you use `stat=` keyword, **always** check it!
+    - otherwise program will continue and be wrong
 
 ## Aside: heap and stack
 
-### FIXME
-
-## Returning `allocatable` variables from functions
-
-### FIXME
+- Two (main) areas of memory in the computer: the heap and the stack
+    - Only a model, not necessarily physically separate!
+- The stack is first-in, first-out, like a stack of plates
+- Program uses this for passing arguments to functions, local
+  variables, where to return to, etc.
+- Stack is only a limited size, so very large arrays as local
+  variables may _overflow_ the stack
+- The heap is just a big pile of memory
+- Slower to find what you want, but there's more of it
+- `allocate` puts variables on the heap instead of the stack
+- So even if you know the size, can be useful to `allocate`
 
 ## `parameter`
 
@@ -1390,7 +1406,21 @@ Three choices for passing arrays:
 
 ## Pure procedures
 
-### FIXME
+- It turns out to be very useful for the compiler to know if a
+  function has _side-effects_
+    - Does it modify any arguments except those marked
+      `intent(out|inout)`?
+    - Does it modify any variables from a different scope?
+    - Does it have a local variable with `save`?
+    - Does it attempt to `read` or `write` anything?
+- A _pure_ procedure has no side-effects
+    - `function`s must only return values
+    - `subroutine`s can have `intent(out)` arguments
+- Given the same input, you will always get the same output
+    - e.g. `abs(-0.5)` always returns `0.5`
+- Useful documentation!
+- Compiler can catch more bugs/mistakes
+- Compiler may be able to apply some more aggressive optimisations
 
 ## Elemental procedures
 
@@ -1399,14 +1429,25 @@ Three choices for passing arrays:
   both scalars and arrays
 - These functions apply the function to each element, so they are
   called _elemental_
+- Elemental functions must be `pure` or marked `impure`
 
 ```{include=examples/elemental_functions.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=11}
 ```
 
+## Returning `allocatable` variables from functions
 
-### FIXME
+- Both `function`s and `subroutine`s can `allocate` variables
+- Returning an `allocatable` from a `function` can be quite
+  convenient, because it will automatically reallocate the assignee
 
+```{include=examples/allocatable_function.f90 .numberLines .Fortran
+startFrom=15 startLine=15 endLine=21}
+```
+Use like:
+```{include=examples/allocatable_function.f90 .numberLines .Fortran
+startFrom=9 startLine=9 endLine=9}
+```
 
 # Session 5
 
@@ -1472,6 +1513,23 @@ end select
 ### FIXME
 
 example
+
+## `where`
+
+- It can be very useful to perform operations on an array only on
+  certain elements
+    - e.g. taking `log` of non-zero elements
+- The `where` construct does exactly this:
+
+```Fortran
+where (pressure > 0)
+  log_pressure = log(pressure)
+elsewhere
+  log_pressure = -1
+end where
+```
+
+- Not very common, but useful to have when you need it
 
 ## `cycle`
 
@@ -1550,6 +1608,7 @@ example
       be"
 - Can also stick text in there:
 - `write(*, '("I have ", i0, " cats")') number_of_cats`
+- Lots of format codes: use your favourite search engine!
 
 ## Formatted I/O
 
@@ -1580,7 +1639,7 @@ startFrom=24 startLine=24 endLine=28}
 
 ## Formatted I/O
 
-- can repeat chunks:
+- Can repeat chunks:
 
 ```{include=examples/repeating_format_string.f90 .numberLines .Fortran
 startFrom=8 startLine=8 endLine=8}
@@ -2053,10 +2112,22 @@ type(<name>) :: <variable name>
 ```Fortran
 type :: particle
   real(real64) :: mass
-  real(real64) :: charge
-  character(len=:), allocatable :: name
+  real(real64), dimension(3) :: velocity
 end type
 ```
+
+## Accessing components of derived types
+
+- Refer to component with `%`
+
+```Fortran
+type(particle) :: proton
+
+proton%mass = 1._real64
+proton%velocity = [2._real64, -1._real64, 1.5_real64]
+```
+
+## Derived type inheritance
 
 ### FIXME
 
@@ -2086,6 +2157,7 @@ particle with mass, charge, energy
 - These are called _invariants_
 - Can make the invariant `private` and then provide `public` methods
   to get or set the value
+- Visibility is at the `module` scope
 
 ### FIXME
 
@@ -2126,8 +2198,9 @@ startFrom=16 startLine=16 endLine=17}
 The following is dangerous, because standard doesn't mandate short-circuiting:
 ```Fortran
 if (present(politely) .and. politely) then
-...
+  ...
 ```
+Might try to read `politely` first, but it doesn't exist!
 
 
 ## `block`
@@ -2316,16 +2389,13 @@ startFrom=25 startLine=25 endLine=30}
 
 - There are some rules about what can be put in a generic interface
 - Mostly, the dummy arguments must be _distinguishable_:
-- Different number of arguments
-- Different types
-- Different kinds
-- Different ranks
-- `allocatable`/`pointer`
-- Procedure vs variable
-
-### FIXME
-
-- Check if names matter
+    - Different number of arguments
+    - Different types
+    - Different kinds
+    - Different ranks
+    - `allocatable`/`pointer`
+    - Procedure vs variable
+- Gets a little tricky if names _and_ types clash
 
 ## Bad old stuff
 
