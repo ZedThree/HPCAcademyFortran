@@ -11,9 +11,8 @@ program bigarray_prog
   if (status /= 0) then
     print*, trim(errmsg)
     print*, status
-    error stop
-    ! F2018:
-    ! error stop status
+    ! Note non-constant stop code is technically F2018
+    error stop status
   end if
   
 end program bigarray_prog
