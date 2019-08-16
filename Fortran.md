@@ -1775,7 +1775,7 @@ and the input file looks like:
 
 ### FIXME
 
-tidy
+- tidy
 
 
 ## Modules
@@ -1936,7 +1936,8 @@ $ gfortran my_module.o my_program.f90 -o my_program
 
 ### FIXME
 
-Full module example
+- Full module example
+- Project layout
 
 
 ## Derived types
@@ -2051,10 +2052,6 @@ if (present(politely) .and. politely) then
 ```
 
 
-## good practice
-
-# Missed bits
-
 ## `block`
 
 - Fortran requires all variables to be declared at the top of the
@@ -2073,12 +2070,6 @@ if (present(politely) .and. politely) then
 ```{include=examples/0x_block_demo.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=11}
 ```
-
-## interoperability with C/python
-
-## Coarrays
-
-## `where`
 
 ## `stop` and `error stop`
 
@@ -2320,3 +2311,14 @@ startFrom=25 startLine=25 endLine=30}
 
 - doxygen
 - Ford
+
+## good practice
+
+# Missed bits
+
+## interoperability with C/python
+
+## Coarrays
+
+## `where`
+
