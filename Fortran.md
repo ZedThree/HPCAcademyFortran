@@ -1180,32 +1180,22 @@ use, intrinsic :: iso_fortran_env, only : int64
 integer(int64) ::y
 ```
 
-## Procedures
+## Breaking up programs
 
-- Break programs up into building blocks
-- Reusable components
+- Large `program`s become difficult to understand and _maintain_
+- Quickly come across chunks of code we want to reuse
+- Therefore very good idea to break programs up into building blocks
+- This gives us reusable components
+    - Reduce copy-paste errors
     - Repeat tasks multiple times
     - Use same task in multiple contexts
-- Procedures:
-    - Functions
-    - Subroutines
-- Modules
-    - Cover later
-- Procedures are good:
-    - easier to test
-    - reuse
-    - maintainability
-    - abstraction
-    - collaboration
-- Encapsulation: hide internal details from other parts of the
-  program. Program against the _interface_
-
-## Procedures
-
-### FIXME
-
-- names are great
-- internal procedures
+    - Gives names to parts of code
+- Names are an often over-looked advantage!
+    - Important to choose names wisely
+- Two ways of breaking `program`s in Fortran:
+    - Procedures
+    - Modules
+        - Cover later
 
 ## Procedures
 
@@ -1216,7 +1206,25 @@ integer(int64) ::y
 - May also refer to them both as _functions_ -- will make it clear
   when I mean `function`s in particular
 
+## Benefits of procedures
+
+- Testing
+    - Can test individual parts of the code in isolation
+- Reuse
+    - Same function can be used in different contexts
+    - Can even build up a _library_ of functions
+- Maintainability
+    - Code can be easier to understand
+    - Can fix implementation without touching rest of code
+- Abstraction
+    - Can now think of chunk of code as a thing itself
+    - Good names help here!
+- Encapsulation
+    - Hide internal details from other parts of the `program`
+    - Program against the _interface_
+
 ## Functions
+
 - Takes arguments and returns a single result (may be array)
 - Always returns a value
 - Intrinsic functions, e.g. `sin(x)`, `sqrt(x)`
@@ -1247,11 +1255,12 @@ end function <name>
 ```{include=examples/0x_basic_function.f90 .numberLines .Fortran startLine=1 endLine=9}
 ```
 
-- use function like `y = function(x)`
-- use `()` even if a function requires no arguments: `x = function()`
+- Use function like `y = function(x)`
+- Use `()` even if a function requires no arguments: `x = function()`
 - As long as `implicit none` is in your `program` (or `module`, see
   later), not necessary in procedures
-    - Some people may advise as good practice though
+    - Some people advise as good practice though!
+    - I will be skipping this from examples for space reasons
 
 ## Subroutines
 
@@ -1259,7 +1268,7 @@ end function <name>
 - Can still return things via out-arguments
     - Could be multiple out-arguments
     - Not always a good idea!
-- syntax:
+- Syntax:
 
 ```Fortran
 subroutine <name>(<input>, <output>)
@@ -1354,11 +1363,11 @@ startLine=13 endLine=17 startFrom=13}
 
 ## `intent`
 
-- when writing programs, can be very useful to tell the compiler as
+- When writing programs, can be very useful to tell the compiler as
   much information as you can
-- one useful piece of info is the _intent_ of arguments to procedures
-- this can help avoid certain classes of bugs
-- there are three `intent`s:
+- One useful piece of info is the _intent_ of arguments to procedures
+- This can help avoid certain classes of bugs
+- There are three `intent`s:
 - `intent(in)`: this is for arguments which should not be modified in
   the routine, only provide information _to_ the procedure
 - `intent(out)`: for arguments which are the _result_ of the
@@ -1366,22 +1375,22 @@ startLine=13 endLine=17 startFrom=13}
   read them!
 - `intent(inout)`: for arguments are to be modified by the procedure
     - if you don't explicitly provide an `intent`, this is the default
-- these are essentially equivalent to read-only, write-only and
+- These are essentially equivalent to read-only, write-only and
   read-write
-- prefer `function`s over `subroutine`s with `intent(out)` arguments
-    - easier to read!
+- Prefer `function`s over `subroutine`s with `intent(out)` arguments
+    - Easier to read!
 
-## dummy arguments
+## Dummy arguments
 
-- _dummy_ arguments are the _local_ names of the procedure arguments
-- _actual_ arguments are the names at the calling site
+- _Dummy_ arguments are the _local_ names of the procedure arguments
+- _Actual_ arguments are the names at the calling site
     - _actual_ arguments are said to be _associated_ with the _dummy_
       arguments
-- the routine doesn't care or know what the names of the actual
+- The routine doesn't care or know what the names of the actual
   arguments are
     - type, kind, rank and order have to match though!
 
-## dummy arguments
+## Dummy arguments
 
 ```{include=examples/0x_dummy_arguments.f90 .numberLines .Fortran}
 ```
@@ -1396,8 +1405,8 @@ startLine=13 endLine=17 startFrom=13}
 ```{include=examples/0x_keyword_arguments.f90 .numberLines .Fortran
 startFrom=6 startLine=6 endLine=8}
 ```
-- lets us change the order of the arguments
-- _very_ useful as documentation at the calling site!
+- Lets us change the order of the arguments
+- _Very_ useful as documentation at the calling site!
     - especially when lots of arguments (but don't)
     - or multiple arguments with same type next to each other
 
@@ -1407,7 +1416,7 @@ call calculate_position(0.345, 0.5346)
 call calculate_position(radius=0.345, angle=0.5346)
 ```
 
-## dummy arguments and arrays
+## Dummy arguments and arrays
 
 Three choices for passing arrays:
 
@@ -2469,3 +2478,14 @@ end subroutine feed_pets
 ## intrinsic modules
 
 ### FIXME
+
+## Internal procedures
+
+- `function`s and `subroutine`s can `contain` other procedures
+- Sometimes useful for longer functions with repeated chunks
+- However: these internal procedures can use variables from their
+  parent function
+    - See above on scope!
+- This makes it easier to make mistakes
+- Usually better to make a separate procedure
+    - Can make it `private` in a `module`
