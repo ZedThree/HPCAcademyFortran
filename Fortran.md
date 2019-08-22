@@ -30,17 +30,17 @@ monofont: Inconsolata LGC
 
 ## What is Fortran?
 
-- old language! 1956 -- 62 years old
-    - oldest "high-level" language
-    - many versions over the years, latest is 2018! And next one is
+- Old language! 1956 -- 62 years old
+    - Oldest "high-level" language
+    - Many versions over the years, latest is 2018! And next one is
       being worked on as we speak
-- some parts feel outdated
-    - backwards compatibility is important
-    - but original reasons for some features no longer hold
-- but still in use for good reason!
-- can be **very** fast
-- native multidimensional arrays
-    - very useful for scientists!
+- Some parts feel outdated
+    - Backwards compatibility is important
+    - But original reasons for some features no longer hold
+- But still in use for good reason!
+- Can be **very** fast
+- Native multidimensional arrays
+    - Very useful for scientists!
 
 ## What is Fortran?
 
@@ -195,6 +195,7 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
 - Words like _this_ are (usually) technical words, either common usage
   or from the Fortran standard
 - Words like **this** are just emphasis
+- I use Fortran 2018, but everything should compile with gfortran 7
 
 
 ## Hello world
