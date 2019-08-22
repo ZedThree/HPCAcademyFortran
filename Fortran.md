@@ -2198,57 +2198,75 @@ $ gfortran my_module.o my_program.o -o my_program
 
 - Not uncommon to need to call a set of functions with the same
   few arguments
+    - For example, may always need `mass` and `velocity` together
 - Or we may have some variables that we need to keep in sync
+    - For example, the `kinetic_energy` of a particle with its
+      `velocity`
 - One solution to these problems is a _derived type_
     - Other languages call these _structs_ or _classes_
 - A derived type contains _components_ (or _members_) which can be
-  intrinsic types or other derived types
+  intrinsic types (`real`, `integer`, etc.) or other derived types
 - Fortran does have the ability to do some _object-oriented
-  programming_
+  programming_ (OOP)
     - Will only cover a little bit here
-
-### FIXME
 
 ## Derived types -- basic syntax
 
+- Declaring a derived type looks like so:
+
 ```Fortran
 type :: <name>
-    <type> :: <component name>
-    ...
+  <type> :: <component name>
+  ...
 end type <name>
 ```
 
-Use like
+- Declaring a variable of that type is done as follows:
 
 ```Fortran
 type(<name>) :: <variable name>
 ```
 
+- And refer to a component with `%`:
+
+```Fortran
+<variable>%<component>
+```
+
 ## Derived types -- example
 
-```Fortran
-type :: particle
-  real(real64) :: mass
-  real(real64), dimension(3) :: velocity
-end type
+```{include=examples/basic_types.f90 .numberLines .Fortran
+startFrom=5 startLine=5 endLine=14}
 ```
 
-## Accessing components of derived types
+- Note: `velocity` is probably better off as a 1D array in real code!
 
-- Refer to component with `%`
+## Derived types -- example continued
 
-```Fortran
-type(particle) :: proton
+- Now only have to pass one parameter to `kinetic_energy`: 
 
-proton%mass = 1._real64
-proton%velocity = [2._real64, -1._real64, 1.5_real64]
+```{include=examples/basic_types.f90 .numberLines .Fortran
+startFrom=25 startLine=25 endLine=33}
 ```
 
-## Derived type inheritance
+- Note: we can access components of components
+    - But might be a sign the design is wrong
+
+## Arrays of derived types
 
 ### FIXME
 
-particle with mass, charge, energy
+- downsides
+
+## Derived type inheritance
+
+- One of the big benefits of derived types and OOP is _inheritance_
+- We can _extend_ a type and add new components
+- The new type _inherits_ all the properties of the old type
+
+```{include=examples/type_inheritance.f90 .numberLines .Fortran
+startFrom=5 startLine=5 endLine=15}
+```
 
 ## type-bound procedures
 
