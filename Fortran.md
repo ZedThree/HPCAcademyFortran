@@ -1093,10 +1093,10 @@ startFrom=3 startLine=3 endLine=12}
 - Doing lots of maths with floating point numbers can lose precision
   => need more precision in our `real`s
 - Default `real` kind is (normally) 32-bit (4 bytes) (`float` in C)
-    - Can represent numbers $\pm 3.4 \times 10^38$ to about 7 decimal
+    - Can represent numbers $\pm 3.4 \times 10^{38}$ to about 7 decimal
       places
 - Using 64-bits (8 bytes) we can represent numbers $\pm 1.7 \times
-  10^308$ to about 15 decimal places
+  10^{308}$ to about 15 decimal places
 
 ## Kinds of types
 
@@ -1166,8 +1166,8 @@ startFrom=4 startLine=4 endLine=6}
 
 - Similar story for `integer`s
 - Default kind is usually 32-bit again
-- Can represent the numbers $-2^31$ to $2^31 - 1$
-- A 64-bit `integer` can represent $-2^63$ to $2^63 - 1$
+- Can represent the numbers $-2^31$ to $2^{31} - 1$
+- A 64-bit `integer` can represent $-2^{63}$ to $2^{63} - 1$
 - Can choose this kind with either:
 
 ```Fortran
