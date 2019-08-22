@@ -1019,9 +1019,11 @@ if (allocated(array)) deallocate(array)
 startFrom=9 startLine=9 endLine=16}
 ```
 
+## Guarding `allocate`
+
 - Note `errmsg` may not always be accurate...
-- Bare `allocate` will terminate, possibly with more useful error
-  message
+- Bare `allocate` will terminate on error, possibly with more useful
+  error message
 - If you use `stat=` keyword, **always** check it!
     - otherwise program will continue and be wrong
 
@@ -1254,6 +1256,8 @@ end function <name>
 
 ```{include=examples/0x_basic_function.f90 .numberLines .Fortran startLine=1 endLine=9}
 ```
+
+## Functions
 
 - Use function like `y = function(x)`
 - Use `()` even if a function requires no arguments: `x = function()`
