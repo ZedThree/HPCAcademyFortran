@@ -1088,9 +1088,19 @@ startFrom=3 startLine=3 endLine=12}
 ## Kinds of types
 
 - Most important for `real`s
+    - Sometimes important for `integer`s
 - Floating point representation
 - Doing lots of maths with floating point numbers can lose precision
   => need more precision in our `real`s
+- Default `real` kind is (normally) 32-bit (4 bytes) (`float` in C)
+    - Can represent numbers $\pm 3.4 \times 10^38$ to about 7 decimal
+      places
+- Using 64-bits (8 bytes) we can represent numbers $\pm 1.7 \times
+  10^308$ to about 15 decimal places
+
+## Kinds of types
+
+- Different ways to specify the kind
 - Three old styles:
     - `double precision`: use twice the number of bytes as for `real`
         - Standard! but vague
@@ -1102,14 +1112,9 @@ startFrom=3 startLine=3 endLine=12}
         - What number represents what `kind` is entirely up to the
           compiler
 
-### FIXME
-
-- ranges of different kinds
-- mention integers
-
 ## Kinds of types
 
-- Don't use those! Use these:
+- Don't use those! Use either this:
 
 ```Fortran
 ! Get the kind number that can give us 15 digits of precision and 300
@@ -1142,6 +1147,8 @@ real(kind=wp) :: x
 x = 1.0_wp
 ```
 
+- We will cover what the `use` line means later
+
 ## Kinds of types
 
 - `real` literals are single precision by default, so need `kind`
@@ -1155,6 +1162,23 @@ startFrom=4 startLine=4 endLine=6}
 - Lots of intrinsics take a `kind` argument:
     - `5._real64 / real(2, kind=real64) == 2.5_real64`
 
+## Kinds of types
+
+- Similar story for `integer`s
+- Default kind is usually 32-bit again
+- Can represent the numbers $-2^31$ to $2^31 - 1$
+- A 64-bit `integer` can represent $-2^63$ to $2^63 - 1$
+- Can choose this kind with either:
+
+```Fortran
+! Get the kind that can represent an integer with 18 digits
+integer, parameter :: ip = selected_real_kind(18)
+integer(ip) :: x
+
+! or, better:
+use, intrinsic :: iso_fortran_env, only : int64
+integer(int64) ::y
+```
 
 ## Procedures
 
