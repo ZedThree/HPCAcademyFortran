@@ -1758,20 +1758,21 @@ open(newunit=<unit>, file=<filename>)
 
 - Now we can't just use `*` for the unit, as we need a "handle" to
   give to `read`/`write`
-- `unit_num` is integer (that you've already declared)
+- `<unit>` is an `integer` (that you've already declared)
 - `newunit` will make sure it's unique (and negative)
-- `newunit` is F2008. Older versions:
+- `newunit` is F2008. On older versions you need to manage the unit
+  numbers yourself:
 
 ```Fortran
-open(unit=10, file="rectangle.shape")
+integer, parameter :: rectangle_unit = 11
+open(unit=rectangle_unit, file="rectangle.shape")
 ```
 
-- You probably want to make the unit a `parameter` with a value `> 10`
-  (to avoid clashing with pre-declared units)
+- There are some pre-declared units, so use values > 10 to be safe
 
 ## `open` arguments
 
-Lots of possible arguments, but two useful ones:
+Lots of possible arguments, but two useful ones are `status` and `action`:
 
 ### `status`
 - Can be one of the following:
@@ -1780,6 +1781,8 @@ Lots of possible arguments, but two useful ones:
 - `"replace"`: overwrite any existing file
 - `"scratch"`: remove file after `close` or end of program
 - `"unknown"`: you don't care!
+
+## `open` arguments
 
 ### `action`
 - Can be one of the following:
@@ -1793,7 +1796,7 @@ Lots of possible arguments, but two useful ones:
   variables
 
 ```Fortran
-read(unit=<unit>, fmt=<fmt>) <transfer list>
+read(unit=<unit>, fmt=<fmt>) <transfer-list>
 ```
 
 - `<unit>` must be already `open`ed unit
@@ -1807,7 +1810,7 @@ read(unit=<unit>, fmt=<fmt>) <transfer list>
   it from variables or expressions
 
 ```Fortran
-write(unit=<unit>, fmt=<fmt>) <transfer list>
+write(unit=<unit>, fmt=<fmt>) <transfer-list>
 ```
 
 - `<unit>` must be already `open`ed unit
@@ -1823,9 +1826,9 @@ write(unit=<unit>, fmt=<fmt>) <transfer list>
 close(unit=<unit>)
 ```
 
-- `<unit>` must be already `open`ed unit
+- If `<unit>` is not an `open`ed unit, `close` does nothing
 
-## `iostat`
+## Error checking I/O: `iostat`
 
 - All the file I/O commands can take an `iostat` argument
 - Should be integer you've already declared
@@ -1833,14 +1836,14 @@ close(unit=<unit>)
 - Best practice is to check value of `iostat`
 
 ```Fortran
-integer :: istat
-open(newunit=unit_num, file="filename", iostat=istat)
-if (istat /= 0) error stop "Error opening file"
+integer :: iostat
+open(newunit=unit_num, file="filename", iostat=iostat)
+if (iostat /= 0) error stop "Error opening file"
 ```
 
 - Worst practice is to use `iostat` and not check it!
 
-## `iomsg`
+## Error checking I/O: `iomsg`
 
 - Any I/O operation errors will cause abort unless `iostat` is used
 - `iostat == 0` means success -- any other value is compiler dependent
@@ -1848,11 +1851,11 @@ if (istat /= 0) error stop "Error opening file"
 - Unfortunately, no spec on how long it should be
 
 ```Fortran
-integer :: istat
+integer :: iostat
 character(len=200) :: error_msg
-open(newunit=unit_num, file="filename", iostat=istat &
+open(newunit=unit_num, file="filename", iostat=iostat &
      iomsg=error_msg)
-if (istat /= 0) then
+if (iostat /= 0) then
   print*, error_msg
   error stop
 end if
@@ -1863,11 +1866,6 @@ end if
 ```{include=examples/open_and_read_file.f90 .numberLines .Fortran
 startFrom=10 startLine=10 endLine=23}
 ```
-
-### FIXME
-
-`write` example
-
 
 ## Namelists
 
@@ -1887,7 +1885,7 @@ and the input file looks like:
 
 ```
 &<name>
-  <variable1> = <value1>
+  <variable1> = <value1>   ! Comment
   <variable2> = <value2>
 /
 ```
@@ -1896,10 +1894,10 @@ and the input file looks like:
 
 - Can also write namelists
     - useful for recording what inputs were actually used
-- variables can be in any order
-- can even miss variables! useful for default values
-- extra ones not in the `namelist` statement is an error though
-- Also, `logical`s can be `T`/`F`, `.true.`/`.false.`, `1`/`0`
+- Variables can be in any order
+- Can even miss variables! useful for default values
+- Extra ones not in the `namelist` statement is an error though
+- Also, `logical`s can be `T`/`F`, `.true.`/`.false.`
 - Variables need to be declared first
 - Comments are allowed (and are ignored), case insensitive (as usual),
   and whitespace is mostly ignored (except within names, as usual)
@@ -1909,11 +1907,11 @@ and the input file looks like:
     - This becomes a pain if you want to do more complicated things,
       e.g. have multiple ion species, each with identical namelists
 
-### FIXME
+## Namelist example
 
-- double check logicals
-- example
-- practical
+```{include=examples/basic_namelist.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=16}
+```
 
 ## Working with `character`s
 

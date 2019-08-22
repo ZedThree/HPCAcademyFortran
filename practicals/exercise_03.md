@@ -65,7 +65,8 @@ Input files and dump files
 ### Further
 
 1. (Less challenging) Read the filename for the output file from the input file
-2. Use a namelist to read the input values
+2. Use a namelist to read the input values. Don't forget to set
+   default values
 3. (More challenging) Allow the user to specify the input file on the
    command line. You can use the intrinsic subroutine
    `get_command_argument` to read command line options.

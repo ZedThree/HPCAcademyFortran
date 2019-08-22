@@ -13,7 +13,7 @@ program open_and_read_file
   if (iostat /= 0) then
     print*, "Something went wrong opening the file!"
     print*, error_message
-    error stop
+    error stop iostat
   end if
   
   read(unit=file_unit, fmt='(f5.3, f5.3)') height, width
