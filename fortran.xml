@@ -21,6 +21,7 @@
       <item>continue</item>
       <item>cycle</item>
       <item>deallocate</item>
+      <item>error</item>
       <item>elemental</item>
       <item>elsewhere</item>
       <item>entry</item>
@@ -76,10 +77,12 @@
       <item>err</item>
       <item>fmt</item>
       <item>iostat</item>
+      <item>iomsg</item>
       <item>status</item>
       <item>advance</item>
       <item>size</item>
       <item>eor</item>
+      <item>nml</item>
     </list>
     <!-- Keywords inside open(...) -->
     <list name="open_keywords">
@@ -96,6 +99,7 @@
       <item>action</item>
       <item>delim</item>
       <item>pad</item>
+      <item>newunit</item>
     </list>
     <!-- Keywords inside inquire(...) -->
     <list name="inquire_keywords">
@@ -416,6 +420,11 @@
       <item>get_environment_variable</item>
     </list>
 
+    <list name="intrinsic_modules">
+      <item>iso_fortran_env</item>
+      <item>real64</item>
+    </list>
+
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  -->
 <!-- *                           C O N T E X T S                         *  -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  -->
@@ -613,6 +622,7 @@
         <keyword attribute="Inquiry Function"          context="#stay" String="inquiry_fn"/>
         <keyword attribute="Transformational Function" context="#stay" String="transform_fn"/>
         <keyword attribute="Non elemental subroutine"  context="#stay" String="non_elem_subr"/>
+        <keyword attribute="Intrinsic modules"  context="#stay" String="intrinsic_modules"/>
       </context>
 
 <!-- The following four contexts implement the complex string multi-line declarations -->
@@ -660,6 +670,7 @@
       <itemData name="Non elemental subroutine" defStyleNum="dsFunction" bold="1" italic="0"/>
       <itemData name="Example" defStyleNum="dsAlert" bold="1" italic="1"/>
       <itemData name="Block Name" defStyleNum="dsFunction" bold="1" italic="1"/>
+      <itemData name="Intrinsic modules" defStyleNum="dsFunction" bold="1" italic="0"/>
     </itemDatas>
   </highlighting>
   <general>
