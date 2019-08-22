@@ -525,6 +525,7 @@
         <IncludeRules context="find_intrinsics" />
         <IncludeRules context="find_numbers" />
         <IncludeRules context="find_symbols" />
+        <IncludeRules context="find_examples" />
       </context>
 <!-- This context highlights the text inside the parenthesis of fortran statement -->
       <context attribute="Normal Text" lineEndContext="#stay" name="format_stmnt">
