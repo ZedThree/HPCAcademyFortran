@@ -739,6 +739,7 @@ real, dimension(-1:1, 3:5) :: stress_tensor
 - Just like scalar types have literals, so do arrays
 - Wrap the scalar values in square brackets `[<values>...]`
     - Older style is `(/<values>.../)`
+    - Called _array constructor_
 - Can use this to initialise or assign to arrays:
 ```{include=examples/array_constructors.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=5}
@@ -749,6 +750,10 @@ startFrom=15 startLine=15 endLine=15}
 ```
 - Unfortunately, only works for 1D arrays! Multidimensional arrays
   need to use `reshape`
+- Note: we can even specify type/kind for all elements:
+```Fortran
+array2 = [real(real64)::1, 2, 3]
+```
 
 ## Literal multidimensional arrays
 
