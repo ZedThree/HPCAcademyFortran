@@ -38,7 +38,7 @@ monofont: Inconsolata LGC
     - backwards compatibility is important
     - but original reasons for some features no longer hold
 - but still in use for good reason!
-- can be _very_ fast
+- can be **very** fast
 - native multidimensional arrays
     - very useful for scientists!
 
@@ -171,8 +171,8 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
 - Source code is read more times than it is written, by factor 5 or
   more
 - We use high-level languages in order to be understandable to humans
-- Therefore, more important to write _readable_ code than _efficient_
-  code
+- Therefore, more important to write **readable** code than
+  **efficient** code
 - Even more important that it is correct
 - Make it work -> make it readable -> make it fast
     - In that order!
@@ -191,6 +191,10 @@ https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr
   and work
 - I don't always follow best practices to make things fit on slides!
     - Do as I say, not as I do!
+- Words like `this` are either keywords or tiny code snippets
+- Words like _this_ are (usually) technical words, either common usage
+  or from the Fortran standard
+- Words like **this** are just emphasis
 
 
 ## Hello world
@@ -252,7 +256,8 @@ There are 5 fundamental types in Fortran:
 
 ## What, exactly, is a type?
 
-- Computers store _everything_ in binary, ones and zeros, called _bits_
+- Computers store **everything** in binary, ones and zeros, called
+  _bits_
 - Given a set of bits, what does it mean?
     - Could be a number, could be some text
     - Could be an instruction!
@@ -279,7 +284,7 @@ There are 5 fundamental types in Fortran:
 
 ## Literals
 
-- Very common to need _literally_ "this value"
+- Very common to need **literally** "this value"
 - `integer`:
     - `1`, `-2`, `1e3`, `42`
 - `real`:
@@ -424,7 +429,7 @@ but one is easier to read
 
 ### File names
 
-- The standard doesn't mention source files _at all_
+- The standard doesn't mention source files **at all**
 - Linux also doesn't care about file extensions
 - Early, fixed-form sources files used `.f` file extension
 - With Fortran 90, people started using `.f90` for free-form source
@@ -441,7 +446,7 @@ but one is easier to read
 - Plus `**` for exponentiation
     - Careful you only use integers unless you mean it
 - BODMAS/PEDMAS and left-to-right, but use `()` to clarify
-    - Don't forget, make it _readable_
+    - Don't forget, make it **readable**
 
 ```{include=examples/03_basic_maths.f90 .numberLines .Fortran
 startLine=3 endLine=10 startFrom=3}
@@ -553,7 +558,7 @@ startLine=3 endLine=8 startFrom=3}
 
 - Note for those familiar with other languages: Fortran does not have
   shortcut logical operations
-    - Line 4 above _may_ evaluate _both_ conditions!
+    - Line 4 above **may** evaluate **both** conditions!
 - Also note that `logical`s must be compared with `.eqv.` and not `==`
   or `.eq.`
     - But you will probably never use this!
@@ -588,8 +593,7 @@ end do
 
 - All three forms essentially equivalent
 - Bare `do` needs something in body to `exit` loop
-- `do while` loops _while_ the condition is true, and does the loop
-  _at least once_
+- `do while` loops _while_ the condition is true
 - Last form does `<upper-bound> - <lower-bound> + 1` loops
     - loop variable (`<index>`) must be pre-declared
     - lower and upper bounds are your choice
@@ -1373,7 +1377,7 @@ startLine=13 endLine=17 startFrom=13}
 - This can help avoid certain classes of bugs
 - There are three `intent`s:
 - `intent(in)`: this is for arguments which should not be modified in
-  the routine, only provide information _to_ the procedure
+  the routine, only provide information **to** the procedure
 - `intent(out)`: for arguments which are the _result_ of the
   routine. these are _undefined_ on entry to the routine: don't try to
   read them!
@@ -1410,7 +1414,7 @@ startLine=13 endLine=17 startFrom=13}
 startFrom=6 startLine=6 endLine=8}
 ```
 - Lets us change the order of the arguments
-- _Very_ useful as documentation at the calling site!
+- **Very** useful as documentation at the calling site!
     - especially when lots of arguments (but don't)
     - or multiple arguments with same type next to each other
 
@@ -1433,7 +1437,7 @@ Three choices for passing arrays:
     - Compiler doesn't know the size of the array, so you better index
       it correctly!
 - `dimension(:, :, :)`: _assumed shape_
-    - Compiler now _does_ know the size of the actual array passed
+    - Compiler now **does** know the size of the actual array passed
     - Can check if you go out-of-bounds (may need compiler flag!)
     - Indices now always start at 1
 - `dimension(n:, m:, p:)`: assumed shape with lower bounds
@@ -1582,7 +1586,7 @@ startFrom=15 startLine=15 endLine=21}
 ## Loop labels
 
 - Many constructs in Fortran can be given labels
-- Useful as a form of documentation: what does this loop _do_?
+- Useful as a form of documentation: what does this loop **do**?
 - Also useful when you need to jump out of a nested loop:
 
 ```{include=examples/loop_labels.f90 .numberLines .Fortran
@@ -1625,7 +1629,7 @@ startFrom=5 startLine=5 endLine=10}
 
 ## What do those stars mean
 
-- First argument, `unit`, tells program _where_ to `read`/`write`
+- First argument, `unit`, tells program **where** to `read`/`write`
     - `*` means `stdout` -- _standard out_ for `write`
         - usually "screen", but could be redirected somewhere else
     - `*` means `stdin` -- _standard in_ for `read`
@@ -1743,8 +1747,8 @@ Other notes:
 - Avoids problems from before
 - Now can `read`/`write` directly the internal representation
 - Good for checkpoints, etc.
-- _Much_ faster than writing text
-- _Can_ be read by other programs, but technically not portable
+- **Much** faster than writing text
+- **Can** be read by other programs, but technically not portable
     - i.e. don't rely on it!
 - For serious HPC programs, better to use a library such as NetCDF
 
@@ -1951,7 +1955,7 @@ startFrom=4 startLine=4 endLine=14}
 ## Useful intrinsics for `character`s
 
 - `len(string)`: How long is `string`, including the trailing spaces
-- `len_trim(string)`: How long is `string`, _excluding_ the trailing
+- `len_trim(string)`: How long is `string`, **excluding** the trailing
   spaces
 - `trim`: Remove all trailing spaces
 - `adjustl(string)`, `adjustr(string)`: "Adjust" the string
@@ -1971,20 +1975,22 @@ startFrom=4 startLine=4 endLine=14}
 
 ## Modules
 
-- very big programs become difficult to develop and maintain
-- becomes useful to split up into separate files
-- early versions of Fortran just stuck subprograms into separate files
+- Very big programs become difficult to develop and maintain
+- Becomes useful to split up into separate files
+    - Can group related functions together
+- Early versions of Fortran just stuck subprograms into separate files
   and compiled them altogether
-    - still works!
-    - but don't do it!
-- but compiler doesn't know what procedures are in what files, or what
+    - Still works!
+    - But don't do it!
+- But compiler doesn't know what procedures are in what files, or what
   the interfaces look like (number and type of arguments)
-- solution is `module`s
-- compiler generates interfaces for you
-- _always_ use `module`s when using multiple files
+- Solution is `module`s
+- Compiler generates interfaces for you
+    - Will cover this in more depth later
+- **Always**, **always** use `module`s when using multiple files
 - `module`s can also contain variables as well as procedures
     - try to avoid though, except for `parameter`s
-- can choose what entities in a `module` to make `public` or `private`
+- Can choose what entities in a `module` to make `public` or `private`
     - `module` is a bit like a single instance of an object
 
 ### FIXME
@@ -2054,7 +2060,7 @@ subroutine push_particle
 
 ## Using modules
 
-- Plain `use <module>` brings in _everything_ from `<module>` to the
+- Plain `use <module>` brings in **everything** from `<module>` to the
   local scope
     - This is called _use association_
 - Sometimes we want to have some variable or procedure that is used
@@ -2318,7 +2324,7 @@ stop converged
 ```
 
 - Unfortunately, the standard is vague on what happens with an integer
-- _Usually_ is the exit code, if between 0--127
+- **Usually** is the exit code, if between 0--127
     - Can't 100% rely on this, but mostly fine
 
 ## Other useful intrinsics
@@ -2425,10 +2431,10 @@ startFrom=39 startLine=39 endLine=44}
 - Only intrinsics could have generic names
 - `interface` allows us to "group" functions or subroutines together
   under a common name
-    - Cannot group _both_ `function`s and `subroutine`s together
+    - Cannot group **both** `function`s and `subroutine`s together
       though!
 - Somewhat annoyingly, can only do this for external procedures or
-  those in `module`s, _not_ those in `program`s
+  those in `module`s, **not** those in `program`s
 
 ## Generic interfaces
 
@@ -2472,7 +2478,7 @@ startFrom=25 startLine=25 endLine=30}
     - Different ranks
     - `allocatable`/`pointer`
     - Procedure vs variable
-- Gets a little tricky if names _and_ types clash
+- Gets a little tricky if names **and** types clash
 
 ## Bad old stuff
 
