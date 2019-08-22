@@ -1494,64 +1494,59 @@ startFrom=9 startLine=9 endLine=9}
 - Input and output
 - Characters
 
-## `select case`
+## Choosing an option: `select case`
 
 - When comparing series of mutually exclusive values, order is not
   important
-- `case` construct can be useful
+- `case` construct can be useful:
 
 ```Fortran
-select case (x)
-case (1)
-  print*, "x is 1"
-case (2:4)
-  print*, "x is between 2 and 4"
-case default
-  print*, "x is neither 1 nor between 2 and 4"
+select case (<expression>)
+case (<case-1>)
+  ! do something 1
+case (<case-2>)
+  ! do something 2
+{case default}
+  ! do something 3
 end select
 ```
+
+- `case default` matches when nothing else does
+    - Not necessary, but absence might hide bugs!
 
 ## `select case`
 
 - The expression in the `select case` must be an `integer`, `logical`
   or `character` scalar variable
-- Ranges must be of same type
+- Can specify value or range:
+    - `value`
     - `:upper_bound`
     - `lower_bound:`
     - `lower:upper`
-    - `value`
-
-### FIXME
-
-example
+- Ranges must be of same type
+- Case must be known at compile time
+    - i.e. literals, `parameter`s, and expressions using them only
+- Cases may not overlap!
+    - Compare to multiple `if` statements
 
 ## `select case`
 
+```{include=examples/select_case_bounds.f90 .numberLines .Fortran
+startFrom=8 startLine=8 endLine=20}
+```
+
+## `select case` with `character`s
+
 - Neat thing about `select case` in Fortran: works with strings!
 
-```Fortran
-character(len=:) :: animal
-
-select case (animal)
-case ("cat")
-    print*, "meow!"
-case ("dog")
-    print*, "woof!"
-case ("pig")
-    print*, "oink!"
-case default
-    print*, "<generic animal noise>"
-end select
+```{include=examples/0x_select_case_character.f90 .numberLines .Fortran
+startFrom=8 startLine=8 endLine=17}
 ```
 
 - Can be useful for parsing user arguments
     - careful not to overdo it though, this is expensive!
 
-### FIXME
-
-example
-
-## `where`
+## Selective array expressions: `where`
 
 - It can be very useful to perform operations on an array only on
   certain elements
@@ -1559,30 +1554,30 @@ example
 - The `where` construct does exactly this:
 
 ```Fortran
-where (pressure > 0)
-  log_pressure = log(pressure)
+where (<array-logical-expression>)
+  ! do something on "true" elements
 elsewhere
-  log_pressure = -1
-end where
+  ! do something on "false" elements
+endwhere
 ```
 
+- Equivalent of `do` loop and `if/else` construct acting on every
+  element
+- The `where` mask must conform to the array(s) used in the construct body
 - Not very common, but useful to have when you need it
 
-## `cycle`
 
-- skip to next loop iteration
+## `where` example
 
-```Fortran
-integer :: i
-do i = 1, 5
-  if (i == 3) cycle
-  print*, i
-end do
+```{include=examples/where_nonzero.f90 .numberLines .Fortran
+startFrom=7 startLine=7 endLine=11}
 ```
 
-### FIXME
+is the same as:
 
-example
+```{include=examples/where_nonzero.f90 .numberLines .Fortran
+startFrom=15 startLine=15 endLine=21}
+```
 
 ## Loop labels
 
@@ -1590,27 +1585,36 @@ example
 - Useful as a form of documentation: what does this loop _do_?
 - Also useful when you need to jump out of a nested loop:
 
-```Fortran
-integer :: i, j
-outer: do i = 1, 5
-  inner: do j = 1, 5
-    if ((i + j) == 9) exit outer
-    print*, i, j
-  end do inner
-end do outer
+```{include=examples/loop_labels.f90 .numberLines .Fortran
+startFrom=5 startLine=5 endLine=10}
 ```
 
-### FIXME
+## Skip an iteration: `cycle`
 
-example
+- Sometimes need to skip a loop iteration, but keep looping
+- Other languages use `continue`: unfortunately, this is an old
+  keyword for `end do`!
+- Fortran uses `cycle` instead
 
-## Formatted i/o
+```{include=examples/cycle_loop.f90 .numberLines .Fortran
+startFrom=5 startLine=5 endLine=8}
+```
+
+## Skip an iteration: `cycle`
+
+- Like `exit`, can also give `cycle` a loop label:
+
+```{include=examples/cycle_with_label.f90 .numberLines .Fortran
+startFrom=5 startLine=5 endLine=10}
+```
+
+## Formatted I/O
 
 - What does the `*` mean in `print`, `read`?
 - Why is it `print` and `read`?
 - Why does Fortran put great big spaces between variables in `print`?
 
-## Formatted i/o
+## Formatted I/O
 
 - `print*,` is essentially short for `write(*, *)`
 - `read*,` is essentially short for `read(*, *)`
