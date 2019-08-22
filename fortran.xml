@@ -542,6 +542,7 @@
         <RegExpr attribute="Keyword" context="#stay" String="\b(do\s*(,|\s)\s*concurrent|select\s+type|block|critical)\b" insensitive="true" beginRegion="Block"/>
         <RegExpr attribute="Keyword" context="#stay" String="\bmodule\s+procedure\b" insensitive="true"/>
         <RegExpr attribute="Keyword" context="BlockName" String="\b(subroutine|function|block\s*data|program|module)\b" insensitive="true" beginRegion="Routine"/>
+        <RegExpr attribute="Normal Text" context="#stay" String="_(subroutine|function|block\s*data|program|module)\b" insensitive="true"/>
         <RegExpr attribute="Keyword" context="#stay" String="\b(then|do|select\s+case)\b" insensitive="true" beginRegion="Block"/>
       </context>
 <!-- The following context matches the end of program units -->
@@ -605,6 +606,7 @@
         <RegExpr attribute="Data Type" context="#stay" String="\bcharacter[*][0-9]+\b" insensitive="true"/>
         <RegExpr attribute="Data Type" context="find_paren" String="\b(type|integer|real|complex|character|logical|intent)\s*[(]" insensitive="true"/>
         <RegExpr attribute="Data Type" context="#stay" String="\b(type|integer|real|complex|character|logical|double\s*precision|intent)\b" insensitive="true"/>
+        <RegExpr attribute="Normal Text" context="#stay" String="_(type|integer|real|complex|character|logical|double\s*precision|intent)\b" insensitive="true"/>
         <Detect2Chars attribute="Data Type" context="#stay" char=":" char1=":"/>
       </context>
 <!-- This context matches parenthesis in data type declarations, such as in 'real(...)'-->
