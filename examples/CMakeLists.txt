@@ -67,3 +67,5 @@ add_example(0x_select_case_character)
 add_example(where_nonzero)
 add_example(cycle_loop)
 add_example(cycle_with_label)
+
+add_subdirectory(module_example)

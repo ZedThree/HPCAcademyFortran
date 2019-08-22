@@ -1906,7 +1906,7 @@ and the input file looks like:
 - Variables need to be declared first
 - Comments are allowed (and are ignored), case insensitive (as usual),
   and whitespace is mostly ignored (except within names, as usual)
-- Unfortunately, `namelist`s are not quite first-class entities
+- Unfortunately, `namelist`s are not quite _first-class entities_
     - Meaning you cannot put them in a variable of any kind, pass them
       to a function, etc.
     - This becomes a pain if you want to do more complicated things,
@@ -1979,25 +1979,27 @@ startFrom=4 startLine=4 endLine=14}
 - Very big programs become difficult to develop and maintain
 - Becomes useful to split up into separate files
     - Can group related functions together
+- May want to reuse functions between projects
 - Early versions of Fortran just stuck subprograms into separate files
-  and compiled them altogether
+  and linked them altogether
     - Still works!
     - But don't do it!
 - But compiler doesn't know what procedures are in what files, or what
   the interfaces look like (number and type of arguments)
 - Solution is `module`s
-- Compiler generates interfaces for you
-    - Will cover this in more depth later
-- **Always**, **always** use `module`s when using multiple files
+
+## Modules
+
+- Modules are their own scope
+    - Names in one `module` do not clash with names in another
+    - Similar to _namespaces_ in other languages
+- Compiler gets access to same information about procedures as if they
+  were inside the `program`
+- Always, **always** use `module`s when using multiple files
 - `module`s can also contain variables as well as procedures
-    - try to avoid though, except for `parameter`s
+    - Try to avoid though, except for `parameter`s
 - Can choose what entities in a `module` to make `public` or `private`
     - `module` is a bit like a single instance of an object
-
-### FIXME
-
-- tidy
-
 
 ## Modules
 
@@ -2006,13 +2008,9 @@ startFrom=4 startLine=4 endLine=14}
 ```Fortran
 module <name>
   implicit none
-
   ! variables, types, parameters
-
 contains
-
   ! functions, subroutines
-
 end module <name>
 ```
 
@@ -2026,13 +2024,13 @@ end module <name>
   ```Fortran
   module badbad
     implicit none
-    print*, "this won't compile!"
+    print*, "This won't compile!"
   end module badbad
   ```
 
 ## Using modules
 
-Using a `module` is simple:
+- Using a `module` is simple:
 
 ```Fortran
 program track_particles
@@ -2040,26 +2038,45 @@ program track_particles
   implicit none
 ```
 
-or even better, just certain things (could be either variables or
-procedures):
+- This makes everything in `particle_properties` available to the
+  whole `program`
+    - Equivalent to `from particle_properties import *` in Python
+- Only one module per `use`:
 
 ```Fortran
-subroutine push_particle
-  use particle_properties, only : electron_mass, electron_charge
+program track_particles
+  use file_utilities
+  use particle_properties
+  use physical_constants
+  implicit none
 ```
-
-This is great!
-    - more obvious where `electron_mass` comes from
-    - doesn't bring in extra names
-    - can even rename things
-
-```Fortran
-subroutine push_particle
-  use particle_properties, only : electron_mass => mass
-```
-- Note: `use` statements must come before `implicit none`
 
 ## Using modules
+
+- Usually better practice to `use` `module`s only in the particular
+  functions that need them
+- We can also just `use` certain things from a `module`:
+
+```Fortran
+subroutine push_particle
+  use particle_properties, only : kinetic_energy, coulomb_force
+  use physical_parameters, only : electron_mass, electron_charge
+```
+
+- These can be either variables or procedures
+- This is great!
+    - More obvious where things come from
+    - Doesn't bring in unneeded names
+    - Can even rename things if they clash locally
+
+```Fortran
+subroutine push_particle
+  use physical_parameters, only : c => speed_of_light
+```
+
+- Note: `use` statements must come before `implicit none`
+
+## Module visibility
 
 - Plain `use <module>` brings in **everything** from `<module>` to the
   local scope
@@ -2072,50 +2089,48 @@ subroutine push_particle
 - `private` entities (i.e. variables or functions) won't be visible
   outside the module
 - `private`/`public` statement by itself marks the default visibility
+- By default, `public` is assumed
 - Then can add either as an attribute to individual entities
 - Entities `use`d from other modules can also have visibility
   attributes applies to them
 
-## Module visibility
+## Module visibility syntax
+
+- As an attribute on a variable:
 
 ```Fortran
-module particle_properties
-  !
-  use physics_constants, only : speed_of_light
-  implicit none
-  private  ! Marks all entities as private by default
-
-  ! As attribute on variable declaration
-  real, parameter, public :: electron_mass = 9.1e-31
-
-  ! As separate attribute for procedure
-  public :: kinetic_energy
-
-contains
-  ! Given public attribute above, so can be used outside of module
-  function kinetic_energy(mass, velocity)
-  ...
-
-  ! Takes default private attribute, so cannot be used outside of module
-  function is_relativistic(velocity)
-  ...
+<type>, <visibility-spec> {, <other-attributes>} :: <variable>
+! For example:
+integer, dimension(2, 2), parameter, private :: internal_array = ...
 ```
 
-### FIXME
+- Or a separate visibility specification statement:
 
-- make proper example
-- think of reason to have something private!
+```Fortran
+<visibility-spec> :: <entity>
+! For example:
+public :: some_public_thing
+```
 
-## Modules
+## Module visibility
+
+```{include=examples/module_example/particle_properties.f90
+.numberLines .Fortran startLine=1 endLine=14}
+```
+
+## Compiling modules
 
 - Compiling a `module` results in a `.mod` file as well as the built
-  object
-- This is essentially an interface file, and is similar (though very
-  different!) to a C header file
-- Slightly unfortunately, `.mod` files are not portable even between
+  object file (`.o`)
+    - (Actual file extensions may vary)
+- This file describes the names in the `module` as well interfaces to
+  the functions, and is similar (though very different!) to a C header
+  file
+- Slightly unfortunately, `.mod` files are not portable, even between
   versions of the same compiler!
-    - This is "Application Binary Interface" (ABI) and is a Hard
-      Problem
+    - This is essentially the _Application Binary Interface_ (ABI) and
+      is a Hard Problem to maintain backwards compatibility while
+      still adding new features
 
 ## Compiling modules
 
@@ -2129,37 +2144,49 @@ contains
 - Modules are not executable, so if we don't want to compile
   everything at once, need to tell compiler to stop at the object file
   stage
-- For `gfortran`, this is the `-c` flag:
+- To link the final executable, we then need to tell the linker about
+  all the object (`.o`) and module (`.mod`) files
+
+## Compiling modules
+
+- For `gfortran`, use the `-c` flag to just compile and not link:
 
 ```bash
-# Creates my_module.o
+# Creates my_module.o and my_module.mod
 $ gfortran -c my_module.f90
-# Compiles my_program and links it with my_module
-$ gfortran my_module.o my_program.f90 -o my_program
+# Just creates my_program.o
+$ gfortran -c my_program.f90
 ```
+
+- To link, we can use `gfortran` again:
+
+```bash
+# Link together the object files
+$ gfortran my_module.o my_program.o -o my_program
+```
+
+- Note that `gfortran` looks in the current directory for the `.mod`
+  files
+    - Don't need to explicitly list the `.mod` files
+- Can use `-I<directory>` to tell `gfortran` to look somewhere else
 
 ## Modules in practice
 
 - Cannot have circular dependencies
-    - A uses B which uses A
+    - `module_A` `use`s `module_B` which `use`s `module_A`
     - This won't work!
-    - Ways round it (may cover `submodule`s later)
+    - Ways round it using `submodule`s: not covered here!
 
 - Some trickiness: there is now an order in which you have to compile
-  files
-- If A uses B which uses C, need to compile C then B then A
+  files:
+    - If `module_A` `use`s `module_B` which `use`s `module_C`, then:
+    - need to compile `module_C` then `module_B` then `module_A`
 - Can do it manually, but quickly gets out of hand
 - Some compilers can sort this out (but need two passes)
 - There are tools available,
   e.g. [fortdepend](https://github.com/ZedThree/fort_depend.py)
 - Also build systems such as [CMake](https://cmake.org) can take care
   of this for you
-
-### FIXME
-
-- Full module example
-- Project layout
-
 
 ## Derived types
 
