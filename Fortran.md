@@ -1625,20 +1625,19 @@ startFrom=5 startLine=5 endLine=10}
 
 ## What do those stars mean
 
-- first argument, `unit`, tells program _where_ to `read`/`write`
+- First argument, `unit`, tells program _where_ to `read`/`write`
     - `*` means `stdout` -- _standard out_ for `write`
         - usually "screen", but could be redirected somewhere else
     - `*` means `stdin` -- _standard in_ for `read`
         - usually keyboard, but could be something else redirected
     - Similar to file descriptor/handle in other languages
-- second argument, `fmt`, short for _format_, tells program _how_ to
+- Second argument, `fmt`, short for _format_, tells program _how_ to
   `read`/`write`
     - `*` means "read/write everything, separated by spaces"
         - Also called _list-directed I/O_
 
 ## Formatted I/O
 
-- Formats first
 - Instead of star, can give a _format string_
     - (technically _data edit descriptor_, but yeesh)
 - Basic form is `'(<something>)'`, where `<something>` is a
@@ -1682,6 +1681,18 @@ startFrom=24 startLine=24 endLine=28}
 
 - Can repeat chunks:
 
+```Fortran
+write(*, '(2(i0, 2(f8.3)))') ...
+```
+
+- expands to:
+
+```Fortran
+write(*, '(i0, f8.3, f8.3, i0, f8.3, f8.3)') ...
+```
+
+- More complicated example:
+
 ```{include=examples/repeating_format_string.f90 .numberLines .Fortran
 startFrom=8 startLine=8 endLine=8}
 ```
@@ -1689,26 +1700,53 @@ startFrom=8 startLine=8 endLine=8}
     - three lots of square brackets surrounding:
     - three lots of `integer` separated by commas
 
-### FIXME
+## Formatted I/O
 
-- the i/o control statement will consume stuff from _transfer list_ to
-  fill up the format string
-- `write` writes a newline every time it "fills up" the format string
-- `read` similar, but ignores everything until after next newline
+- The I/O control statement will consume stuff from _transfer list_ to
+  fill up the format string:
+    - `write` writes a newline every time it "fills up" the format string
+    - `read` similar, but ignores everything until after next newline
+- This will print the whole of `array`, two elements per line:
+```{include=examples/format_more_records.f90 .numberLines .Fortran
+startForm=10 startLine=10 endLine=10}
+```
+
+## Formatted I/O
+
+Other notes:
+
 - Compiler will check types, but unfortunately only at runtime
-- this is because format string can be built dynamically!
-- `****` when format is too small for data
-- nice tip: can put format string into a `character`
+    - This is because format string can be built dynamically!
+- Nice tip: can put format string into a `character`
+    - Good if reusing the same format a lot
+- If the format string is too small for the data, program will print stars
+  (`****`) taking up the full space instead
 
-## unformatted i/o
+## Unformatted I/O
 
-### FIXME
+- Formatted I/O is about writing variables as text
+- Fine for small amounts of data
+- But can rapidly become bottleneck at large amounts
+- For example, printing a `real` as text: sign, leading digit, decimal
+  point, 8 digits, exponent symbol, exponent sign, 2 exponent digits:
+  total 15 characters
+- Assuming ASCII, then 1 byte per character: 15 bytes vs 4 for
+  internal binary representation
+- Almost 4x larger!
+- Plus additional cost of converting
+- Possible rounding errors as well
 
-- good for checkpoints, etc.
-- _much_ faster than writing text
-- _can_ be read by other programs, but technically not portable
+## Unformatted I/O
+
+- When we `open` a file (next section), can choose to open it
+  `form='unformatted'`
+- Avoids problems from before
+- Now can `read`/`write` directly the internal representation
+- Good for checkpoints, etc.
+- _Much_ faster than writing text
+- _Can_ be read by other programs, but technically not portable
     - i.e. don't rely on it!
-- for serious HPC programs, better to use a library such as NetCDF
+- For serious HPC programs, better to use a library such as NetCDF
 
 ## `open` - File I/O
 
