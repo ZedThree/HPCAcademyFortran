@@ -23,7 +23,7 @@ Boxes of stars
 1. Write a program that reads two numbers from the user and draws a
    box made of stars of the corresponding height and width. An example
    of the output might be:
-   
+
    ```
    $ ./starboxes
    Enter height and width:
@@ -52,7 +52,18 @@ Number to string
 1. Write a function that takes an `integer` and converts it to a
    string, returning an `allocatable` `character` of the correct
    length. Don't forget the minus sign!
-    
+
+String to number
+----------------
+
+1. Write a function that takes a `character` and converts it to an
+   integer
+
+### Further
+
+1. How many bad inputs can you find?
+2. How many of the bad inputs can you provide error checking for?
+
 Input files and dump files
 --------------------------
 
@@ -61,12 +72,12 @@ Input files and dump files
    condition from file.
 2. Further modify it so it writes the current timestep and value of
    $y$ to another file.
-   
+
 ### Further
 
 1. (Less challenging) Read the filename for the output file from the input file
 2. Use a namelist to read the input values. Don't forget to set
-   default values
+   default values.
 3. (More challenging) Allow the user to specify the input file on the
    command line. You can use the intrinsic subroutine
    `get_command_argument` to read command line options.

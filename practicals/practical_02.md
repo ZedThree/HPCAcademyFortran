@@ -4,6 +4,7 @@ Practical 02
 By the end of this set of problems, you will be familiar with:
 
 - Arrays
+- Kinds
 - `function`
 - `subroutine`
 
@@ -60,6 +61,28 @@ $$a \times b = (a_2 \cdot b_3 - a_3 \cdot b_2)\mathbf{\hat{i}} + (a_3 \cdot b_1
    an out argument.
 2. Rewrite your subroutine as a function that returns the
    cross product in the result.
+
+Matrix-vector multiplication
+----------------------------
+
+You can check your implementations here by using the intrinsic
+`matmul`. Don't use it in your implementations though!
+
+1. Write a function that returns the result of multiplying a 3x3 matrix
+   with a 3-element vector.
+2. Write a `logical` `function` that returns true if the result of
+   `matmul` is identical to your result if you used `integer`s, or
+   sufficiently close (given some tolerance) if you used `real`s.
+
+### Further
+
+1. Write a function that returns the result of multiplying an $n
+   \times m$ matrix with a vector of length $m$.
+2. Can you enforce or check that the size of the vector is compatible
+   with the matrix?
+3. Write a function that returns the result of multiplying an $n
+   \times m$ matrix with an $m \times k$ matrix. What can you do if
+   the two matrices are incompatible sizes?
 
 Mean and standard deviation
 ---------------------------
@@ -123,3 +146,4 @@ calculate $\pi$. The method is as follows:
    $N$, along with $A = \pi r^2$, calculate $\pi$.
 5. Repeat the above steps for varying $N$ until the answer has
    converged in $N$.
+6. How does this change when using `real32` compared to `real64`?

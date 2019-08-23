@@ -65,7 +65,10 @@ Fortran Course Schedule
         - stop and error stop
         - documentation
 8. Thursday 11:30 - 12:30 (1 hours)
-    - Practical?
+    - Practical covering:
+        - Modules
+        - Derived types
+        - Interfaces
 9. Thursday 1:30 - 3:30 (2 hours)
     - Practical?
     - the bad stuff: ancient fortran and how to update it

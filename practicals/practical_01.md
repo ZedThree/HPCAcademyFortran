@@ -52,14 +52,20 @@ Hello \<name\>!
 Summing integers
 ----------------
 
-1. Write a program that sums all the integers from 1 to 100
+1. Write a program that sums all the integers from 1 to 100 using a
+   loop.
 2. Modify the program so that it takes an integer from user input, and
    then sums all the integers up to that number.
 
 ### Further
 
 1. What happens if the user supplies a negative number? Hint: try
-   looping over the `read` until the number is acceptable
+   looping over the `read` until the number is acceptable.
+2. Take two numbers from the user, and sum all the integers between
+   those numbers.
+3. Take three numbers from the user, and use the third number as
+   stride. That is, take $a$, $b$, and $n$, and sum every $n^{th}$
+   number between $a$ and $b$.
 
 Solving quadratics
 ------------------
@@ -73,3 +79,7 @@ $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
    solutions, print a message saying so.
 2. Extend your program to also print complex solutions
 
+### Further
+
+1. Can you extend this to solve cubics?
+2. What about quartics?
