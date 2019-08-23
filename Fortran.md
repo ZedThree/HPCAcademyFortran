@@ -1978,6 +1978,7 @@ startFrom=4 startLine=4 endLine=14}
 - Modules
 - Derived types
 - Interfaces
+- Miscellaneous
 
 ## Modules
 
@@ -2704,19 +2705,21 @@ stop converged
 
 ## Other useful intrinsics
 
-### FIXME
+There are a few intrinsics for dealing with command line arguments
 
-- `call execute_command_line`
-- `call cpu_time`
-- `call get_command_line`
-
-## Bad old stuff
-
-### FIXME
-
-- `common` blocks
-- `goto`
-- `do; do; 10 continue`
+- `command_argument_count()`: Returns the number of command arguments
+- `call get_command_argument(number [, value] [, length] [, status])`:
+  Does one of the following, depending on the argument passed:
+    - `value`: (`character(len=*)`) get the value of the
+      argument
+    - `length`: (`integer`) get the length of the argument
+    - `status`: (`integer`) positive if bad `number`, -1 if `value`
+      argument was too short, zero otherwise
+- `call get_environment_variable(name [, value] [, length] [, status]
+  [,trim_name])`: Similar to `get_command_argument` but for
+  environment variables
+    - `trim_name`: (`logical`) if false, trailing whitespace in `name`
+      is significant
 
 ## Documentation
 
@@ -2750,10 +2753,6 @@ subroutine feed_pets(cats, dogs, food, angry)
 end subroutine feed_pets
 ```
 
-## intrinsic modules
-
-### FIXME
-
 ## Internal procedures
 
 - `function`s and `subroutine`s can `contain` other procedures
@@ -2767,5 +2766,10 @@ end subroutine feed_pets
 
 ## Further reading
 
-- "Modern Fortran explained", Metcalf, Reid, Cohen
-- Fortran wiki
+- "Modern Fortran Explained: Incorportating Fortran 2018", Metcalf,
+  Reid, Cohen (2018) OUP
+- "Fortran for Scientists and Engineers", Chapman (2018) McGraw-Hill
+  Education
+- "Guide to Fortran 2008 Programming", Brainerd (2015), Springer
+- Fortran wiki: fortranwiki.org
+    - Lots of resources linked from there!
