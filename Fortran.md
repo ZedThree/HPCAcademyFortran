@@ -63,7 +63,7 @@ monofont: Inconsolata LGC
 - Programs were made on punchcards
 
 ![By Arnold Reinhold, CC BY-SA 2.5,
-https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.agr.jpg){width=50%}
+https://commons.wikimedia.org/w/index.php?curid=775153](./FortranCardPROJ039.jpg){width=50%}
 
 ## Brief history of Fortran
 
