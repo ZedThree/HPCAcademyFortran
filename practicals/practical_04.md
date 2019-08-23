@@ -1,5 +1,5 @@
-Exercise 04
-===========
+Practical 04
+============
 
 By the end of this set of problems, you will be familiar with:
 

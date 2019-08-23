@@ -1,5 +1,5 @@
-Exercise 01
-===========
+Practical 01
+============
 
 By the end of this set of exercises, you will be familiar with:
 
