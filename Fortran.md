@@ -2001,6 +2001,8 @@ startFrom=4 startLine=4 endLine=14}
 - Compiler gets access to same information about procedures as if they
   were inside the `program`
 - Always, **always** use `module`s when using multiple files
+- Not limited to one `module` per file
+    - But usually a good idea!
 - `module`s can also contain variables as well as procedures
     - Try to avoid though, except for `parameter`s
 - Can choose what entities in a `module` to make `public` or `private`
