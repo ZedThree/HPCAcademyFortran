@@ -2202,6 +2202,17 @@ $ gfortran my_module.o my_program.o -o my_program
 - Or we may have some variables that we need to keep in sync
     - For example, the `kinetic_energy` of a particle with its
       `velocity`
+
+```Fortran
+ke = kinetic_energy(mass1, velocity1, position1, charge1, E_field)
+force = coulomb_force(charge1, charge2, position1, position2)
+update_position(position1, mass1, velocity1, force)
+```
+
+- We keep passing around the same bundle of information!
+
+## Derived types
+
 - One solution to these problems is a _derived type_
     - Other languages call these _structs_ or _classes_
 - A derived type contains _components_ (or _members_) which can be
@@ -2209,6 +2220,12 @@ $ gfortran my_module.o my_program.o -o my_program
 - Fortran does have the ability to do some _object-oriented
   programming_ (OOP)
     - Will only cover a little bit here
+
+```Fortran
+ke = particle1%kinetic_energy(E_field)
+call particle1%set_coulomb_force(particle2)
+call particle1%push()
+```
 
 ## Derived types -- basic syntax
 
@@ -2239,11 +2256,14 @@ type(<name>) :: <variable name>
 startFrom=5 startLine=5 endLine=14}
 ```
 
+- Due to Fortran being case insensitive, type names can accidentally
+  clash with variable names
+    - Hence my personal preference for `_type` suffix
 - Note: `velocity` is probably better off as a 1D array in real code!
 
 ## Derived types -- example continued
 
-- Now only have to pass one parameter to `kinetic_energy`: 
+- Now only have to pass one parameter to `kinetic_energy`:
 
 ```{include=examples/basic_types.f90 .numberLines .Fortran
 startFrom=25 startLine=25 endLine=33}
@@ -2251,12 +2271,56 @@ startFrom=25 startLine=25 endLine=33}
 
 - Note: we can access components of components
     - But might be a sign the design is wrong
+    - Can also use `associate` block to make this easier (not covered
+      here)
+
+## Derived type initialisation
+
+- Fortran makes a default _structure constructor_ for us
+- This initialises all the members in order:
+
+```Fortran
+  type :: particle_type
+    real :: mass
+    real :: velocity
+  end type particle_type
+
+  type(particle_type) :: proton = particle_type(1., 0.)
+  ! Equivalent to:
+  proton%mass = 1.
+  proton%velocity = 0.
+```
+- Keyword arguments also work here
+- Later we will see a way of customising _constructors_
+
+## Derived type components default values
+
+- Often useful to give default values to (some) components
+- Then when declaring a variable, those components will already be
+  initialised
+
+```{include=examples/type_array.f90 .numberLines .Fortran
+startFrom=7 startLine=7 endLine=10}
+```
+- Now if we make declare a new `particle_type`:
+```Fortran
+  type(particle_type) :: particle
+```
+
+- We have `particle%position == 0.0` and `particle%velocity == 1.0`
 
 ## Arrays of derived types
 
-### FIXME
+- Fortran's approach to arrays extends to derived types
+- Accessing a component on an array gives an array of that component
 
-- downsides
+```{include=examples/type_array.f90 .numberLines .Fortran
+startFrom=12 startLine=12 endLine=22}
+```
+
+- Note: in performance-sensitive parts of code, there may be faster
+  methods!
+    - Search: Array of Structures vs Structure of Arrays
 
 ## Derived type inheritance
 
@@ -2265,22 +2329,112 @@ startFrom=25 startLine=25 endLine=33}
 - The new type _inherits_ all the properties of the old type
 
 ```{include=examples/type_inheritance.f90 .numberLines .Fortran
-startFrom=5 startLine=5 endLine=15}
+startFrom=5 startLine=5 endLine=17}
 ```
 
-## type-bound procedures
+## Derived type inheritance
 
-- Can associate a procedure with a type
-    - But procedure can remain as a _free function_
-- Called _methods_ in other languages
-- Slightly annoying in that definition still needs to be in the
-  `contains` section of the `program` or `module`
+- A `proton` is both a `charged_particle_type` **and** a
+  `particle_type`
+- Now we can write code that works for all `particle_type`s, plus
+  special code that just deals with `charged_particle_type`
+    - For example, `gravitational_force` applies to both protons and
+      neutrons, but `coulomb_force` only applies to protons
+- Only need to change one thing:
+- Functions that can take a derived type as well as types that extend
+  it, need to use `class(<base-type>)`:
 
-### FIXME
+```{include=examples/type_inheritance.f90 .numberLines .Fortran
+startFrom=23 startLine=23 endLine=29}
+```
 
-- example
+## Derived type polymorphism
 
-## Private/Public
+- This ability to use the same function to act on different types is
+  called _polymorphism_
+    - Polymorphism == "many shapes"
+- Polymorphism is one of the four pillars of OOP
+    - Along with: abstraction, encapsulation and inheritance
+- Possible to use `class(<name>), allocatable` to make a variable
+  whose exact type is determined at runtime
+- Won't be covering this in-depth here!
+
+## Type-bound procedures
+
+- As well as data members, we can associate procedures with types
+    - Procedures can also remain as a _free function_
+- These are _type-bound procedures_
+    - Called _methods_ in other languages
+- Three slight annoyances:
+    1. The `type` needs to be in a `module` not a `program`
+        - Ways round this, but more annoying!
+    2. The function definition still needs to be in the `contains`
+       section of the `module`
+    3. The list of methods has to be a `contains` section in the
+       `type`
+
+## Derived type methods
+
+```{include=examples/type_bound_procedure.f90 .numberLines .Fortran
+startFrom=1 startLine=1 endLine=16}
+```
+
+## Derived type methods
+
+- Can now call the method on our objects:
+
+```{include=examples/type_bound_procedure.f90 .numberLines .Fortran
+startFrom=34 startLine=34 endLine=36}
+```
+
+- Because we're calling the method with the `%` syntax, Fortran passes
+  the object as the first argument
+    - Very similar to Python's `self`
+    - Can use `nopass` attribute to disable this
+- We don't know if the type will be `extend`ed, so must use `class`
+  not `type`
+- Identical to calling the method and passing the argument ourselves!
+- Note `update_position` is `elemental` so can act on the whole array
+- We can hide the free function version with `private` -- still have
+  access to the method though!
+
+## Derived type methods
+
+- Why are methods useful?
+- We can rename them!
+
+```Fortran
+  type :: particle_type
+    ...
+  contains
+    procedure :: push => update_position
+  end type particle_type
+```
+- Now `particle_type%push` doesn't conflict with other procedures
+  called `push`
+- If a method is in the base type, we can _override_ it in child types
+
+## Overriding derived type methods
+
+```{include=examples/type_override.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=17}
+```
+
+## Overriding derived type methods
+
+- Now if we have something that just takes a `class(animal)`, we can
+  use `make_noise` on it:
+
+```{include=examples/type_override.f90 .numberLines .Fortran
+startFrom=46 startLine=46 endLine=49}
+```
+
+- We can pass in a `cat` or `dog` and get the right noise
+- At runtime, Fortran works out exactly which `make_noise` it should
+  call
+
+
+## Derived type member visibility
 
 - Just like `module`s can have declare the visibility of their
   entities, `type`s can specify visibility of their members
@@ -2294,9 +2448,32 @@ startFrom=5 startLine=5 endLine=15}
   to get or set the value
 - Visibility is at the `module` scope
 
-### FIXME
+## Invariant example
 
-- example
+```{include=examples/type_private.f90 .numberLines .Fortran
+startFrom=9 startLine=9 endLine=19}
+```
+
+- Hiding all the members means we can't use the default constructor
+    - Could provide our own, see later
+- We provide _setters_ and _getters_ for the private members
+    - Skipped getters for `mass`, `velocity` here for simplicity!
+
+## Invariant example
+
+```{include=examples/type_private.f90 .numberLines .Fortran
+startFrom=22 startLine=22 endLine=29}
+```
+
+- Setting either the `mass` or `velocity` instantly updates the
+  `kinetic_energy`
+- Setter for `kinetic_energy` is `private`: user of our type can't
+  accidentally change it
+- Now all the properties of the particle are always in sync
+- Very useful if `kinetic_energy` is used more often than we change
+  `velocity` or `mass` -- calculation only done on updates
+    - This is called _caching_, useful performance technique
+
 
 ## Optional arguments
 
