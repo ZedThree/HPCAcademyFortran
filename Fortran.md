@@ -2474,96 +2474,6 @@ startFrom=22 startLine=22 endLine=29}
   `velocity` or `mass` -- calculation only done on updates
     - This is called _caching_, useful performance technique
 
-
-## Optional arguments
-
-- Common to have a function that only sometimes needs a particular
-  argument
-- Can make these arguments `optional`
-- We've met a few intrinsics with optional arguments
-- Need to check that an `optional` argument is `present` before we can
-  use it
-    - Except to pass it to other functions
-- Require a bit of special handling if we want to give `optional`
-  arguments default values
-
-## Optional arguments
-
-```{include=examples/optional_arguments.f90 .numberLines .Fortran
-startFrom=8 startLine=8 endLine=23}
-```
-
-## Optional arguments
-
-```{include=examples/optional_arguments.f90 .numberLines .Fortran
-startFrom=4 startLine=4 endLine=5}
-```
-
-Also notice that we need to check if `politely` is `present` before
-trying to use it at all:
-
-
-```{include=examples/optional_arguments.f90 .numberLines .Fortran
-startFrom=16 startLine=16 endLine=17}
-```
-
-The following is dangerous, because standard doesn't mandate short-circuiting:
-```Fortran
-if (present(politely) .and. politely) then
-  ...
-```
-Might try to read `politely` first, but it doesn't exist!
-
-
-## `block`
-
-- Fortran requires all variables to be declared at the top of the
-  scope, before first executable statement
-    - Limitation of early compilers!
-- But modern best practice is to declare variables only where you need
-  them
-- Reducing scope -> always good!
-    - Easier to read
-    - Reduces chances for bugs
-- `block` construct allows introduction of new entities
-- Names within a `block` can _shadow_ or hide those outside
-
-## `block` example
-
-```{include=examples/0x_block_demo.f90 .numberLines .Fortran
-startFrom=3 startLine=3 endLine=11}
-```
-
-## `stop` and `error stop`
-
-- Sometimes want to finish a program "early"
-    - Maybe some quantity has converged
-    - Maybe something's gone wrong and we can't continue
-- Two statements: `stop` and `error stop`
-    - Essentially equivalent, except `error stop` always indicates an
-      error somehow
-- Can take an `integer` or `character` constant (i.e. value has to be
-  known exactly at compile time)
-    - Relaxed in Fortran 2018!
-
-```Fortran
-character(len=*), parameter :: converged = "The simulation has converged!"
-...
-stop converged
-```
-
-- Unfortunately, the standard is vague on what happens with an integer
-- **Usually** is the exit code, if between 0--127
-    - Can't 100% rely on this, but mostly fine
-
-## Other useful intrinsics
-
-### FIXME
-
-- `call execute_command_line`
-- `call cpu_time`
-- `call get_command_line`
-
 ## Interfaces
 
 - Early Fortran standards didn't have `contains` or `module`s
@@ -2709,6 +2619,95 @@ startFrom=25 startLine=25 endLine=30}
     - Procedure vs variable
 - Gets a little tricky if names **and** types clash
 
+## Optional arguments
+
+- Common to have a function that only sometimes needs a particular
+  argument
+- Can make these arguments `optional`
+- We've met a few intrinsics with optional arguments
+- Need to check that an `optional` argument is `present` before we can
+  use it
+    - Except to pass it to other functions
+- Require a bit of special handling if we want to give `optional`
+  arguments default values
+
+## Optional arguments
+
+```{include=examples/optional_arguments.f90 .numberLines .Fortran
+startFrom=8 startLine=8 endLine=23}
+```
+
+## Optional arguments
+
+```{include=examples/optional_arguments.f90 .numberLines .Fortran
+startFrom=4 startLine=4 endLine=5}
+```
+
+Also notice that we need to check if `politely` is `present` before
+trying to use it at all:
+
+
+```{include=examples/optional_arguments.f90 .numberLines .Fortran
+startFrom=16 startLine=16 endLine=17}
+```
+
+The following is dangerous, because standard doesn't mandate short-circuiting:
+```Fortran
+if (present(politely) .and. politely) then
+  ...
+```
+Might try to read `politely` first, but it doesn't exist!
+
+
+## Introducing new scope: `block`
+
+- Fortran requires all variables to be declared at the top of the
+  scope, before first executable statement
+    - Limitation of early compilers!
+- But modern best practice is to declare variables only where you need
+  them
+- Reducing scope -> always good!
+    - Easier to read
+    - Reduces chances for bugs
+- `block` construct allows introduction of new entities
+- Names within a `block` can _shadow_ or hide those outside
+
+## `block` example
+
+```{include=examples/0x_block_demo.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=11}
+```
+
+## `stop` and `error stop`
+
+- Sometimes want to finish a program "early"
+    - Maybe some quantity has converged
+    - Maybe something's gone wrong and we can't continue
+- Two statements: `stop` and `error stop`
+    - Essentially equivalent, except `error stop` always indicates an
+      error somehow
+- Can take an `integer` or `character` constant (i.e. value has to be
+  known exactly at compile time)
+    - Relaxed in Fortran 2018!
+
+```Fortran
+character(len=*), parameter :: converged = "The simulation has converged!"
+...
+stop converged
+```
+
+- Unfortunately, the standard is vague on what happens with an integer
+- **Usually** is the exit code, if between 0--127
+    - Can't 100% rely on this, but mostly fine
+
+## Other useful intrinsics
+
+### FIXME
+
+- `call execute_command_line`
+- `call cpu_time`
+- `call get_command_line`
+
 ## Bad old stuff
 
 ### FIXME
@@ -2749,11 +2748,6 @@ subroutine feed_pets(cats, dogs, food, angry)
 end subroutine feed_pets
 ```
 
-## Further reading
-
-- "Modern Fortran explained", Metcalf, Reid, Cohen
-- Fortran wiki
-
 ## intrinsic modules
 
 ### FIXME
@@ -2768,3 +2762,8 @@ end subroutine feed_pets
 - This makes it easier to make mistakes
 - Usually better to make a separate procedure
     - Can make it `private` in a `module`
+
+## Further reading
+
+- "Modern Fortran explained", Metcalf, Reid, Cohen
+- Fortran wiki
