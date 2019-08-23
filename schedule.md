@@ -20,7 +20,7 @@ Fortran Course Schedule
 3. Tuesday 1:30 - 3:30 (2 hours)
     - Arrays
     - Allocatable
-        - heap and stack?
+        - heap and stack
     - Parameters
     - Kinds
     - Procedures
@@ -41,6 +41,7 @@ Fortran Course Schedule
 5. Wednesday 11:30 - 12:30 (1 hours) <- Last one before target app practical
     - More control flow
         - select case
+        - where
         - cycle
         - loop labels
     - Formatted I/O
@@ -53,15 +54,16 @@ Fortran Course Schedule
 7. Thursday 9:00 - 11:00 (2 hours)
     - Modules
     - Derived types
-    - Block
-    - various intrinsics
-    - More derived types
+        - inheritance and polymorphism
         - type bound procedures
-        - inheritance
-        - polymorphism
     - Interfaces
         - passing procedures
         - generic/overloads
+    - Miscellaneous bits
+        - optional
+        - block
+        - stop and error stop
+        - documentation
 8. Thursday 11:30 - 12:30 (1 hours)
     - Practical?
 9. Thursday 1:30 - 3:30 (2 hours)
