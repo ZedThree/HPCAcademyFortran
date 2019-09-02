@@ -372,13 +372,13 @@ There are 5 fundamental types in Fortran:
 
 - Whitespace mostly doesn't matter:
 
-```{include=examples/bad_whitespace.f90 .numberLines .Fortran
+```{include=examples/03_bad_whitespace.f90 .numberLines .Fortran
 startFrom=1 startLine=1 endLine=5}
 ```
 
 - But very important for readability!
 
-```{include=examples/good_whitespace.f90 .numberLines .Fortran
+```{include=examples/04_good_whitespace.f90 .numberLines .Fortran
 startFrom=1 startLine=1 endLine=5}
 ```
 
@@ -449,7 +449,7 @@ but one is easier to read
 - BODMAS/PEDMAS and left-to-right, but use `()` to clarify
     - Don't forget, make it **readable**
 
-```{include=examples/03_basic_maths.f90 .numberLines .Fortran
+```{include=examples/05_basic_maths.f90 .numberLines .Fortran
 startLine=3 endLine=10 startFrom=3}
 ```
 
@@ -470,7 +470,7 @@ startLine=3 endLine=10 startFrom=3}
 - Therefore, if you need the result to be a `real`, either convert (at
   least) one operand to `real`, or use a `real` literal
 
-```{include=examples/0x_integer_division.f90 .numberLines .Fortran
+```{include=examples/06_integer_division.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=7}
 ```
 
@@ -489,7 +489,7 @@ startFrom=3 startLine=3 endLine=7}
     - `.lt.`, `.le.`, `.gt.`, `.ge.`, `.eq.`, `.ne.`
     - But don't use these!
 
-```{include=examples/04_logical_operators.f90 .numberLines .Fortran
+```{include=examples/07_logical_operators.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=6}
 ```
 
@@ -502,7 +502,7 @@ startFrom=3 startLine=3 endLine=6}
 - Use them if they exist -- can be heavily optimised by compiler
     - Difficult to detect if they are available of course
 
-```{include=examples/intrinsic_functions.f90 .numberLines .Fortran
+```{include=examples/08_intrinsic_functions.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=6}
 ```
 
@@ -543,7 +543,7 @@ end if
 
 - Conditions are checked from the top:
 
-```{include=examples/05_if_statement.f90 .numberLines .Fortran
+```{include=examples/09_if_statement.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=12}
 ```
 
@@ -552,7 +552,7 @@ startFrom=3 startLine=3 endLine=12}
 - `.and.`, `.or.`, `.not.`
 
 
-```{include=examples/06_logical_boolean_operations.f90 .numberLines
+```{include=examples/10_logical_boolean_operations.f90 .numberLines
 .Fortran
 startLine=3 endLine=8 startFrom=3}
 ```
@@ -603,7 +603,7 @@ end do
 
 - Notice nothing to say when loop is done!
 
-```{include=examples/07_infinite_do.f90 .numberLines .Fortran
+```{include=examples/11_infinite_do.f90 .numberLines .Fortran
 startLine=3 endLine=7 startFrom=3}
 ```
 
@@ -612,7 +612,7 @@ startLine=3 endLine=7 startFrom=3}
 - We can use `exit` to leave a loop
 - Leaves current loop entirely
 
-```{include=examples/08_do_exit.f90 .numberLines .Fortran
+```{include=examples/12_do_exit.f90 .numberLines .Fortran
 startLine=3 endLine=8 startFrom=3}
 ```
 
@@ -620,13 +620,13 @@ startLine=3 endLine=8 startFrom=3}
 
 - Equivalent to using `exit` at start of loop
 
-```{include=examples/09_do_while.f90 .numberLines .Fortran
+```{include=examples/13_do_while.f90 .numberLines .Fortran
 startLine=3 endLine=7 startFrom=3}
 ```
 
 - Unlike C++, `do while` checks the condition at the _beginning_ of the loop:
 
-```{include=examples/10_do_while_none.f90 .numberLines .Fortran
+```{include=examples/14_do_while_none.f90 .numberLines .Fortran
 startLine=3 endLine=7 startFrom=3}
 ```
 
@@ -637,7 +637,7 @@ startLine=3 endLine=7 startFrom=3}
 - `start` and `stop` are required, `counter` goes from `start` to
   `stop` _inclusive_:
 
-```{include=examples/11_do_counter.f90 .numberLines .Fortran
+```{include=examples/15_do_counter.f90 .numberLines .Fortran
 startLine=3 endLine=6 startFrom=3}
 ```
 
@@ -645,7 +645,7 @@ startLine=3 endLine=6 startFrom=3}
 
 - There is an optional `stride`:
 
-```{include=examples/12_do_stride.f90 .numberLines .Fortran
+```{include=examples/16_do_stride.f90 .numberLines .Fortran
 startLine=3 endLine=6 startFrom=3}
 ```
 
@@ -657,7 +657,7 @@ startLine=3 endLine=6 startFrom=3}
 - It's ok for `stop` < `start`: just won't be executed
 - `stride` can be negative:
 
-```{include=examples/13_do_negative_stride.f90 .numberLines .Fortran
+```{include=examples/17_do_negative_stride.f90 .numberLines .Fortran
 startLine=3 endLine=6 startFrom=3}
 ```
 
@@ -682,13 +682,13 @@ startLine=3 endLine=6 startFrom=3}
     - Big reason why it's lasted so long!
 - Vector in 3D space could be 1D array of 3 elements:
 
-```{include=examples/array_basics.f90 .numberLines .Fortran
+```{include=examples/18_array_basics.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=5}
 ```
 
 - Fortran can natively handle multidimensional arrays:
 
-```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+```{include=examples/19_array_multidimensions.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=5}
 ```
 
@@ -698,19 +698,19 @@ startFrom=3 startLine=3 endLine=5}
 
 - We can _index_ an array using an integer:
 
-```{include=examples/array_basics.f90 .numberLines .Fortran
+```{include=examples/18_array_basics.f90 .numberLines .Fortran
 startFrom=9 startLine=9 endLine=13}
 ```
 
 - We can even take a _slice_ using the `:` notation:
 
-```{include=examples/array_basics.f90 .numberLines .Fortran
+```{include=examples/18_array_basics.f90 .numberLines .Fortran
 startFrom=14 startLine=14 endLine=14}
 ```
 
 - We can optionally leave off the lower and/or upper bounds:
 
-```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+```{include=examples/19_array_multidimensions.f90 .numberLines .Fortran
 startFrom=16 startLine=16 endLine=19}
 ```
 
@@ -719,7 +719,7 @@ startFrom=16 startLine=16 endLine=19}
 - **Note:** By default, Fortran indices start at 1!
 - Can change this:
 
-```{include=examples/array_indices.f90 .numberLines .Fortran
+```{include=examples/20_array_indices.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=8}
 ```
 
@@ -741,11 +741,11 @@ real, dimension(-1:1, 3:5) :: stress_tensor
     - Older style is `(/<values>.../)`
     - Called _array constructor_
 - Can use this to initialise or assign to arrays:
-```{include=examples/array_constructors.f90 .numberLines .Fortran
+```{include=examples/21_array_constructors.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=5}
 ```
 - Or even pass to functions:
-```{include=examples/array_constructors.f90 .numberLines .Fortran
+```{include=examples/21_array_constructors.f90 .numberLines .Fortran
 startFrom=15 startLine=15 endLine=15}
 ```
 - Unfortunately, only works for 1D arrays! Multidimensional arrays
@@ -757,11 +757,11 @@ array2 = [real(real64)::1, 2, 3]
 
 ## Literal multidimensional arrays
 
-```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+```{include=examples/19_array_multidimensions.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=5}
 ```
 
-```{include=examples/array_multidimensions.f90 .numberLines .Fortran
+```{include=examples/19_array_multidimensions.f90 .numberLines .Fortran
 startFrom=21 startLine=21 endLine=24}
 ```
 
@@ -788,7 +788,7 @@ end do
 
 - This can be written a bit more compactly using an _implied do_:
 
-```{include=examples/array_constructors.f90 .numberLines .Fortran
+```{include=examples/21_array_constructors.f90 .numberLines .Fortran
 startFrom=10 startLine=10 endLine=10}
 ```
 
@@ -798,7 +798,7 @@ startFrom=10 startLine=10 endLine=10}
 
 - We can do element-wise operations on arrays very simply:
 
-```{include=examples/array_basics.f90 .numberLines .Fortran
+```{include=examples/18_array_basics.f90 .numberLines .Fortran
 startFrom=18 startLine=18 endLine=23}
 ```
 
@@ -821,13 +821,13 @@ pressure = density * temperature
 - Slices with the same shape conform (even if upper/lower bounds don't
   match)
 
-```{include=examples/array_conformability.f90 .numberLines .Fortran
+```{include=examples/22_array_conformability.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=12}
 ```
 
 ## Conformability
 
-```{include=examples/array_conformability.f90 .numberLines .Fortran
+```{include=examples/22_array_conformability.f90 .numberLines .Fortran
 startFrom=19 startLine=19 endLine=29}
 ```
 
@@ -895,7 +895,7 @@ https://commons.wikimedia.org/w/index.php?curid=65107030](./500px-Row_and_column
     - order of magnitude!
 - This is different from C-like languages
 
-```{include=examples/0x_memory_order.f90 .numberLines .Fortran
+```{include=examples/23_memory_order.f90 .numberLines .Fortran
 startFrom=15 startLine=15 endLine=27}
 ```
 
@@ -904,7 +904,7 @@ startFrom=15 startLine=15 endLine=27}
 - The basic mathematical intrinsic functions also work on arrays:
 - `sin`, `cos`, `tan`, `sqrt`, `exp`, `log`, etc.
 
-```{include=examples/array_intrinsics.f90 .numberLines .Fortran
+```{include=examples/24_array_intrinsics.f90 .numberLines .Fortran
 startFrom=6 startLine=6 endLine=12}
 ```
 
@@ -1025,7 +1025,7 @@ if (allocated(array)) deallocate(array)
 - Value of `stat` is non-portable and might not even be documented!
 - Combine with `errmsg`:
 
-```{include=examples/0x_allocate_stat.f90 .numberLines .Fortran
+```{include=examples/25_allocate_stat.f90 .numberLines .Fortran
 startFrom=9 startLine=9 endLine=16}
 ```
 
@@ -1074,7 +1074,7 @@ real, dimension(10, 10) :: density
 
 ## `parameter` examples
 
-```{include=examples/0x_parameters.f90 .numberLines .Fortran}
+```{include=examples/26_parameters.f90 .numberLines .Fortran}
 ```
 
 ## `character` `parameter`s
@@ -1093,7 +1093,7 @@ real, dimension(10, 10) :: density
 
 ## `character` examples
 
-```{include=examples/parameter_and_allocatable_characters.f90 .numberLines .Fortran
+```{include=examples/27_parameter_and_allocatable_characters.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=12}
 ```
 
@@ -1166,7 +1166,7 @@ x = 1.0_wp
 - `real` literals are single precision by default, so need `kind`
   identifier
 
-```{include=examples/loss_of_precision.f90 .numberLines .Fortran
+```{include=examples/28_loss_of_precision.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=6}
 ```
 
@@ -1257,14 +1257,14 @@ end function <name>
 - Result has the same name as the function, by default
 - Can change this with `result` keyword
 
-```{include=examples/0x_basic_function.f90 .numberLines .Fortran startLine=8 endLine=16}
+```{include=examples/29_basic_function.f90 .numberLines .Fortran startLine=8 endLine=16}
 ```
 
 ## Functions
 
 - Functions in `program`s go after a `contains` statement:
 
-```{include=examples/0x_basic_function.f90 .numberLines .Fortran startLine=1 endLine=9}
+```{include=examples/29_basic_function.f90 .numberLines .Fortran startLine=1 endLine=9}
 ```
 
 ## Functions
@@ -1301,13 +1301,13 @@ call <name>(<arguments>)
 
 ## Subroutine example
 
-```{include=examples/0x_basic_subroutine.f90 .numberLines .Fortran
+```{include=examples/30_basic_subroutine.f90 .numberLines .Fortran
 startFrom=10 startLine=10 endLine=14}
 ```
 
 used like:
 
-```{include=examples/0x_basic_subroutine.f90 .numberLines .Fortran
+```{include=examples/30_basic_subroutine.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=7}
 ```
 
@@ -1340,7 +1340,7 @@ end function factorial
 
 ## Local variables
 
-```{include=examples/0x_local_variables.f90 .numberLines .Fortran
+```{include=examples/31_local_variables.f90 .numberLines .Fortran
 startLine=3 endLine=12 startFrom=3}
 ```
 
@@ -1354,7 +1354,7 @@ variables
     - Technically called _host association_
 - Generally not a great idea!
 
-```{include=examples/0x_global_variables.f90 .numberLines .Fortran
+```{include=examples/32_global_variables.f90 .numberLines .Fortran
 startLine=4 endLine=11}
 ```
 
@@ -1371,7 +1371,7 @@ startLine=4 endLine=11}
 - This `save`s the value of the variable between function calls
 - Initialisation is then _not done_ on subsequent calls:
 
-```{include=examples/0x_save_attribute.f90 .numberLines .Fortran
+```{include=examples/33_save_attribute.f90 .numberLines .Fortran
 startLine=13 endLine=17 startFrom=13}
 ```
 
@@ -1406,7 +1406,7 @@ startLine=13 endLine=17 startFrom=13}
 
 ## Dummy arguments
 
-```{include=examples/0x_dummy_arguments.f90 .numberLines .Fortran}
+```{include=examples/34_dummy_arguments.f90 .numberLines .Fortran}
 ```
 
 - `x` becomes associated with `a`; `y` with `b`; `z` with `c`
@@ -1416,7 +1416,7 @@ startLine=13 endLine=17 startFrom=13}
 
 - Another nifty feature of Fortran is keyword arguments:
 
-```{include=examples/0x_keyword_arguments.f90 .numberLines .Fortran
+```{include=examples/34_keyword_arguments.f90 .numberLines .Fortran
 startFrom=6 startLine=6 endLine=8}
 ```
 - Lets us change the order of the arguments
@@ -1451,6 +1451,12 @@ Three choices for passing arrays:
     - but remaps indices to match your provided lower bounds
     - `n`, `m`, `p` need to be passed in (or got from elsewhere)
 
+## Dummy arguments and arrays
+
+```{include=examples/35_array_dummy_arguments.f90 .numberLines .Fortran
+startFrom=11 startLine=11 endLine=15}
+```
+
 ## Pure procedures
 
 - It turns out to be very useful for the compiler to know if a
@@ -1478,7 +1484,7 @@ Three choices for passing arrays:
   called _elemental_
 - Elemental functions must be `pure` or marked `impure`
 
-```{include=examples/elemental_functions.f90 .numberLines .Fortran
+```{include=examples/36_elemental_functions.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=11}
 ```
 
@@ -1488,11 +1494,11 @@ startFrom=4 startLine=4 endLine=11}
 - Returning an `allocatable` from a `function` can be quite
   convenient, because it will automatically reallocate the assignee
 
-```{include=examples/allocatable_function.f90 .numberLines .Fortran
+```{include=examples/37_allocatable_function.f90 .numberLines .Fortran
 startFrom=15 startLine=15 endLine=21}
 ```
 Use like:
-```{include=examples/allocatable_function.f90 .numberLines .Fortran
+```{include=examples/37_allocatable_function.f90 .numberLines .Fortran
 startFrom=9 startLine=9 endLine=9}
 ```
 
@@ -1541,7 +1547,7 @@ end select
 
 ## `select case`
 
-```{include=examples/select_case_bounds.f90 .numberLines .Fortran
+```{include=examples/38_select_case_bounds.f90 .numberLines .Fortran
 startFrom=8 startLine=8 endLine=20}
 ```
 
@@ -1549,7 +1555,7 @@ startFrom=8 startLine=8 endLine=20}
 
 - Neat thing about `select case` in Fortran: works with strings!
 
-```{include=examples/0x_select_case_character.f90 .numberLines .Fortran
+```{include=examples/39_select_case_character.f90 .numberLines .Fortran
 startFrom=8 startLine=8 endLine=17}
 ```
 
@@ -1579,13 +1585,13 @@ endwhere
 
 ## `where` example
 
-```{include=examples/where_nonzero.f90 .numberLines .Fortran
+```{include=examples/40_where_nonzero.f90 .numberLines .Fortran
 startFrom=7 startLine=7 endLine=11}
 ```
 
 is the same as:
 
-```{include=examples/where_nonzero.f90 .numberLines .Fortran
+```{include=examples/40_where_nonzero.f90 .numberLines .Fortran
 startFrom=15 startLine=15 endLine=21}
 ```
 
@@ -1595,8 +1601,8 @@ startFrom=15 startLine=15 endLine=21}
 - Useful as a form of documentation: what does this loop **do**?
 - Also useful when you need to jump out of a nested loop:
 
-```{include=examples/loop_labels.f90 .numberLines .Fortran
-startFrom=5 startLine=5 endLine=10}
+```{include=examples/41_loop_labels.f90 .numberLines .Fortran
+startFrom=26 startLine=26 endLine=31}
 ```
 
 ## Skip an iteration: `cycle`
@@ -1606,7 +1612,7 @@ startFrom=5 startLine=5 endLine=10}
   keyword for `end do`!
 - Fortran uses `cycle` instead
 
-```{include=examples/cycle_loop.f90 .numberLines .Fortran
+```{include=examples/42_cycle_loop.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=8}
 ```
 
@@ -1614,7 +1620,7 @@ startFrom=5 startLine=5 endLine=8}
 
 - Like `exit`, can also give `cycle` a loop label:
 
-```{include=examples/cycle_with_label.f90 .numberLines .Fortran
+```{include=examples/43_cycle_with_label.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=10}
 ```
 
@@ -1679,10 +1685,10 @@ startFrom=5 startLine=5 endLine=10}
 
 ## Formatted I/O
 
-```{include=examples/format_string.f90 .numberLines .Fortran
+```{include=examples/44_format_string.f90 .numberLines .Fortran
 startFrom=12 startLine=12 endLine=18}
 ```
-```{include=examples/format_string.f90 .numberLines .Fortran
+```{include=examples/44_format_string.f90 .numberLines .Fortran
 startFrom=24 startLine=24 endLine=28}
 ```
 
@@ -1703,7 +1709,7 @@ write(*, '(i0, f8.3, f8.3, i0, f8.3, f8.3)') ...
 
 - More complicated example:
 
-```{include=examples/repeating_format_string.f90 .numberLines .Fortran
+```{include=examples/45_repeating_format_string.f90 .numberLines .Fortran
 startFrom=8 startLine=8 endLine=8}
 ```
 - This means:
@@ -1717,7 +1723,7 @@ startFrom=8 startLine=8 endLine=8}
     - `write` writes a newline every time it "fills up" the format string
     - `read` similar, but ignores everything until after next newline
 - This will print the whole of `array`, two elements per line:
-```{include=examples/format_more_records.f90 .numberLines .Fortran
+```{include=examples/46_format_more_records.f90 .numberLines .Fortran
 startForm=10 startLine=10 endLine=10}
 ```
 
@@ -1873,7 +1879,7 @@ end if
 
 ## Working with files example
 
-```{include=examples/open_and_read_file.f90 .numberLines .Fortran
+```{include=examples/47_open_and_read_file.f90 .numberLines .Fortran
 startFrom=10 startLine=10 endLine=23}
 ```
 
@@ -1919,7 +1925,7 @@ and the input file looks like:
 
 ## Namelist example
 
-```{include=examples/basic_namelist.f90 .numberLines .Fortran
+```{include=examples/48_basic_namelist.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=16}
 ```
 
@@ -1954,7 +1960,7 @@ character(len=*), parameter :: both_cats = cat1 // " and " // cat2
 
 ## Writing to a `character`
 
-```{include=examples/write_to_character.f90 .numberLines .Fortran
+```{include=examples/49_write_to_character.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=14}
 ```
 
@@ -2123,7 +2129,7 @@ public :: some_public_thing
 
 ## Module visibility
 
-```{include=examples/module_example/particle_properties.f90
+```{include=examples/50_module_example/particle_properties.f90
 .numberLines .Fortran startLine=1 endLine=14}
 ```
 
@@ -2255,7 +2261,7 @@ type(<name>) :: <variable name>
 
 ## Derived types -- example
 
-```{include=examples/basic_types.f90 .numberLines .Fortran
+```{include=examples/51_basic_types.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=14}
 ```
 
@@ -2268,7 +2274,7 @@ startFrom=5 startLine=5 endLine=14}
 
 - Now only have to pass one parameter to `kinetic_energy`:
 
-```{include=examples/basic_types.f90 .numberLines .Fortran
+```{include=examples/51_basic_types.f90 .numberLines .Fortran
 startFrom=25 startLine=25 endLine=33}
 ```
 
@@ -2302,7 +2308,7 @@ startFrom=25 startLine=25 endLine=33}
 - Then when declaring a variable, those components will already be
   initialised
 
-```{include=examples/type_array.f90 .numberLines .Fortran
+```{include=examples/52_type_array.f90 .numberLines .Fortran
 startFrom=7 startLine=7 endLine=10}
 ```
 - Now if we make declare a new `particle_type`:
@@ -2317,7 +2323,7 @@ startFrom=7 startLine=7 endLine=10}
 - Fortran's approach to arrays extends to derived types
 - Accessing a component on an array gives an array of that component
 
-```{include=examples/type_array.f90 .numberLines .Fortran
+```{include=examples/52_type_array.f90 .numberLines .Fortran
 startFrom=12 startLine=12 endLine=22}
 ```
 
@@ -2331,7 +2337,7 @@ startFrom=12 startLine=12 endLine=22}
 - We can _extend_ a type and add new components
 - The new type _inherits_ all the properties of the old type
 
-```{include=examples/type_inheritance.f90 .numberLines .Fortran
+```{include=examples/53_type_inheritance.f90 .numberLines .Fortran
 startFrom=5 startLine=5 endLine=17}
 ```
 
@@ -2347,7 +2353,7 @@ startFrom=5 startLine=5 endLine=17}
 - Functions that can take a derived type as well as types that extend
   it, need to use `class(<base-type>)`:
 
-```{include=examples/type_inheritance.f90 .numberLines .Fortran
+```{include=examples/53_type_inheritance.f90 .numberLines .Fortran
 startFrom=23 startLine=23 endLine=29}
 ```
 
@@ -2378,7 +2384,7 @@ startFrom=23 startLine=23 endLine=29}
 
 ## Derived type methods
 
-```{include=examples/type_bound_procedure.f90 .numberLines .Fortran
+```{include=examples/54_type_bound_procedure.f90 .numberLines .Fortran
 startFrom=1 startLine=1 endLine=16}
 ```
 
@@ -2386,7 +2392,7 @@ startFrom=1 startLine=1 endLine=16}
 
 - Can now call the method on our objects:
 
-```{include=examples/type_bound_procedure.f90 .numberLines .Fortran
+```{include=examples/54_type_bound_procedure.f90 .numberLines .Fortran
 startFrom=34 startLine=34 endLine=36}
 ```
 
@@ -2419,7 +2425,7 @@ startFrom=34 startLine=34 endLine=36}
 
 ## Overriding derived type methods
 
-```{include=examples/type_override.f90 .numberLines .Fortran
+```{include=examples/55_type_override.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=17}
 ```
 
@@ -2428,7 +2434,7 @@ startFrom=4 startLine=4 endLine=17}
 - Now if we have something that just takes a `class(animal)`, we can
   use `make_noise` on it:
 
-```{include=examples/type_override.f90 .numberLines .Fortran
+```{include=examples/55_type_override.f90 .numberLines .Fortran
 startFrom=46 startLine=46 endLine=49}
 ```
 
@@ -2453,7 +2459,7 @@ startFrom=46 startLine=46 endLine=49}
 
 ## Invariant example
 
-```{include=examples/type_private.f90 .numberLines .Fortran
+```{include=examples/56_type_private.f90 .numberLines .Fortran
 startFrom=9 startLine=9 endLine=19}
 ```
 
@@ -2464,7 +2470,7 @@ startFrom=9 startLine=9 endLine=19}
 
 ## Invariant example
 
-```{include=examples/type_private.f90 .numberLines .Fortran
+```{include=examples/56_type_private.f90 .numberLines .Fortran
 startFrom=22 startLine=22 endLine=29}
 ```
 
@@ -2490,10 +2496,10 @@ startFrom=22 startLine=22 endLine=29}
 ## Missing interface example
 
 External library:
-```{include=examples/idouble.f90 .numberLines .Fortran}
+```{include=examples/57_idouble.f90 .numberLines .Fortran}
 ```
 Program:
-```{include=examples/external_function.f90 .numberLines .Fortran}
+```{include=examples/58_external_function.f90 .numberLines .Fortran}
 ```
 
 ## Interfaces
@@ -2512,7 +2518,7 @@ Program:
 
 ## Interfaces
 
-```{include=examples/external_function_with_interface.f90 .numberLines
+```{include=examples/59_external_function_with_interface.f90 .numberLines
 .Fortran
 startFrom=3 startLine=3 endLine=14}
 ```
@@ -2526,7 +2532,7 @@ Now compiler knows that `idouble(2.0)` and `iadd(2, 4)` are mistakes!
 
 Let's take two functions we want to apply:
 
-```{include=examples/passing_procedure.f90 .numberLines .Fortran
+```{include=examples/60_passing_procedure.f90 .numberLines .Fortran
 startFrom=18 startLine=18 endLine=26}
 ```
 
@@ -2534,13 +2540,13 @@ startFrom=18 startLine=18 endLine=26}
 
 Using an explicit interface in the function:
 
-```{include=examples/passing_procedure.f90 .numberLines .Fortran
+```{include=examples/60_passing_procedure.f90 .numberLines .Fortran
 startFrom=28 startLine=28 endLine=37}
 ```
 
 And calling the function:
 
-```{include=examples/passing_procedure.f90 .numberLines .Fortran
+```{include=examples/60_passing_procedure.f90 .numberLines .Fortran
 startFrom=10 startLine=10 endLine=11}
 ```
 
@@ -2550,13 +2556,13 @@ startFrom=10 startLine=10 endLine=11}
 - This gets very verbose if we use the same function interface a lot
 - Another option is to use an _abstract interface_ to name a signature
 
-```{include=examples/passing_procedure.f90 .numberLines .Fortran
+```{include=examples/60_passing_procedure.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=8}
 ```
 
 - We can then declare our dummy argument to be a `procedure` of this type:
 
-```{include=examples/passing_procedure.f90 .numberLines .Fortran
+```{include=examples/60_passing_procedure.f90 .numberLines .Fortran
 startFrom=39 startLine=39 endLine=44}
 ```
 
@@ -2602,11 +2608,11 @@ end interface
 ## Generic interfaces
 
 In a module:
-```{include=examples/generic_interface.f90 .numberLines .Fortran
+```{include=examples/61_generic_interface.f90 .numberLines .Fortran
 startFrom=1 startLine=1 endLine=7}
 ```
 Using it in a program:
-```{include=examples/generic_interface.f90 .numberLines .Fortran
+```{include=examples/61_generic_interface.f90 .numberLines .Fortran
 startFrom=25 startLine=25 endLine=30}
 ```
 
@@ -2636,13 +2642,13 @@ startFrom=25 startLine=25 endLine=30}
 
 ## Optional arguments
 
-```{include=examples/optional_arguments.f90 .numberLines .Fortran
+```{include=examples/62_optional_arguments.f90 .numberLines .Fortran
 startFrom=8 startLine=8 endLine=23}
 ```
 
 ## Optional arguments
 
-```{include=examples/optional_arguments.f90 .numberLines .Fortran
+```{include=examples/62_optional_arguments.f90 .numberLines .Fortran
 startFrom=4 startLine=4 endLine=5}
 ```
 
@@ -2650,7 +2656,7 @@ Also notice that we need to check if `politely` is `present` before
 trying to use it at all:
 
 
-```{include=examples/optional_arguments.f90 .numberLines .Fortran
+```{include=examples/62_optional_arguments.f90 .numberLines .Fortran
 startFrom=16 startLine=16 endLine=17}
 ```
 
@@ -2677,7 +2683,7 @@ Might try to read `politely` first, but it doesn't exist!
 
 ## `block` example
 
-```{include=examples/0x_block_demo.f90 .numberLines .Fortran
+```{include=examples/63_block_demo.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=11}
 ```
 
