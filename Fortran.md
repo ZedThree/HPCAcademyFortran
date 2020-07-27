@@ -1328,6 +1328,24 @@ startFrom=5 startLine=5 endLine=7}
 ```
 
 
+## Returning early from procedures
+
+- Sometimes we want to finish a procedure early
+- Use the `return` keyword
+- Finishes the procedure there and then
+
+```Fortran
+real function my_abs(x)
+  real, intent(in) :: x
+  if (x > 0) then
+    my_abs = x
+    return
+  end if
+  my_abs = -x
+end function my_abs
+```
+
+
 ## Recursion
 
 - Due to historical reasons, procedures are not recursive by default:
