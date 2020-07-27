@@ -1406,7 +1406,7 @@ variables
 ## More on scope
 
 - Possible for procedures to access variables in the containing scope
-    - Technically called _host association_
+    - Technically called _host association_, more usually called _globals_
 - Generally not a great idea!
 
 ```{include=examples/32_global_variables.f90 .numberLines .Fortran
