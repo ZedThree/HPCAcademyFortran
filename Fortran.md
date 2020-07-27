@@ -384,6 +384,27 @@ There are 5 fundamental types in Fortran:
   is sufficient
     - You may like to keep it in every function, see later
 
+## A Note on Comments
+
+- Comments are very useful for documenting code
+- Not just for other people, you will forget how it works in six
+  months!
+- Do explain reasons for doing something
+  ```Fortran
+  ! FFT isn't normalised
+  frequency = rfft(signal)/size(signal)
+  ```
+
+- Don't just repeat what the code does
+  ```Fortran
+  ! Divide inverse fourier transform by length of signal
+  frequency = rfft(signal)/size(signal)
+  ```
+- Too many useless comments make code harder to read
+  ```Fortran
+  x = 5 ! assign 5 to x
+  ```
+
 ## Some points on Fortran grammar: whitespace
 
 - Whitespace mostly doesn't matter:
