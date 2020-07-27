@@ -1,24 +1,31 @@
 program save_attribute
   implicit none
 
-  call increment_count_implicit()
-  call increment_count_implicit()
-  call increment_count_implicit()
+  call count_to_10_wrong()
+  call count_to_10_wrong()
+  call count_to_10_wrong()
   
-  call increment_count_explicit()
-  call increment_count_explicit()
-  call increment_count_explicit()
+  call count_to_10_right()
+  call count_to_10_right()
+  call count_to_10_right()
 
 contains
-  subroutine increment_count_implicit()
+  subroutine count_to_10_wrong()
     integer :: count = 0
-    count = count + 1
-    print*, "Called implicit version", count, "times"
-  end subroutine increment_count_implicit
+    integer :: i
+    do i = 1, 10
+      count = count + 1
+    end do
+    print*, "Initialisation in declaration =", count
+  end subroutine count_to_10_wrong
 
-  subroutine increment_count_explicit()
-    integer, save :: count = 0
-    count = count + 1
-    print*, "Called explicit version", count, "times"
-  end subroutine increment_count_explicit
+  subroutine count_to_10_right()
+    integer :: count
+    integer :: i
+    count = 0
+    do i = 1, 10
+      count = count + 1
+    end do
+    print*, "Initialisation not in declaration =", count
+  end subroutine count_to_10_right
 end program save_attribute

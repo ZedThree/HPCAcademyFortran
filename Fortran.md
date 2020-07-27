@@ -1372,7 +1372,7 @@ startLine=4 endLine=11}
 - Initialisation is then _not done_ on subsequent calls:
 
 ```{include=examples/33_save_attribute.f90 .numberLines .Fortran
-startLine=13 endLine=17 startFrom=13}
+startLine=13 endLine=20 startFrom=13}
 ```
 
 ## `intent`
