@@ -12,6 +12,8 @@ program array_basics
   
   print*, "vector1(1):", vector1(1)
   print*, "vector1(2:3):", vector1(2:3)
+  print*, "vector1(1:3:2):", vector1(1:3:2)
+  print*, "vector1(3:1:-1):", vector1(3:1:-1)
 
   vector2 = [4, 5, 6]
 

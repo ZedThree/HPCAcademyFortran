@@ -739,7 +739,7 @@ startFrom=3 startLine=3 endLine=5}
 startFrom=9 startLine=9 endLine=13}
 ```
 
-- We can even take a _slice_ using the `:` notation:
+- We can take a _slice_ using the `:` notation:
 
 ```{include=examples/18_array_basics.f90 .numberLines .Fortran
 startFrom=14 startLine=14 endLine=14}
@@ -750,6 +750,23 @@ startFrom=14 startLine=14 endLine=14}
 ```{include=examples/19_array_multidimensions.f90 .numberLines .Fortran
 startFrom=16 startLine=16 endLine=19}
 ```
+
+## Array indexing
+
+- Just like with `do` loops, we can also specify a _stride_:
+
+```{include=examples/18_array_basics.f90 .numberLines .Fortran
+startFrom=15 startLine=15 endLine=15}
+```
+
+- And similarly, the stride can even be negative:
+
+```{include=examples/18_array_basics.f90 .numberLines .Fortran
+startFrom=16 startLine=16 endLine=16}
+```
+
+- Note that we must also reverse the upper/lower bounds to actually
+  reverse the array
 
 ## Arrays
 
@@ -836,7 +853,7 @@ startFrom=10 startLine=10 endLine=10}
 - We can do element-wise operations on arrays very simply:
 
 ```{include=examples/18_array_basics.f90 .numberLines .Fortran
-startFrom=18 startLine=18 endLine=23}
+startFrom=20 startLine=20 endLine=25}
 ```
 
 - Notice how we can use both scalars and arrays in these operations?
