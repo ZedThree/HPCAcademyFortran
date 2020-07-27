@@ -243,6 +243,68 @@ Full compile line might look like:
 
 Build systems like `CMake` or `Makefile` help simplify this
 
+## Variables
+
+- A variable is label for some value in memory used in a program
+- In Fortran, we must tell the compiler up front what type a variable
+  is, and this is fixed
+    - In other languages, like Python, we can change our minds
+- Variables are declared like:
+
+```Fortran
+    <type> :: <name> {, <name>}
+```
+- Note: `::` not always needed, but never hurts!
+
+```Fortran
+    integer :: grid_points
+    real :: energy, mass
+```
+
+## Variable assignment
+
+- Variables starts out *uninitialised*
+- It's possible to read an uninitialised variable, but its value will
+  be junk!
+    - This is a frequent cause of bugs
+- We can *assign* it a value with `=`
+
+```Fortran
+    real :: mass, velocity, energy
+    mass = 2.0
+    velocity = 3.5
+    energy = 0.5 * mass * (velocity**2)
+```
+
+## Variable names
+
+- Variable names must start with a letter, and are limited to ASCII
+  lower/uppercase, numbers and underscore
+- Valid:
+    - `a`, `NUMBER5`, `nitrogen_mass`, `O2_concentration`
+- Invalid:
+    - `1a`: must start with a letter
+    - `_b`: must start with a letter
+    - `Pounds£`: contains non-valid character `£`
+    - `a-b`: parsed as "subtract `b` from `a`"
+
+## Variable names
+
+- Pick variable names wisely!
+    - in F2003, you can have up to 63 characters in a name
+- Good names:
+    - `distance_to_next_atom`
+    - `temperature`
+    - `total_energy`
+- Less good names:
+    - `distnxtatm`
+    - `temp`
+    - `E`
+- "Writing code is a form of communication" - Kate Gregory
+- Be kind to future readers, dnt ndlssly shrtn nms
+- Your code will live longer than you think!
+
+
 ## Types
 
 There are 5 fundamental types in Fortran:
@@ -299,52 +361,6 @@ There are 5 fundamental types in Fortran:
 - `logical`:
     - `.true.`, `.false.`
     - But often printed as `T` and `F`!
-
-## Variables
-
-- A variable is label for some value in memory used in a program
-- In Fortran, we must tell the compiler up front what type a variable
-  is, and this is fixed
-    - In other languages, like Python, we can change our minds
-- Variables are declared like:
-
-```Fortran
-    <type> :: <name> {, <name>}
-```
-- Note: `::` not always needed, but never hurts!
-
-```Fortran
-    integer :: grid_points
-    real :: energy, mass
-```
-
-## Variable names
-
-- Variable names must start with a letter, and are limited to ASCII
-  lower/uppercase, numbers and underscore
-- Valid:
-    - `a`, `NUMBER5`, `nitrogen_mass`, `O2_concentration`
-- Invalid:
-    - `1a`: must start with a letter
-    - `_b`: must start with a letter
-    - `Pounds£`: contains non-valid character `£`
-    - `a-b`: parsed as "subtract `b` from `a`"
-
-## Variable names
-
-- Pick variable names wisely!
-    - in F2003, you can have up to 63 characters in a name
-- Good names:
-    - `distance_to_next_atom`
-    - `temperature`
-    - `total_energy`
-- Less good names:
-    - `distnxtatm`
-    - `temp`
-    - `E`
-- "Writing code is a form of communication" - Kate Gregory
-- Be kind to future readers, dnt ndlssly shrtn nms
-- Your code will live longer than you think!
 
 ## Hello world again
 
