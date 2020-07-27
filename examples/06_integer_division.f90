@@ -3,6 +3,6 @@ program integer_division
   integer :: x = 5
   print*, 5 / 2
   print*, x / 2
-  print*, x / real(2)
   print*, x / 2.
+  print*, real(x) / 2
 end program integer_division
