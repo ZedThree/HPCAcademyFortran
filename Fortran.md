@@ -820,6 +820,7 @@ startFrom=21 startLine=21 endLine=24}
 ```
 
 - Second argument to `reshape` is shape of result
+- Array of integers with size in each dimension, for example `[3, 3]` above
 - For assigning to arrays, we can just use `shape` intrinsic to get
   the right answer
 
