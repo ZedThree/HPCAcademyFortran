@@ -1131,26 +1131,6 @@ real, dimension(10, 10) :: density
 ```{include=examples/26_parameters.f90 .numberLines .Fortran}
 ```
 
-## `character` `parameter`s
-
-- It can be a quite annoying to keep the `len` of a `character` in
-  sync with how long it is
-- For `character` `parameter`s though, we can use `len=*`
-
-    ```Fortran
-    character(len=*), parameter :: filename = "output.log"
-    ```
-
-- Only works for `parameter`s and dummy `intent(in)` arguments (see
-  later) though!
-- Non-constant `character`s can be `allocatable` with `len=:` though!
-
-## `character` examples
-
-```{include=examples/27_parameter_and_allocatable_characters.f90 .numberLines .Fortran
-startFrom=3 startLine=3 endLine=12}
-```
-
 ## Kinds of types
 
 - Most important for `real`s
@@ -2003,6 +1983,7 @@ startFrom=4 startLine=4 endLine=16}
 
 ## Working with `character`s
 
+- `character` declarations must include the `len`gth:
 - `character`s of a fixed length are terminated by _blanks_,
   i.e. spaces
 - so `character(len=10) :: cat = "ziggy     "`
@@ -2014,6 +1995,42 @@ character(len=10) :: cat = "Ziggy     "
 cat(:3) == "Zig"
 cat(4:4) == "g"
 cat(5:) == "y     "
+```
+
+## Working with `character`s
+
+- It can be a quite annoying to keep the `len` of a `character` in
+  sync with how long it is
+- For `character` `parameter`s though, we can use `len=*`
+
+    ```Fortran
+    character(len=*), parameter :: filename = "output.log"
+    ```
+
+- Only works for `parameter`s and dummy `intent(in)` arguments (see
+  later) though!
+
+## Working with `character`s
+
+- If we don't know how long the `character` needs to be, we can make
+  it `allocatable`
+- Also allows us to change the size later
+- Use `len=:` in declaration:
+
+    ```Fortran
+    character(len=:), allocatable :: filename
+    ```
+- If allocating manually, need to specify the type and `len`:
+
+    ```Fortran
+    allocate(character(len=10)::filename)
+    ```
+
+
+## `character` examples
+
+```{include=examples/27_parameter_and_allocatable_characters.f90 .numberLines .Fortran
+startFrom=3 startLine=3 endLine=12}
 ```
 
 ## Working with `character`s
