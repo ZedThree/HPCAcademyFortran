@@ -514,8 +514,8 @@ startFrom=3 startLine=3 endLine=7}
 
 ## Logical/relational operations
 
-- `<` `>`: Less/greater than
-- `<=` `>=`: Less/greater than or equal to
+- `<`, `>`: Less/greater than
+- `<=`, `>=`: Less/greater than or equal to
 - `==`: Equal to
 - `/=`: Not equal to
     - Note the inequality operator! Might look odd if you come from
@@ -1047,7 +1047,7 @@ real(kind=wp), dimension(:, :, :), allocatable :: array3
 ```Fortran
 real(kind=wp), dimension(:, :), allocatable :: array
 allocate(array(10, 5))
-! array is now 10x5
+! array is now 10*5
 ```
 
 ## Allocatable arrays
@@ -1107,7 +1107,7 @@ startFrom=9 startLine=9 endLine=16}
 
 ## `parameter`
 
-- sometimes want a variable that can't be modified at runtime,
+- Sometimes want a variable that can't be modified at runtime,
   e.g. `pi`
 - or have lots of arrays of fixed size
 
@@ -1118,12 +1118,12 @@ real, dimension(10, 10) :: density
 ```
 
 - What if you now need a 20x20 grid?
-- use a `parameter`!
-- fixed at compile time
-    - has to be made of literals, other `parameter`s, intrinsics
-- names are great!
-- attribute (now we definitely need `::`)
-- super useful for things like `pi`, `speed_of_light`,
+- Use a `parameter`!
+- Fixed at compile time
+    - Has to be made of literals, other `parameter`s, intrinsics
+- Names are great!
+- Attribute (now we definitely need `::`)
+- Super useful for things like `pi`, `speed_of_light`,
   `electron_mass`, etc.
 
 ## `parameter` examples
@@ -1232,7 +1232,7 @@ startFrom=4 startLine=4 endLine=6}
 
 - Similar story for `integer`s
 - Default kind is usually 32-bit again
-- Can represent the numbers $-2^31$ to $2^{31} - 1$
+- Can represent the numbers $-2^{31}$ to $2^{31} - 1$
 - A 64-bit `integer` can represent $-2^{63}$ to $2^{63} - 1$
 - Can choose this kind with either:
 
