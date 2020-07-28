@@ -622,7 +622,7 @@ end do
 ```
 
 ```Fortran
-do <index> = <lower-bound>, <upper-bound>
+do <index> = <lower-bound>, <upper-bound> {, <stride>}
   ! do something
 end do
 ```
@@ -632,7 +632,7 @@ end do
 - All three forms essentially equivalent
 - Bare `do` needs something in body to `exit` loop
 - `do while` loops _while_ the condition is true
-- Last form does `<upper-bound> - <lower-bound> + 1` loops
+- Last form does `<upper-bound> - <lower-bound> + <stride>` loops
     - loop variable (`<index>`) must be pre-declared
     - lower and upper bounds are your choice
 
