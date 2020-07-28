@@ -1218,7 +1218,7 @@ startFrom=4 startLine=4 endLine=6}
 
 ```Fortran
 ! Get the kind that can represent an integer with 18 digits
-integer, parameter :: ip = selected_real_kind(18)
+integer, parameter :: ip = selected_int_kind(18)
 integer(ip) :: x
 
 ! or, better:
