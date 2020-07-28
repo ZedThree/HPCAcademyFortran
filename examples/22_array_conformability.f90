@@ -25,10 +25,10 @@ program array_conformability
   ! Won't work because the ranks don't match
   ! print*, vector1 + matrix1
 
-  ! Ok, shape(matrix1(:, 1)) == shape(vector1)
+  ! Ok, shape(vector1) == shape(matrix1(:, 1))
   print*, vector1 + matrix1(:, 1)
 
-  ! Ok, shape(matrix1(1, :)) == shape(vector1)
+  ! Ok, shape(vector1) == shape(matrix1(1, :))
   print*, vector1 + matrix1(1, :)
 
   ! Ok, can use slices on both operands
@@ -46,7 +46,7 @@ program array_conformability
   ! Won't work, shapes don't match
   ! print*, vector2 + matrix2(:, 1)
 
-  ! Ok, shape(matrix2(1, :)) == shape(vector2)
+  ! Ok, shape(vector2) == shape(matrix2(1, :))
   print*, vector2 + matrix2(1, :)
 
 end program array_conformability
