@@ -14,9 +14,6 @@ monofont: Inconsolata LGC
 - A brief history of Fortran
 - Some programming fundamentals
 - Hello World
-- Types and variables
-- Basic grammar and operations
-- Control flow
 
 ## Course content
 
@@ -243,6 +240,15 @@ Full compile line might look like:
 
 Build systems like `CMake` or `Makefile` help simplify this
 
+# Session 2
+
+## Overview
+
+- Types and variables
+- Basic grammar and operations
+- Control flow
+- Programming style
+
 ## Variables
 
 - A variable is label for some value in memory used in a program
@@ -268,6 +274,7 @@ Build systems like `CMake` or `Makefile` help simplify this
   be junk!
     - This is a frequent cause of bugs
 - We can *assign* it a value with `=`
+- Can assign from _literals_ or _expressions_
 
 ```Fortran
     real :: mass, velocity, energy
@@ -288,32 +295,15 @@ Build systems like `CMake` or `Makefile` help simplify this
     - `Pounds£`: contains non-valid character `£`
     - `a-b`: parsed as "subtract `b` from `a`"
 
-## Variable names
-
-- Pick variable names wisely!
-    - in F2003, you can have up to 63 characters in a name
-- Good names:
-    - `distance_to_next_atom`
-    - `temperature`
-    - `total_energy`
-- Less good names:
-    - `distnxtatm`
-    - `temp`
-    - `E`
-- "Writing code is a form of communication" - Kate Gregory
-- Be kind to future readers, dnt ndlssly shrtn nms
-- Your code will live longer than you think!
-
-
 ## Types
 
 There are 5 fundamental types in Fortran:
 
 - `integer`
 - `real` -- floating point numbers
-- `logical` -- booleans, two values: `.true.`/`.false.`
-- `character` -- text, also called strings
 - `complex` -- floating point complex numbers
+- `logical` -- booleans, two values: `.true.`/`.false.`
+- `character(len=<n>)` -- fixed length text, also called strings
 
 (later, we will look at derived types)
 
@@ -332,18 +322,21 @@ There are 5 fundamental types in Fortran:
 
 ## What, exactly, is a type?
 
-- We need to tell computer how to interpret the set of bits
-    - We're free to lie to the computer and change our minds about how
-      to interpret a given set of bits
-- Would be very tedious if we had to tell the computer every time we
-  wanted to do an operation on some bits what type they represented
-    - plus potential for mistakes
-- Types tell the _compiler_ our intent: these bits are an integer,
-  those are text
-- Compiler then checks we're doing sensible things
-    - `4 + 6` makes sense
-    - `4 + "hello"` doesn't make any sense
-    - `4 + 5.3` might do
+- Type tells computer how to interpret set of bits
+- Type carries _semantic_ information
+- Also what operations can be done
+
+    ```Fortran
+    integer :: a = 1, b = 2
+    real :: c = 2.0
+    character(len=1) :: d = "2"
+    a + b  ! Ok
+    a + c  ! Ok
+    a + d  ! Error
+    ```
+- Compiler checks semantics based on types
+    - Won't check other semantics like `mass + velocity`
+    - Some programming languages go further like `Haskell`
 
 ## Literals
 
@@ -367,8 +360,8 @@ There are 5 fundamental types in Fortran:
 ```{include=examples/02_hello_input.f90 .numberLines .Fortran}
 ```
 
-- Line 3: `character(len=20)`: we need to say up-front how long how strings
-  are via the `len` type parameter (we'll cover this a bit more later on)
+- Lines 3-4: all variable declarations need to come after `implicit
+  none` and before _executable statements_
 - Line 6: `read*,`: read a variable from stdin/command line
 - Line 9: `&`: line continuation for long lines
 
@@ -538,6 +531,10 @@ startFrom=3 startLine=3 endLine=6}
     - F2008 has things like `hypot`, `bessel_j0`, `erf`, `norm2`
 - Use them if they exist -- can be heavily optimised by compiler
     - Difficult to detect if they are available of course
+- _Call_ the function with `()` brackets/parentheses
+- _Arguments_ or _parameters_ go in `()` brackets
+    - Can be literals or expressions
+- Functions _return_ _results_ that can be used in expressions
 
 ```{include=examples/08_intrinsic_functions.f90 .numberLines .Fortran
 startFrom=3 startLine=3 endLine=6}
@@ -566,9 +563,9 @@ end if
 ```Fortran
 if (<logical-expression-1>) then
   ! do something 1
-else if (<logical-expression-2>) then
+{else if (<logical-expression-2>) then}
   ! do something 2
-else
+{else}
   ! do something 3
 end if
 ```
