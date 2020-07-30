@@ -5,10 +5,9 @@ program global_variables
   print*, add_square(x)
   print*, x
 contains
-  function add_square(number) result(res)
+  integer function add_square(number)
     integer, intent(in) :: number
-    integer :: res
     x = number * number
-    res = number + x
+    add_square = number + x
   end function add_square
 end program global_variables

@@ -1050,7 +1050,7 @@ real, allocatable :: array2(:)
 real, dimension(:, :, :), allocatable :: array3
 ```
 
-- The number of dimensions/rank must be known at compile time
+- The number of dimensions (_rank_) must be known at compile time
     - Size of each dimension must be just `:`
 - After declaration, we must use `allocate` before first use:
 
@@ -1237,31 +1237,37 @@ use, intrinsic :: iso_fortran_env, only : int64
 integer(int64) :: x
 ```
 
+# Session 4
+
+## Overview
+
+- Functions and subroutines
+
 ## Breaking up programs
 
 - Large `program`s become difficult to understand and _maintain_
 - Quickly come across chunks of code we want to reuse
-- Therefore very good idea to break programs up into building blocks
-- This gives us reusable components
+- Very good idea to break programs up
+- Gives us reusable components
     - Reduce copy-paste errors
     - Repeat tasks multiple times
     - Use same task in multiple contexts
     - Gives names to parts of code
-- Names are an often over-looked advantage!
+- Naming things is a big advantage!
     - Important to choose names wisely
-- Two ways of breaking `program`s in Fortran:
-    - Procedures
+- Two ways of breaking up `program`s in Fortran:
+    - Functions/subroutines
     - Modules
-        - Cover later
 
-## Procedures
+## Functions/subroutines
 
-- Two types of procedures:
-    - `function`s
-    - `subroutine`s
+- `functions`/`subroutines`: reusable chunks of code
+- Take _arguments_ or _parameters_ and (may) _return results_
 - Generically called _procedures_ or _subprograms_
 - May also refer to them both as _functions_ -- will make it clear
   when I mean `function`s in particular
+- Procedures should have a single responsibility
+- Prefer short procedures
 
 ## Benefits of procedures
 
@@ -1270,12 +1276,12 @@ integer(int64) :: x
 - Reuse
     - Same function can be used in different contexts
     - Can even build up a _library_ of functions
-- Maintainability
-    - Code can be easier to understand
-    - Can fix implementation without touching rest of code
 - Abstraction
     - Can now think of chunk of code as a thing itself
     - Good names help here!
+- Maintainability
+    - Code can be easier to understand
+    - Can fix implementation without touching rest of code
 - Encapsulation
     - Hide internal details from other parts of the `program`
     - Program against the _interface_
@@ -1283,19 +1289,39 @@ integer(int64) :: x
 ## Functions
 
 - Takes arguments and returns a single result (may be array)
-- Always returns a value
-- Intrinsic functions, e.g. `sin(x)`, `sqrt(x)`
-- syntax:
+- **Always** returns a value
+- Set result by assigning to function name
+- Two ways to write the same thing:
+    - Left-hand version required when `<type>` has attributes (for
+      example, `dimension`)
+
+:::::: {.columns}
+::: {.column}
 
 ```Fortran
 function <name>(<input>)
   implicit none
-  <type>, intent(in) :: <input>
   <type> :: <name>
+  <type> :: <input>
   ! body
   <name> = ! result
 end function <name>
 ```
+
+:::
+::: {.column}
+
+```Fortran
+<type> function <name>(<input>)
+  implicit none
+  <type> :: <input>
+  ! body
+  <name> = ! result
+end function <name>
+```
+
+:::
+::::::
 
 ## Functions
 
@@ -1314,8 +1340,9 @@ end function <name>
 
 ## Functions
 
-- Use function like `y = function(x)`
-- Use `()` even if a function requires no arguments: `x = function()`
+- Use function like `y = kronecker_delta(x, x)`
+    - Note you must do **something** with the result!
+- Use `()` even if a function requires no arguments: `t = current_time()`
 - As long as `implicit none` is in your `program` (or `module`, see
   later), not necessary in procedures
     - Some people advise as good practice though!
@@ -1332,8 +1359,8 @@ end function <name>
 ```Fortran
 subroutine <name>(<input>, <output>)
   implicit none
-  <type>, intent(in) :: <input>
-  <type>, intent(out) :: <output>
+  <type> :: <input>
+  <type> :: <output>
   ! body
 end subroutine <name>
 ```
@@ -1346,53 +1373,34 @@ call <name>(<arguments>)
 
 ## Subroutine example
 
-```{include=examples/30_basic_subroutine.f90 .numberLines .Fortran
-startFrom=10 startLine=10 endLine=14}
-```
-
-used like:
-
-```{include=examples/30_basic_subroutine.f90 .numberLines .Fortran
-startFrom=5 startLine=5 endLine=7}
+```{include=examples/30_basic_subroutine.f90 .numberLines .Fortran}
 ```
 
 
-## Returning early from procedures
+## `intent`
 
-- Sometimes we want to finish a procedure early
-- Use the `return` keyword
-- Finishes the procedure there and then
-
-```Fortran
-real function my_abs(x)
-  real, intent(in) :: x
-  if (x > 0) then
-    my_abs = x
-    return
-  end if
-  my_abs = -x
-end function my_abs
-```
-
-
-## Recursion
-
-- Due to historical reasons, procedures are not recursive by default:
-  they cannot call themselves directly or indirectly
-- Need to use `result` keyword to change name of function result
-- Use `recursive` keyword:
-
-```Fortran
-recursive function factorial(n) result(res)
-  ...
-end function factorial
-```
+- When writing programs, can be very useful to tell the compiler as
+  much information as you can
+- One useful piece of info is the _intent_ of arguments to procedures
+- This can help avoid certain classes of bugs
+- There are three `intent`s:
+- `intent(in)`: this is for arguments which should not be modified in
+  the routine, only provide information **to** the procedure
+- `intent(out)`: for arguments which are the _result_ of the
+  routine. These are _undefined_ on entry to the routine: don't try to
+  read them!
+- `intent(inout)`: for arguments are to be modified by the procedure
+    - If you don't explicitly provide an `intent`, this is the default
+- These are essentially equivalent to read-only, write-only and
+  read-write
+- Prefer `function`s over `subroutine`s with `intent(out)` arguments
+    - Easier to read!
 
 ## Local variables
 
 - Variables declared inside procedures are _local_ to that routine
     - Also called _automatic_ variables
-- Their _scope_ is the immediate procedure
+- Their _scope_ or _lifetime_ is the immediate procedure
 - Cannot be accessed outside the routine, except via:
     - function result
     - `intent(out)` or `intent(inout)` dummy arguments (see later)
@@ -1404,25 +1412,25 @@ end function factorial
 ## Local variables
 
 ```{include=examples/31_local_variables.f90 .numberLines .Fortran
-startLine=3 endLine=12 startFrom=3}
+startLine=1 endLine=12 startFrom=1}
 ```
 
-`x` in the main program and `x` within `add_square` are different
+- `x` in the main program and `x` within `add_square` are different
 variables
+    - The inner `x` _shadows_ the outer one
 
 
-## More on scope
+## Global variables
 
 - Possible for procedures to access variables in the containing scope
-    - Technically called _host association_, more usually called _globals_
-- Generally not a great idea!
+    - Technically called _host association_
 
 ```{include=examples/32_global_variables.f90 .numberLines .Fortran
-startLine=4 endLine=11}
+startLine=3 endLine=11 startFrom=3}
 ```
 
-- This is surprising, despite the `intent(in)`!
-- Also hard to see where `x` comes from
+- This is surprising, especially given `intent(in)`!
+- Hard to see where `x` comes from
 - There are uses for this, but prefer to explicitly pass in variables
   via arguments
 
@@ -1435,37 +1443,28 @@ startLine=4 endLine=11}
 - Initialisation is then _not done_ on subsequent calls:
 
 ```{include=examples/33_save_attribute.f90 .numberLines .Fortran
-startLine=13 endLine=20 startFrom=13}
+startLine=17 endLine=24 startFrom=17}
 ```
 
-## `intent`
+## Initialising local variables
 
-- When writing programs, can be very useful to tell the compiler as
-  much information as you can
-- One useful piece of info is the _intent_ of arguments to procedures
-- This can help avoid certain classes of bugs
-- There are three `intent`s:
-- `intent(in)`: this is for arguments which should not be modified in
-  the routine, only provide information **to** the procedure
-- `intent(out)`: for arguments which are the _result_ of the
-  routine. these are _undefined_ on entry to the routine: don't try to
-  read them!
-- `intent(inout)`: for arguments are to be modified by the procedure
-    - if you don't explicitly provide an `intent`, this is the default
-- These are essentially equivalent to read-only, write-only and
-  read-write
-- Prefer `function`s over `subroutine`s with `intent(out)` arguments
-    - Easier to read!
+- This behaviour can be useful for _caching_ results of expensive
+  calculations
+- Nicer to have the explicit `save` attribute
+
+```{include=examples/33_save_attribute.f90 .numberLines .Fortran
+startLine=36 endLine=47 startFrom=36}
+```
 
 ## Dummy arguments
 
 - _Dummy_ arguments are the _local_ names of the procedure arguments
 - _Actual_ arguments are the names at the calling site
-    - _actual_ arguments are said to be _associated_ with the _dummy_
+    - _Actual_ arguments are said to be _associated_ with the _dummy_
       arguments
 - The routine doesn't care or know what the names of the actual
   arguments are
-    - type, kind, rank and order have to match though!
+    - Type, kind, rank and order have to match though
 
 ## Dummy arguments
 
@@ -1517,7 +1516,37 @@ Three choices for passing arrays:
 ## Dummy arguments and arrays
 
 ```{include=examples/35_array_dummy_arguments.f90 .numberLines .Fortran
-startFrom=11 startLine=11 endLine=15}
+startFrom=14 startLine=14 endLine=18}
+```
+
+## Returning early from procedures
+
+- Sometimes we want to finish a procedure early
+    - For example, to avoid deeply nested `if` statements
+    - Or to check _preconditions_
+- Use the `return` keyword
+- Finishes the procedure there and then
+
+```Fortran
+real function my_abs(x)
+  real, intent(in) :: x
+  if (x > 0) then
+    my_abs = x
+    return
+  end if
+  my_abs = -x
+end function my_abs
+```
+
+## Recursion
+
+- Due to historical reasons, procedures are not recursive by default:
+  they cannot call themselves directly or indirectly
+- Need to use `result` keyword to change name of function result
+- Use `recursive` keyword:
+
+```{include=examples/35a_recursive_functions.f90 .numberLines .Fortran
+startFrom=10 startLine=10 endLine=18}
 ```
 
 ## Pure procedures

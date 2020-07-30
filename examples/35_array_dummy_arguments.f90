@@ -1,6 +1,6 @@
 program array_dummy_arguments
   implicit none
-
+  character(len=*), parameter :: array_format = '(2(2(i3, " ", i3, "'// new_line('a') // '"), "'// new_line('a') //'"))'
   integer, dimension(2, 2, 2) :: array
   integer, dimension(:, :, :), allocatable :: heap_array
 
@@ -8,6 +8,9 @@ program array_dummy_arguments
 
   print*, "----------------"
   print*, "Fixed size array"
+  print*, "values:"
+  write(*, array_format) array
+
   call print_array_explicit(array)
   call print_array_explicit_passed_sizes(array, 2, 2, 2)
   call print_array_assumed_size(array, 2, 2)
@@ -19,6 +22,9 @@ program array_dummy_arguments
 
   print*, "------------------"
   print*, "Dynamic size array"
+  print*, "values:"
+  print*, heap_array
+
   call print_array_explicit(heap_array)
   call print_array_explicit_passed_sizes(heap_array, 2, 2, 2)
   call print_array_assumed_size(heap_array, 2, 2)

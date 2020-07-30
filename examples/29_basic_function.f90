@@ -6,7 +6,7 @@ program basic_function
 
 contains
   function kronecker_delta(i, j) result(delta)
-    integer, intent(in) :: i, j
+    integer :: i, j
     integer :: delta
     if (i == j) then
       delta = 1

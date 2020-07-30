@@ -4,10 +4,14 @@ program save_attribute
   call count_to_10_wrong()
   call count_to_10_wrong()
   call count_to_10_wrong()
-  
+
   call count_to_10_right()
   call count_to_10_right()
   call count_to_10_right()
+
+  call count_to_10_cache()
+  call count_to_10_cache()
+  call count_to_10_cache()
 
 contains
   subroutine count_to_10_wrong()
@@ -28,4 +32,18 @@ contains
     end do
     print*, "Initialisation not in declaration =", count
   end subroutine count_to_10_right
+
+  subroutine count_to_10_cache()
+    logical, save :: first_call = .true.
+    integer, save :: count = 0
+    integer :: i
+    if (first_call) then
+      do i = 1, 10
+        count = count + 1
+      end do
+      first_call = .false.
+    end if
+    print*, "Explicit 'save' and cached flag =", count
+  end subroutine count_to_10_cache
+
 end program save_attribute
