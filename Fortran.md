@@ -377,100 +377,6 @@ There are 5 fundamental types in Fortran:
   is sufficient
     - You may like to keep it in every function, see later
 
-## A Note on Comments
-
-- Comments are very useful for documenting code
-- Not just for other people, you will forget how it works in six
-  months!
-- Do explain reasons for doing something
-  ```Fortran
-  ! FFT isn't normalised
-  frequency = rfft(signal)/size(signal)
-  ```
-
-- Don't just repeat what the code does
-  ```Fortran
-  ! Divide inverse fourier transform by length of signal
-  frequency = rfft(signal)/size(signal)
-  ```
-- Too many useless comments make code harder to read
-  ```Fortran
-  x = 5 ! assign 5 to x
-  ```
-
-## Some points on Fortran grammar: whitespace
-
-- Whitespace mostly doesn't matter:
-
-```{include=examples/03_bad_whitespace.f90 .numberLines .Fortran
-startFrom=1 startLine=1 endLine=5}
-```
-
-- But very important for readability!
-
-```{include=examples/04_good_whitespace.f90 .numberLines .Fortran
-startFrom=1 startLine=1 endLine=5}
-```
-
-## Some points on Fortran grammar: whitespace
-
-- Matter of personal taste, but go for readability over prettiness
-- Prefer one space around operators (`+`, `*`, `=`, etc.)
-- Prefer one space after "punctuation" (`:`, `,`)
-- Vertical whitespace also affects readability
-- Also note: tabs are not standard Fortran! Use spaces for indentation
-
-## Some points on Fortran grammar
-
-### Lines
-- Statements must be on a single line unless you use a `&`, _line
-  continuation_
-  ```Fortran
-  if (some_very_long_and_complicated_condition > some_other_very_long_and_complicated_condition) then
-  ```
-  can be rewritten as
-  ```Fortran
-  if (some_very_long_and_complicated_condition &
-      > some_other_very_long_and_complicated_condition) then
-  ```
-- Optional to put `&` at start of next line
-- Maximum of 256 lines (i.e. 255 `&`)
-- Prefer to put operators at the beginning of lines
-
-
-## Some points on Fortran grammar
-
-### Capitalisation
-- Fortran is (almost) completely case-insensitive
-    - Inside strings matters, but keywords and variable names don't
-```Fortran
-iF (eNeRgY > cRiTiCaL_eNeRgY) tHen
-```
-is _identical_ to
-```Fortran
-if (energy > critical_energy) then
-```
-but one is easier to read
-    - Originally didn't have lower-case characters at all!
-- Prefer lower-case keywords
-- Careful with names!
-- You may prefer `snake_case` for variable names
-
-## Some points on Fortran grammar
-
-### File names
-
-- The standard doesn't mention source files **at all**
-- Linux also doesn't care about file extensions
-- Early, fixed-form sources files used `.f` file extension
-- With Fortran 90, people started using `.f90` for free-form source
-  files
-- Some people thought that `.f95`, `.f03`, etc. should be used for
-  later standards
-- Not the case!
-- Just use `.f90` and you'll be fine
-
-
 ## Arithmetic operations
 
 - Usual mathematical operators: `+, -, *, /`
@@ -700,6 +606,110 @@ startLine=3 endLine=6 startFrom=3}
     - Likely to take on last value after loop, but absolutely do not
       rely on it!
     - Compiler free to optimise it away
+
+## Some points on writing Fortran: variable names
+
+- Pick variable names wisely!
+    - in F2003, you can have up to 63 characters in a name
+- Good names:
+    - `distance_to_next_atom`
+    - `temperature`
+    - `total_energy`
+- Less good names:
+    - `distnxtatm`
+    - `temp`
+    - `E`
+- "Writing code is a form of communication" - Kate Gregory
+- Be kind to future readers, dnt ndlssly shrtn nms
+- Your code will live longer than you think!
+
+## Some points on writing Fortran: comments
+
+- Comments are very useful for documenting code
+- Not just for other people, you will forget how it works in six
+  months!
+- Do explain reasons for doing something
+  ```Fortran
+  ! FFT isn't normalised
+  frequency = rfft(signal)/size(signal)
+  ```
+
+- Don't just repeat what the code does
+  ```Fortran
+  ! Divide inverse fourier transform by length of signal
+  frequency = rfft(signal)/size(signal)
+  ```
+- Too many useless comments make code harder to read
+  ```Fortran
+  x = 5 ! assign 5 to x
+  ```
+
+## Some points on writing Fortran: whitespace
+
+- Whitespace mostly doesn't matter:
+
+```{include=examples/03_bad_whitespace.f90 .numberLines .Fortran
+startFrom=1 startLine=1 endLine=5}
+```
+
+- But very important for readability!
+
+```{include=examples/04_good_whitespace.f90 .numberLines .Fortran
+startFrom=1 startLine=1 endLine=5}
+```
+
+## Some points on writing Fortran: whitespace
+
+- Matter of personal taste, but go for readability over prettiness
+- Prefer one space around operators (`+`, `*`, `=`, etc.)
+- Prefer one space after "punctuation" (`:`, `,`)
+- Vertical whitespace also affects readability
+- Also note: tabs are not standard Fortran! Use spaces for indentation
+
+## Some points on writing Fortran: lines
+
+- Statements must be on a single line unless you use a `&`, _line
+  continuation_
+  ```Fortran
+  if (some_very_long_and_complicated_condition > some_other_very_long_and_complicated_condition) then
+  ```
+  can be rewritten as
+  ```Fortran
+  if (some_very_long_and_complicated_condition &
+      > some_other_very_long_and_complicated_condition) then
+  ```
+- Optional to put `&` at start of next line
+- Maximum of 256 lines (i.e. 255 `&`)
+- Prefer to put operators at the beginning of lines
+
+## Some points on writing Fortran: capitalisation
+
+- Fortran is (almost) completely case-insensitive
+    - Inside strings matters, but keywords and variable names don't
+```Fortran
+iF (eNeRgY > cRiTiCaL_eNeRgY) tHen
+```
+is _identical_ to
+```Fortran
+if (energy > critical_energy) then
+```
+but one is easier to read
+    - Originally didn't have lower-case characters at all!
+- Prefer lower-case keywords
+- Careful with names!
+- You may prefer `snake_case` for variable names
+
+## Some points on Fortran grammar: file names
+
+- The standard doesn't mention source files **at all**
+- Linux also doesn't care about file extensions
+- Early, fixed-form sources files used `.f` file extension
+- With Fortran 90, people started using `.f90` for free-form source
+  files
+- Some people thought that `.f95`, `.f03`, etc. should be used for
+  later standards
+- Not the case!
+- Just use `.f90` and you'll be fine
 
 # Session 3
 
