@@ -718,12 +718,12 @@ but one is easier to read
 - Arrays
 - Parameters
 - Kinds
-- Procedures (functions and subroutines)
 
 ## Arrays
 
 - Arrays are one of the "killer features" of Fortran
     - Big reason why it's lasted so long!
+- Use `dimension` _attribute_ to make anything an array
 - Vector in 3D space could be 1D array of 3 elements:
 
 ```{include=examples/18_array_basics.f90 .numberLines .Fortran
@@ -920,6 +920,7 @@ https://commons.wikimedia.org/w/index.php?curid=79728977](./Matrix.png){width=50
 - $a_{11}$, $a_{12}$, $...$, $a_{1n}$, then $a_{21}$, $a_{22}$, $...$
 - or $a_{11}$, $a_{21}$, $...$, $a_{m1}$, then $a_{12}$, $a_{22}$ $...$
 - _Row-major_ or _column-major_
+- "Which index increases fastest?"
 
 :::
 ::: {.column}
@@ -986,7 +987,8 @@ function just along that dimension
   two matrices
 - `product(array)`: Return the product of all the elements
 - `sum(array)`: Return the sum of all the elements
-- `norm2(array)`: Return the $L_2$ norm, essentially `sqrt(array**2)`
+- `norm2(array)`: Return the $L_2$ norm, essentially
+  `sqrt(dot_product(x, x))`
 
 ## Useful intrinsics
 
@@ -1042,10 +1044,10 @@ function just along that dimension
 
 ```Fortran
 ! These two are equivalent:
-real(kind=wp), dimension(:), allocatable :: array1
-real(kind=wp), allocatable :: array2(:)
+real, dimension(:), allocatable :: array1
+real, allocatable :: array2(:)
 ! 3D array:
-real(kind=wp), dimension(:, :, :), allocatable :: array3
+real, dimension(:, :, :), allocatable :: array3
 ```
 
 - The number of dimensions/rank must be known at compile time
@@ -1053,7 +1055,7 @@ real(kind=wp), dimension(:, :, :), allocatable :: array3
 - After declaration, we must use `allocate` before first use:
 
 ```Fortran
-real(kind=wp), dimension(:, :), allocatable :: array
+real, dimension(:, :), allocatable :: array
 allocate(array(10, 5))
 ! array is now 10*5
 ```
@@ -1130,7 +1132,6 @@ real, dimension(10, 10) :: density
 - Fixed at compile time
     - Has to be made of literals, other `parameter`s, intrinsics
 - Names are great!
-- Attribute (now we definitely need `::`)
 - Super useful for things like `pi`, `speed_of_light`,
   `electron_mass`, etc.
 
@@ -1141,7 +1142,7 @@ real, dimension(10, 10) :: density
 
 ## Kinds of types
 
-- Most important for `real`s
+- Most important for `real`s (and `complex`)
     - Sometimes important for `integer`s
 - Floating point representation
 - Doing lots of maths with floating point numbers can lose precision
@@ -1165,6 +1166,8 @@ real, dimension(10, 10) :: density
         - Standard but non-portable!
         - What number represents what `kind` is entirely up to the
           compiler
+- Also possible to change default kind via compiler flags
+
 
 ## Kinds of types
 
@@ -1182,9 +1185,9 @@ x = 1.0_wp
 
 ## Kinds of types
 
-### `iso_fortran_env`
-- Even better! F2008 feature, but use this and complain if stuck on a
-  previous standard (upgrade compilers!)
+- F2008 added standardised names for common kinds
+- Prefer to use this and complain if stuck on a previous standard
+  (upgrade compilers!)
 
 ```Fortran
 use, intrinsic :: iso_fortran_env, only : real64
@@ -1231,7 +1234,7 @@ integer(ip) :: x
 
 ! or, better:
 use, intrinsic :: iso_fortran_env, only : int64
-integer(int64) ::y
+integer(int64) :: x
 ```
 
 ## Breaking up programs
