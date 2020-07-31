@@ -1452,7 +1452,9 @@ startLine=36 endLine=47 startFrom=36}
       arguments
 - The routine doesn't care or know what the names of the actual
   arguments are
-    - Type, kind, rank and order have to match though
+- Type, kind, rank and order have to match though!
+    - Can use intrinsics `int`, `real`, `cmplx` to convert types and
+      kinds
 
 ## Dummy arguments
 
@@ -1530,6 +1532,8 @@ end function my_abs
 
 - Due to historical reasons, procedures are not recursive by default:
   they cannot call themselves directly or indirectly
+    - Luckily, always possible to write recursive algorithms as
+      iterative instead!
 - Need to use `result` keyword to change name of function result
 - Use `recursive` keyword:
 
