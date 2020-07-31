@@ -12,29 +12,55 @@ By the end of this set of problems, you will be familiar with:
 All `program`s _must_ contain `implicit none`. While not strictly
 necessary, it will eliminate an entire class of bugs.
 
+It is a very good idea to always use the following compiler flags for
+all these problems: `-Wall -Wextra -fcheck=all -g`. Try to ensure you
+have no warnings. You may also want to use `-std=f2008` or
+`-std=f2018`, depending on the version of `gfortran` you are
+using. This will ensure you stick to standard Fortran.
+
 You should use the lecture materials for help/inspiration, but please
 don't copy and paste! There is some value to be had in typing up the
 programs yourself.
 
+There are very likely too many exercises here for the time you have
+available. It's ok if you don't get through them all!
+
 There may be several ways to solve each problem. If you have time, you
 might like to try different approaches.
+
+Use a separate file and program for each exercise.
 
 Reversed Range
 --------------
 
-1. Write a program that creates an array filled with the numbers 1
-   to 100 and prints it to screen.
-2. Read two integers in the range $[1, 100]$ from the user and print
-   out the array within that range.
+1. Write a program that creates an array filled with the numbers 1 to
+   10 and prints it to screen.
+2. Read two integers in the range $[1, 10]$ from the user and print
+   out the array within that range. Hint: you can use either a loop or
+   a slice. Which is shorter?
 3. Using the two numbers from step 2, reverse the numbers in the array
-   within that range, and print the entire array.
+   within that range, and print the entire array. Hint: it may be
+   useful to use a stride!
+
+Sample output:
+
+```
+$ gfortran reversed_range.f90 -o reversed_range
+$ ./reversed_range
+   1   2   3   4   5   6   7   8   9  10
+ Enter lower and upper bounds
+2 6
+   1   6   5   4   3   2   7   8   9  10
+```
 
 ### Further
 
-1. What happens if the user gives numbers outside the range $[1,
-   100]$? What are some ways of handling this?
+1. What happens if the user gives numbers outside the range $[1, 10]$?
+   What are some ways of handling this?
 2. What happens if the user gives the two numbers in the opposite
    order than you're expecting? What are some ways of handling this?
+3. Make the size of the array an input parameter. Hint: this requires
+   the use of `allocatable`.
 
 Factorial
 ---------
@@ -47,6 +73,7 @@ $$n! = 1 \cdot 2 \cdot 3 \cdots (n - 2) \cdot (n - 1) \cdot n.$$
 2. Write a `recursive` function that computes $n!$ by calling itself
    with $(n - 1)$.
 3. Write a function that can compute $n!$ on every element of an array
+   using either of the above methods
 
 Cross product
 -------------
@@ -65,14 +92,24 @@ $$a \times b = (a_2 \cdot b_3 - a_3 \cdot b_2)\mathbf{\hat{i}} + (a_3 \cdot b_1
 Matrix-vector multiplication
 ----------------------------
 
-You can check your implementations here by using the intrinsic
-`matmul`. Don't use it in your implementations though!
+The formula for matrix multiplication
+
+$$\mathbf{A} = \mathbf{BC},$$
+
+where $\mathbf{A}, \mathbf{B}, \mathbf{C}$ are matrices with elements
+$a_{ij}, b_{ij}, c_{ij}$, respectively, is
+
+$$a_{ij} = \sum_{k=1}^n b_{ik} c_{jk}$$
 
 1. Write a function that returns the result of multiplying a 3x3 matrix
    with a 3-element vector.
-2. Write a `logical` `function` that returns true if the result of
+2. Write a `logical` `function` that returns `.true.` if the result of
    `matmul` is identical to your result if you used `integer`s, or
-   sufficiently close (given some tolerance) if you used `real`s.
+   sufficiently close (given some tolerance) if you used `real`s, and
+   `.false.` otherwise.
+
+You can check your implementations here by using the intrinsic
+`matmul`. Don't use it in your implementations though!
 
 ### Further
 

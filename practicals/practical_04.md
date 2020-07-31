@@ -10,12 +10,24 @@ By the end of this set of problems, you will be familiar with:
 All `program`s _must_ contain `implicit none`. While not strictly
 necessary, it will eliminate an entire class of bugs.
 
+It is a very good idea to always use the following compiler flags for
+all these problems: `-Wall -Wextra -fcheck=all -g`. Try to ensure you
+have no warnings. You may also want to use `-std=f2008` or
+`-std=f2018`, depending on the version of `gfortran` you are
+using. This will ensure you stick to standard Fortran.
+
 You should use the lecture materials for help/inspiration, but please
 don't copy and paste! There is some value to be had in typing up the
 programs yourself.
 
+There are very likely too many exercises here for the time you have
+available. It's ok if you don't get through them all!
+
 There may be several ways to solve each problem. If you have time, you
 might like to try different approaches.
+
+Use a separate file and program for each exercise.
+
 
 Rational Numbers
 ----------------
