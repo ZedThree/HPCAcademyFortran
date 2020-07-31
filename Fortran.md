@@ -22,8 +22,20 @@ monofont: Inconsolata LGC
 - Covers Fortran language
 - Other people covering floating point maths, compilation,
   performance, parallelisation
-- One/two practical sessions on the basics, but most hands-on in the
-  target application sessions
+
+## Further reading
+
+- "Modern Fortran Explained: Incorportating Fortran 2018", Metcalf,
+  Reid, Cohen (2018) OUP
+- "Fortran for Scientists and Engineers", Chapman (2018) McGraw-Hill
+  Education
+- "Guide to Fortran 2008 Programming", Brainerd (2015), Springer
+- Fortran wiki: <http://fortranwiki.org>
+    - Lots of resources linked from there!
+- `gfortran` documentation:
+  <https://gcc.gnu.org/onlinedocs/gcc-10.2.0/gfortran/>
+- Intel Fortran language reference:
+  <https://software.intel.com/content/www/us/en/develop/documentation/fortran-compiler-developer-guide-and-reference/top/language-reference.html>
 
 ## What is Fortran?
 
@@ -2916,13 +2928,3 @@ startFrom=10 startLine=10 endLine=10}
 ```
 
 - Not always the best tool, but sometimes very useful!
-
-## Further reading
-
-- "Modern Fortran Explained: Incorportating Fortran 2018", Metcalf,
-  Reid, Cohen (2018) OUP
-- "Fortran for Scientists and Engineers", Chapman (2018) McGraw-Hill
-  Education
-- "Guide to Fortran 2008 Programming", Brainerd (2015), Springer
-- Fortran wiki: fortranwiki.org
-    - Lots of resources linked from there!
