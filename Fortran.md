@@ -831,31 +831,6 @@ startFrom=21 startLine=21 endLine=24}
 - For assigning to arrays, we can just use `shape` intrinsic to get
   the right answer
 
-
-## Constructing arrays
-
-- How to fill an array with 10 values between $0$ and $2\pi$?
-- Could do:
-
-```Fortran
-array(1) = 0.
-array(2) = 2. * pi * (1. / 10.)
-array(3) = 2. * pi * (2. / 10.)
-...
-! or
-do i = 1, 10
-    array(i) = 2. * pi * (real(i - 1) / 10.)
-end do
-```
-
-- This can be written a bit more compactly using an _implied do_:
-
-```{include=examples/21_array_constructors.f90 .numberLines .Fortran
-startFrom=10 startLine=10 endLine=10}
-```
-
-- Not always the best tool, but sometimes very useful!
-
 ## Operations with arrays
 
 - We can do element-wise operations on arrays very simply:
@@ -2898,6 +2873,30 @@ end subroutine feed_pets
 - This makes it easier to make mistakes
 - Usually better to make a separate procedure
     - Can make it `private` in a `module`
+
+## Another way to construct arrays
+
+- How to fill an array with 10 values between $0$ and $2\pi$?
+- Could do:
+
+```Fortran
+array(1) = 0.
+array(2) = 2. * pi * (1. / 10.)
+array(3) = 2. * pi * (2. / 10.)
+...
+! or
+do i = 1, 10
+    array(i) = 2. * pi * (real(i - 1) / 10.)
+end do
+```
+
+- This can be written a bit more compactly using an _implied do_:
+
+```{include=examples/21_array_constructors.f90 .numberLines .Fortran
+startFrom=10 startLine=10 endLine=10}
+```
+
+- Not always the best tool, but sometimes very useful!
 
 ## Further reading
 
