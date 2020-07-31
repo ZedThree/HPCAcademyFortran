@@ -1,11 +1,9 @@
 program parameters
-  use, intrinsic :: iso_fortran_env, only : real64
   implicit none
-  integer, parameter :: wp = real64
-  real(kind=wp), parameter :: pi = 4._wp*atan(1._wp)
+  real, parameter :: pi = 4.*atan(1.)
   integer, parameter :: grid_size = 4
-  integer, dimension(grid_size), parameter :: x_grid = [1, 2, 3, 4]
+  real, dimension(grid_size), parameter :: x_grid = [0., .25, .5, .75]
+  real, dimension(grid_size), parameter :: x = sin(2 * pi * x_grid)
 
-  print*, pi
-  print*, x_grid
+  print*, x
 end program parameters

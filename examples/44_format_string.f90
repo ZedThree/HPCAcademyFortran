@@ -13,7 +13,7 @@ program format_string
   write(*, '("      |12345678|")')
   write(*, '("i0:   |", i0, "|")') grid_size
   write(*, '("i4:   |", i4, "|")') grid_size
-  write(*, '("i4.4: |", i4. 4,"|")') grid_size
+  write(*, '("i4.4: |", i4.4,"|")') grid_size
   write(*, '("i0:   |", i0, "|")') 23249425
   write(*, '("i4:   |", i4, "|")') 23249425
 

@@ -1,12 +1,15 @@
 program array_conformability
   implicit none
   integer :: i
-  integer, dimension(3) :: vector1 = [(i, i=1, 3)]
-  integer, dimension(3, 3) :: matrix1 = reshape(&
-       [(i, i=1, 9)], shape(matrix1))
-  integer, dimension(4) :: vector2 = [(i, i=1, 4)]
-  integer, dimension(3, 4) :: matrix2 = reshape(&
-       [(i, i=1, 12)], shape(matrix2))
+  integer :: vector1(3)
+  integer :: matrix1(3, 3)
+  integer :: vector2(4)
+  integer :: matrix2(3, 4)
+
+  vector1 = [(i, i=1, 3)]
+  matrix1 = reshape([(i, i=1, 9)], shape(matrix1))
+  vector2 = [(i, i=1, 4)]
+  matrix2 = reshape([(i, i=1, 12)], shape(matrix2))
 
   print*, "shape(vector1):", shape(vector1)
   print*, "shape(matrix1):", shape(matrix1)

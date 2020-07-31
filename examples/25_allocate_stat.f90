@@ -9,7 +9,7 @@ program bigarray_prog
   allocate(bigarray(bignumber), stat=status, errmsg=errmsg)
 
   if (status /= 0) then
-    print*, trim(errmsg)
+    print*, errmsg
     print*, status
     ! Note non-constant stop code is technically F2018
     error stop status

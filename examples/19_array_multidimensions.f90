@@ -14,9 +14,9 @@ program array_multidimensions
   end do
 
   ! All of first row:
-  print*, matrix1(1, :)
-  ! First two columns, last two rows:
-  print*, matrix1(:2, 2:)
+  print*, "matrix1(1, :):", matrix1(1, :)
+  ! First two rows, last two columns:
+  print*, "matrix1(:2, 2:):", matrix1(:2, 2:)
   
   matrix2 = reshape([ &
        9, 8, 7, &

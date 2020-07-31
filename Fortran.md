@@ -859,13 +859,13 @@ pressure = density * temperature
   match)
 
 ```{include=examples/22_array_conformability.f90 .numberLines .Fortran
-startFrom=4 startLine=4 endLine=12}
+startFrom=4 startLine=4 endLine=7}
 ```
 
 ## Conformability
 
 ```{include=examples/22_array_conformability.f90 .numberLines .Fortran
-startFrom=19 startLine=19 endLine=29}
+startFrom=22 startLine=22 endLine=35}
 ```
 
 ## Memory layout
@@ -1190,6 +1190,7 @@ x = 1.0_wp
 startFrom=4 startLine=4 endLine=6}
 ```
 
+- Can also use `D` instead of `E`: `3.142d0`
 - Mixed-kind operations will convert like mixed-type operations
 - Lots of intrinsics take a `kind` argument:
     - `5._real64 / real(2, kind=real64) == 2.5_real64`
@@ -1722,15 +1723,22 @@ startFrom=5 startLine=5 endLine=10}
 ## Formatted I/O
 
 - Instead of star, can give a _format string_
-    - (technically _data edit descriptor_, but yeesh)
+    - Technically _data edit descriptor_
 - Basic form is `'(<something>)'`, where `<something>` is a
   comma-separated list of format codes
-- `write(*, '(a, i0, a)') "I have ", number_of_cats, " cats"`
-    - `a` means `character`
-    - `i0` means `integer`, the `0` is "make it as wide as it needs to
+
+    ```Fortran
+    write(*, '(a, i0, a)') "I have ", number_of_cats, " cats"
+    ```
+   - `a` means `character`
+   - `i0` means `integer`, the `0` is "make it as wide as it needs to
       be"
 - Can also stick text in there:
-- `write(*, '("I have ", i0, " cats")') number_of_cats`
+
+    ```Fortran
+    write(*, '("I have ", i0, " cats")') number_of_cats
+    ```
+
 - Lots of format codes: use your favourite search engine!
 
 ## Formatted I/O
@@ -1791,7 +1799,7 @@ startFrom=8 startLine=8 endLine=8}
     - `read` similar, but ignores everything until after next newline
 - This will print the whole of `array`, two elements per line:
 ```{include=examples/46_format_more_records.f90 .numberLines .Fortran
-startForm=10 startLine=10 endLine=10}
+startFrom=10 startLine=10 endLine=10}
 ```
 
 ## Formatted I/O
@@ -2001,29 +2009,28 @@ startFrom=4 startLine=4 endLine=16}
 - `character` declarations must include the `len`gth:
 - `character`s of a fixed length are terminated by _blanks_,
   i.e. spaces
-- so `character(len=10) :: cat = "ziggy     "`
+  ```Fortran
+  character(len=10) :: cat = "ziggy     "
+  ```
 - `character`s can be indexed similarly to arrays, with one
   restriction: the colon (`:`) is **required**:
 
-```Fortran
-character(len=10) :: cat = "Ziggy     "
-cat(:3) == "Zig"
-cat(4:4) == "g"
-cat(5:) == "y     "
-```
+    ```Fortran
+    cat(:3) == "Zig"
+    cat(4:4) == "g"
+    cat(5:) == "y     "
+    ```
 
 ## Working with `character`s
 
-- It can be a quite annoying to keep the `len` of a `character` in
-  sync with how long it is
-- For `character` `parameter`s though, we can use `len=*`
+- The `character` `len` must match how long it actually is
+- For `parameter`s though, we can use `len=*`
 
     ```Fortran
     character(len=*), parameter :: filename = "output.log"
     ```
 
-- Only works for `parameter`s and dummy `intent(in)` arguments (see
-  later) though!
+- Only works for `parameter`s and dummy `intent(in)` arguments though!
 
 ## Working with `character`s
 
@@ -2035,6 +2042,7 @@ cat(5:) == "y     "
     ```Fortran
     character(len=:), allocatable :: filename
     ```
+- Normal `a = b` assignment will take care of allocation
 - If allocating manually, need to specify the type and `len`:
 
     ```Fortran
@@ -2788,7 +2796,7 @@ Might try to read `politely` first, but it doesn't exist!
 ## `block` example
 
 ```{include=examples/63_block_demo.f90 .numberLines .Fortran
-startFrom=3 startLine=3 endLine=11}
+startFrom=3 startLine=3 endLine=12}
 ```
 
 ## `stop` and `error stop`
