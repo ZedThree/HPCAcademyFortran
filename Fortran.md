@@ -2874,6 +2874,17 @@ end subroutine feed_pets
 - Usually better to make a separate procedure
     - Can make it `private` in a `module`
 
+```Fortran
+function integrate(y, dy)
+  ...
+contains
+  function runge_kutta_step(y, dy)
+    ...
+  end function runge_kutta_step
+end function integrate
+```
+
+
 ## Another way to construct arrays
 
 - How to fill an array with 10 values between $0$ and $2\pi$?
