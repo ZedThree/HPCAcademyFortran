@@ -7,7 +7,7 @@ header-includes: \usepackage{pandoc-solarized}
 monofont: Inconsolata LGC
 ---
 
-# Session 1
+# Section 1: A Brief History of Fortran
 
 ## Overview
 
@@ -240,7 +240,7 @@ Full compile line might look like:
 
 Build systems like `CMake` or `Makefile` help simplify this
 
-# Session 2
+# Section 2: Types, Grammar and Control
 
 ## Overview
 
@@ -711,7 +711,7 @@ but one is easier to read
 - Not the case!
 - Just use `.f90` and you'll be fine
 
-# Session 3
+# Section 3: Array, Parameters and Kinds
 
 ## Overview
 
@@ -1213,7 +1213,7 @@ use, intrinsic :: iso_fortran_env, only : int64
 integer(int64) :: x
 ```
 
-# Session 4
+# Section 4: Functions and Subroutines
 
 ## Overview
 
@@ -1570,7 +1570,7 @@ Use like:
 startFrom=9 startLine=9 endLine=9}
 ```
 
-# Session 5
+# Section 5: Input, Output and Text
 
 ## Overview
 
@@ -1604,8 +1604,8 @@ end select
   or `character` scalar variable
 - Can specify value or range:
     - `value`
-    - `:upper_bound`
-    - `lower_bound:`
+    - `:upper`
+    - `lower:`
     - `lower:upper`
 - Ranges must be of same type
 - Case must be known at compile time
@@ -2089,7 +2089,7 @@ startFrom=4 startLine=4 endLine=14}
 - `new_line(a)`: Get the new line `character` of the same kind as `a`
     - This is the equivalent of `\n` in C, Python, etc.
 
-# Session 7
+# Section 7: Modules and Derived Types
 
 ## Overview
 
