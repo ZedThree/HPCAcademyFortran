@@ -7,8 +7,8 @@ By the end of this set of problems, you will be familiar with:
 - Derived types
 - Interfaces
 
-All `program`s _must_ contain `implicit none`. While not strictly
-necessary, it will eliminate an entire class of bugs.
+All `program`s and `module`s _must_ contain `implicit none`. While not
+strictly necessary, it will eliminate an entire class of bugs.
 
 It is a very good idea to always use the following compiler flags for
 all these problems: `-Wall -Wextra -fcheck=all -g`. Try to ensure you

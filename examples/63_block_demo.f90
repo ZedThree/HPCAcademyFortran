@@ -1,6 +1,6 @@
 program block_demo
   implicit none
-  integer :: y = 1
+  real :: y = 1
   print*, y
 
   block
