@@ -2,11 +2,16 @@ program reversed_range
   implicit none
   integer :: lower, upper, temp
   integer :: i
-  integer, dimension(100) :: array = [(i, i=1, 100)]
+  integer, parameter :: array_size = 10
+  integer, dimension(array_size) :: array
 
-  print*, array
+  do i = 1, array_size
+    array(i) = i
+  end do
 
-  do
+  write(*,'(10i4)') array
+
+  input_loop: do
     print*, "Enter lower and upper bounds"
     read*, lower, upper
 
@@ -16,10 +21,10 @@ program reversed_range
       upper = temp
     end if
 
-    if ((lower > 1) .and. (upper < 100)) exit
-  end do
+    if ((lower > 1) .and. (upper < array_size)) exit input_loop
+  end do input_loop
 
   array(lower:upper) = array(upper:lower:-1)
 
-  print*, array
+  write(*,'(10i4)') array
 end program reversed_range
