@@ -1579,7 +1579,7 @@ startFrom=4 startLine=4 endLine=11}
   convenient, because it will automatically reallocate the assignee
 
 ```{include=examples/37_allocatable_function.f90 .numberLines .Fortran
-startFrom=15 startLine=15 endLine=21}
+startFrom=15 startLine=15 endLine=23}
 ```
 Use like:
 ```{include=examples/37_allocatable_function.f90 .numberLines .Fortran
@@ -1983,8 +1983,8 @@ startFrom=10 startLine=10 endLine=23}
 - But now with reading, have a bit more flexibility
 
 ```Fortran
+<type> :: variable1 {, <variable2> ...}
 namelist /<name>/ <variable1> {, <variable2> ...}
-
 read(<unit>, nml=<name>)
 ```
 
@@ -2012,12 +2012,13 @@ and the input file looks like:
     - Meaning you cannot put them in a variable of any kind, pass them
       to a function, etc.
     - This becomes a pain if you want to do more complicated things,
-      e.g. have multiple ion species, each with identical namelists
+      e.g. have multiple particle species, each with identical
+      namelists
 
 ## Namelist example
 
 ```{include=examples/48_basic_namelist.f90 .numberLines .Fortran
-startFrom=4 startLine=4 endLine=16}
+startFrom=6 startLine=6 endLine=17}
 ```
 
 ## Working with `character`s
@@ -2026,7 +2027,7 @@ startFrom=4 startLine=4 endLine=16}
 - `character`s of a fixed length are terminated by _blanks_,
   i.e. spaces
   ```Fortran
-  character(len=10) :: cat = "ziggy     "
+  character(len=10) :: cat = "Ziggy     "
   ```
 - `character`s can be indexed similarly to arrays, with one
   restriction: the colon (`:`) is **required**:
@@ -2097,7 +2098,7 @@ startFrom=4 startLine=4 endLine=14}
 - `len(string)`: How long is `string`, including the trailing spaces
 - `len_trim(string)`: How long is `string`, **excluding** the trailing
   spaces
-- `trim`: Remove all trailing spaces
+- `trim(string)`: Remove all trailing spaces
 - `adjustl(string)`, `adjustr(string)`: "Adjust" the string
   left/right, moving leading/trailing spaces to the end/beginning
 - `index(string, substring)`: Return the starting position of

@@ -16,7 +16,9 @@ contains
     integer, intent(in) :: grid_size
     real, dimension(:), allocatable :: make_grid
     integer :: i
-
-    make_grid = [(real(i) / grid_size, i=1, grid_size)]
+    allocate(make_grid(grid_size))
+    do i = 1, grid_size
+      make_grid = real(i) / grid_size
+    end do
   end function make_grid
 end program allocatable_function
