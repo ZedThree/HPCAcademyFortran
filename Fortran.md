@@ -1236,13 +1236,6 @@ integer(int64) :: x
 - Large `program`s become difficult to understand and _maintain_
 - Quickly come across chunks of code we want to reuse
 - Very good idea to break programs up
-- Gives us reusable components
-    - Reduce copy-paste errors
-    - Repeat tasks multiple times
-    - Use same task in multiple contexts
-    - Gives names to parts of code
-- Naming things is a big advantage!
-    - Important to choose names wisely
 - Two ways of breaking up `program`s in Fortran:
     - Functions/subroutines
     - Modules
@@ -1287,10 +1280,10 @@ integer(int64) :: x
 ::: {.column}
 
 ```Fortran
-function <name>(<input>)
+function <name>({<argument> {, ...}})
   implicit none
   <type> :: <name>
-  <type> :: <input>
+  {<type> :: <argument>}
   ! body
   <name> = ! result
 end function <name>
@@ -1300,9 +1293,9 @@ end function <name>
 ::: {.column}
 
 ```Fortran
-<type> function <name>(<input>)
+<type> function <name>({<argument> {, ...}})
   implicit none
-  <type> :: <input>
+  {<type> :: <argument>}
   ! body
   <name> = ! result
 end function <name>
@@ -1345,10 +1338,9 @@ end function <name>
 - Syntax:
 
 ```Fortran
-subroutine <name>(<input>, <output>)
+subroutine <name>({<argument> {, ...}})
   implicit none
-  <type> :: <input>
-  <type> :: <output>
+  {<type> :: <argument>}
   ! body
 end subroutine <name>
 ```
