@@ -1356,85 +1356,34 @@ call <name>(<arguments>)
 ```{include=examples/30_basic_subroutine.f90 .numberLines .Fortran}
 ```
 
-
 ## `intent`
 
-- When writing programs, can be very useful to tell the compiler as
-  much information as you can
-- One useful piece of info is the _intent_ of arguments to procedures
-- This can help avoid certain classes of bugs
+- Compiler can optimise better when it has more information
+- Useful to know whether arguments are inputs or outputs
 - There are three `intent`s:
 - `intent(in)`: this is for arguments which should not be modified in
   the routine, only provide information **to** the procedure
+  ("read-only")
 - `intent(out)`: for arguments which are the _result_ of the
   routine. These are _undefined_ on entry to the routine: don't try to
-  read them!
+  read them! ("write-only")
 - `intent(inout)`: for arguments are to be modified by the procedure
+  ("read-write")
     - If you don't explicitly provide an `intent`, this is the default
-- These are essentially equivalent to read-only, write-only and
-  read-write
-- Prefer `function`s over `subroutine`s with `intent(out)` arguments
-    - Easier to read!
 
-## Local variables
+## `intent`
 
-- Variables declared inside procedures are _local_ to that routine
-    - Also called _automatic_ variables
-- Their _scope_ or _lifetime_ is the immediate procedure
-- Cannot be accessed outside the routine, except via:
-    - function result
-    - `intent(out)` or `intent(inout)` dummy arguments (see later)
-- Local `allocatable` variables are automatically `deallocate`d on
-  exit from a procedure
-    - not the case for dummy arguments (see later), or variables
-      accessed from a different scope (also see later!)
-
-## Local variables
-
-```{include=examples/31_local_variables.f90 .numberLines .Fortran
-startLine=1 endLine=12 startFrom=1}
+```{include=examples/30a_intents.f90 .numberLines .Fortran}
 ```
 
-- `x` in the main program and `x` within `add_square` are different
-variables
-    - The inner `x` _shadows_ the outer one
+## `intent`
 
-
-## Global variables
-
-- Possible for procedures to access variables in the containing scope
-    - Technically called _host association_
-
-```{include=examples/32_global_variables.f90 .numberLines .Fortran
-startLine=3 endLine=11 startFrom=3}
-```
-
-- This is surprising, especially given `intent(in)`!
-- Hard to see where `x` comes from
-- There are uses for this, but prefer to explicitly pass in variables
-  via arguments
-
-## Initialising local variables
-
-- A word of warning when initialising local variables
-- Giving a variable a value on the same line it is declared gives it
-  an implicit `save` attribute
-- This `save`s the value of the variable between function calls
-- Initialisation is then _not done_ on subsequent calls:
-
-```{include=examples/33_save_attribute.f90 .numberLines .Fortran
-startLine=17 endLine=24 startFrom=17}
-```
-
-## Initialising local variables
-
-- This behaviour can be useful for _caching_ results of expensive
-  calculations
-- Nicer to have the explicit `save` attribute
-
-```{include=examples/33_save_attribute.f90 .numberLines .Fortran
-startLine=36 endLine=47 startFrom=36}
-```
+- **Always**, **always** include `intent`!
+    - Removes class of bugs
+    - Adds documentation
+    - Can improve performance
+- Prefer `function`s over `subroutine`s with one `intent(out)`
+  argument
 
 ## Dummy arguments
 
@@ -1499,6 +1448,65 @@ Three choices for passing arrays:
 
 ```{include=examples/35_array_dummy_arguments.f90 .numberLines .Fortran
 startFrom=14 startLine=14 endLine=18}
+```
+
+## Local variables
+
+- Variables declared inside procedures are _local_ to that routine
+    - Also called _automatic_ variables
+- Their _scope_ or _lifetime_ is the immediate procedure
+- Cannot be accessed outside the routine, except via:
+    - function result
+    - `intent(out)` or `intent(inout)` dummy arguments (see later)
+- Local `allocatable` variables are automatically `deallocate`d on
+  exit from a procedure
+    - not the case for dummy arguments or globals
+
+## Local variables
+
+```{include=examples/31_local_variables.f90 .numberLines .Fortran
+startLine=1 endLine=12 startFrom=1}
+```
+
+- `x` in the main program and `x` within `add_square` are different
+variables
+    - The inner `x` _shadows_ the outer one
+
+
+## Global variables
+
+- Possible for procedures to access variables in the containing scope
+    - Technically called _host association_
+
+```{include=examples/32_global_variables.f90 .numberLines .Fortran
+startLine=3 endLine=11 startFrom=3}
+```
+
+- This is surprising, especially given `intent(in)`!
+- Hard to see where `x` comes from
+- There are uses for this, but prefer to explicitly pass in variables
+  via arguments
+
+## Initialising local variables
+
+- A word of warning when initialising local variables
+- Giving a variable a value on the same line it is declared gives it
+  an implicit `save` attribute
+- This `save`s the value of the variable between function calls
+- Initialisation is then _not done_ on subsequent calls:
+
+```{include=examples/33_save_attribute.f90 .numberLines .Fortran
+startLine=17 endLine=24 startFrom=17}
+```
+
+## Initialising local variables
+
+- This behaviour can be useful for _caching_ results of expensive
+  calculations
+- Nicer to have the explicit `save` attribute
+
+```{include=examples/33_save_attribute.f90 .numberLines .Fortran
+startLine=36 endLine=47 startFrom=36}
 ```
 
 ## Returning early from procedures
