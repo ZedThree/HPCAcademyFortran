@@ -34,9 +34,10 @@ Reversed Range
 --------------
 
 1. Write a program that creates an array filled with the numbers 1 to
-   10 and prints it to screen.
+   10 and prints it to screen. There are several different ways you
+   could do this.
 2. Read two integers in the range $[1, 10]$ from the user and print
-   out the array within that range. Hint: you can use either a loop or
+   out your array within that range. Hint: you can use either a loop or
    a slice. Which is shorter?
 3. Using the two numbers from step 2, reverse the numbers in the array
    within that range, and print the entire array. Hint: it may be

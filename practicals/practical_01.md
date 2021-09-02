@@ -74,7 +74,7 @@ Summing integers
    then sums all the integers up to that number using a loop. Hint:
    you can check your answer with the formula:
 
-$$\sum_{k=1}^n k = \frac{n (n-1)}{2}$$
+$$\sum_{k=1}^n k = \frac{n (n+1)}{2}$$
 
 ### Further
 

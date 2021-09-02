@@ -44,7 +44,7 @@ Rational Numbers
 
 ### Further
 
-1. Write a `logical function`s that takes three rational numbers and a
+1. Write a `logical function` that takes three rational numbers and a
    `function` $f$ and returns true if the result of applying $f$ to
    the first two numbers is equal to the third number. Use this to
    implement your tests
